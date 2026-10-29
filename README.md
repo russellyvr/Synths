@@ -13,6 +13,10 @@ back it up, read what it stored.
 - [T-8 Beat Foundations](https://russellyvr.github.io/Synths/guides/t8-foundations.html), with chaining to the S-1
 - [S-1 Patch Inspector](https://russellyvr.github.io/Synths/guides/s1-inspector.html), open a `.PRM` backup in the browser
 
+The two Foundations courses were written for a younger reader on purpose. The
+plain wording and simplified descriptions are a deliberate choice to make the
+material accessible, not a reflection of the depth of the underlying research.
+
 ## What is in the repo
 
 | Path | What |
