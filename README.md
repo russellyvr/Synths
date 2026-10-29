@@ -52,8 +52,10 @@ back it up, read what it stored.
 ## MiniLab 3 map for the S-1
 
 `minilab3/Roland S1 v2.minilab3` is a MIDI Control Center program (MiniLab 3
-firmware 1.2.0). Import it in MIDI Control Center, store it to a program slot, then
-hold **Shift** and tap the pad until the display shows that program. It sends on
+firmware 1.2.0). Import it in MIDI Control Center and store it to one of the five
+User Program slots. On the keyboard, hold **Shift** and press **Pad 3** repeatedly;
+each press steps through ARTURIA, DAW and the User Programs, and the display names
+the current one. Stop when it shows "Roland S1 v2". It sends on
 MIDI channel 3, which is the S-1's factory channel (menu item `CH`). Every CC below
 was confirmed by watching what the S-1's own knobs send over USB MIDI.
 
