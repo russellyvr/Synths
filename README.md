@@ -57,6 +57,8 @@ hold **Shift** and tap the pad until the display shows that program. It sends on
 MIDI channel 3, which is the S-1's factory channel (menu item `CH`). Every CC below
 was confirmed by watching what the S-1's own knobs send over USB MIDI.
 
+![MiniLab 3 to Roland S-1 MIDI control map](guides/img/minilab3-s1-map.png)
+
 | MiniLab 3 control | CC | S-1 control | Section |
 |---|---|---|---|
 | Knob 1 | 74 | FREQ | FILTER |
@@ -99,8 +101,11 @@ patterns and my test recordings are redistributed.
 
 ## Related
 
-- denzlobin/S1Utility — Windows editor; issues #3 and #4 carry the pitch-bend,
-  LENG and PROB corrections above.
-- Roland S-1 reference manual v1.02, MIDI implementation chart (section 87294690).
+- [denzlobin/S1Utility](https://github.com/denzlobin/S1Utility) — Windows editor;
+  issues [#3](https://github.com/denzlobin/S1Utility/issues/3) and
+  [#4](https://github.com/denzlobin/S1Utility/issues/4) carry the pitch-bend, LENG
+  and PROB corrections above.
+- [Roland S-1 reference manual v1.02](https://static.roland.com/manuals/s-1_manual_v102/eng/),
+  [MIDI implementation chart (section 87294690)](https://static.roland.com/manuals/s-1_manual_v102/eng/87294690.html).
 
 MIT licence.
