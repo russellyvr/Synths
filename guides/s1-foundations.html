@@ -1,0 +1,1017 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Roland S-1 Synth Foundations</title><style>
+/* Shared page theme.
+   2026-08-23: retokenized to the SwarmKey master-dashboard "Linear idiom"
+   (Scheduled/master-dashboard/dashboard-theme.sh) -- near-black ground,
+   off-white text, hairline borders, one indigo accent, dot-grid backdrop.
+   Dark in both colour schemes by design. Static (no JS) -- these also
+   render as email attachments. Edit here; all agents inherit. */
+:root {
+  --bg: #08090a; --card: #0f1011; --card-2: #191a1b;
+  --text: #f7f8f8; --secondary: #8a8f98; --tertiary: #8a8f98; /* tertiary lightened from #62666d (3.3:1, WCAG AA fail) — council 2026-08-24 D5 */
+  --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.10);
+  --accent: #6e74c9; --accent-soft: rgba(110,116,201,0.14); /* aligned to the deployed indigo accent (dashboard-theme.sh + live pages) — council 2026-08-24 D6 */
+  --green: #8FCE63; --green-soft: #1B2A12;
+  --orange: #F4A63C; --orange-soft: #33240D;
+  --red: #F26D6D; --red-soft: #3A1414;
+  --purple: #9585FF; --purple-soft: #1E1B3D;
+  --shadow-1: none; --shadow-2: none;
+  --blk-amber:#F4A63C; --blk-amber-wash:#33240D;
+  --blk-violet:#9585FF; --blk-violet-wash:#1E1B3D;
+  --blk-teal:#2FC7B4;  --blk-teal-wash:#0C2E2B;
+  --blk-navy:#7C9BE0;  --blk-navy-wash:#151F38;
+  --blk-green:#8FCE63; --blk-green-wash:#1B2A12;
+  --blk-rose:#F26D6D;  --blk-rose-wash:#3A1414;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  line-height: 1.45; font-size: 15px;
+}
+.wrap { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+header.hero { margin-bottom: 24px; }
+.hero .eyebrow { color: var(--accent); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.06; margin-top: 6px; }
+.meta-line { color: var(--secondary); font-size: 15px; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.meta-line .dot { color: var(--tertiary); }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 22px 0; }
+.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; box-shadow: var(--shadow-1); }
+.kpi-label { color: var(--secondary); font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.kpi-value { font-size: 30px; font-weight: 700; margin-top: 6px; letter-spacing: -0.024em; font-feature-settings: 'tnum'; line-height: 1.1; }
+.kpi-sub { font-size: 12px; color: var(--tertiary); margin-top: 4px; font-weight: 600; }
+
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; margin-bottom: 16px; box-shadow: var(--shadow-1); }
+.card > h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.018em; margin-bottom: 4px; }
+.card > .card-sub { color: var(--secondary); font-size: 13px; margin-bottom: 14px; }
+.sec-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--secondary); margin: 6px 0 12px; }
+
+.item { padding: 14px 0; border-top: 1px solid var(--border); }
+.item:first-of-type { border-top: 0; padding-top: 2px; }
+.item-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.item-meta { color: var(--secondary); font-size: 12.5px; margin-top: 3px; display: flex; flex-wrap: wrap; gap: 10px; }
+.item-link { color: var(--accent); text-decoration: none; font-size: 12.5px; word-break: break-all; }
+.item-link:hover { text-decoration: underline; }
+.summary { color: var(--text); font-size: 14px; line-height: 1.55; margin-top: 8px; }
+.sub-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-top: 8px; }
+
+.overview { font-size: 16px; line-height: 1.6; color: var(--text); }
+
+.pill { padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+.pill-green { background: var(--green-soft); color: var(--green); }
+.pill-orange { background: var(--orange-soft); color: var(--orange); }
+.pill-red { background: var(--red-soft); color: var(--red); }
+.pill-blue { background: var(--accent-soft); color: var(--accent); }
+.pill-purple { background: var(--purple-soft); color: var(--purple); }
+.pill-gray { background: var(--card-2); color: var(--tertiary); border: 1px solid var(--border); }
+
+.empty { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 40px 28px; text-align: center; color: var(--secondary); }
+.empty-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+
+footer.foot { color: var(--tertiary); font-size: 12px; margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--border); }
+a { color: var(--accent); }
+
+/* ---- colour-block accent layer (2026-08-23) ----
+   Every card and KPI tile carries a tinted rail; hue cycles by position so a
+   brief with N sections reads as N distinct blocks without the agent fragment
+   having to know about colour. .pill-* classes map onto the same hue set. */
+.card, .kpi, .empty { position: relative; overflow: hidden; padding-left: 30px; }
+.kpi { padding-left: 26px; }
+.card::before, .kpi::before, .empty::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
+  background: var(--wash); border-right: 1px solid var(--border); }
+.card, .kpi, .empty { --c: var(--blk-amber); --wash: var(--blk-amber-wash); }
+.card:nth-of-type(5n+2), .kpi:nth-child(5n+2) { --c: var(--blk-violet); --wash: var(--blk-violet-wash); }
+.card:nth-of-type(5n+3), .kpi:nth-child(5n+3) { --c: var(--blk-teal);   --wash: var(--blk-teal-wash); }
+.card:nth-of-type(5n+4), .kpi:nth-child(5n+4) { --c: var(--blk-green);  --wash: var(--blk-green-wash); }
+.card:nth-of-type(5n+5), .kpi:nth-child(5n+5) { --c: var(--blk-navy);   --wash: var(--blk-navy-wash); }
+.card > h2, .kpi-label, .sec-label { color: var(--c); }
+.kpi-sub { color: var(--c); opacity: .85; }
+.hero .eyebrow { color: var(--blk-amber); }
+.pill { border: 1px solid var(--border); }
+
+/* ---- collapsible topics + outlined kind badges (2026-08-23) ----
+   Adopted from the Microsoft Change Digest layout: each topic card is a
+   <details> (open by default) whose summary shows the title and item count;
+   pills become small uppercase outlined badges coloured by kind. */
+details.card > summary { list-style: none; cursor: pointer; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; margin: -4px 0 0; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary h2 { display: inline-flex; align-items: center; gap: 10px; margin: 0; }
+details.card > summary h2::before { content: "\25B8"; font-size: 11px; color: var(--tertiary);
+  transition: transform .15s ease; }
+details.card[open] > summary h2::before { transform: rotate(90deg); }
+details.card > summary .count { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px;
+  color: var(--tertiary); white-space: nowrap; }
+details.card[open] > summary { margin-bottom: 12px; }
+details.card:not([open]) { padding-bottom: 16px; }
+.pill { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  padding: 2px 8px; border-radius: 999px; background: transparent; border: 1px solid currentColor; }
+.pill-green { color: var(--green); }  .pill-orange { color: var(--orange); }
+.pill-red { color: var(--red); }      .pill-blue { color: var(--accent); }
+.pill-purple { color: var(--purple); } .pill-gray { color: var(--secondary); background: transparent; }
+</style></head><body>
+<style>
+.wrap{max-width:980px}
+p,li{font-size:16px;line-height:1.65}
+.card p{margin:8px 0 12px}
+.card ul,.card ol{margin:6px 0 12px 22px}
+.card ol li{margin-bottom:6px}
+h3{font-size:15px;color:var(--c);margin:18px 0 6px;text-transform:uppercase;letter-spacing:.05em}
+h4{font-size:14px;color:var(--text);margin:14px 0 4px}
+.big{font-size:18px;font-weight:600;color:var(--text);margin:8px 0 12px}
+.fig{background:var(--card-2);border:1px solid var(--border-strong);border-radius:10px;padding:14px;margin:12px 0}
+.fig svg{width:100%;height:auto;display:block}
+.cap{color:var(--secondary);font-size:13px;margin-top:8px}
+.box{border:1px solid var(--border-strong);border-radius:10px;padding:12px 16px;margin:12px 0}
+.box b.lead{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.box p{margin:6px 0}.box ol,.box ul{margin:6px 0 4px 22px}
+.try{background:var(--blk-green-wash)}.try b.lead{color:var(--blk-green)}
+.gate{background:var(--blk-navy-wash)}.gate b.lead{color:var(--blk-navy)}
+.tip{background:var(--blk-violet-wash)}.tip b.lead{color:var(--blk-violet)}
+.wrong{background:var(--blk-rose-wash)}.wrong b.lead{color:var(--blk-rose)}
+.remember{background:var(--card-2)}.remember b.lead{color:var(--secondary)}
+.start{background:var(--blk-amber-wash)}.start b.lead{color:var(--blk-amber)}
+.start table,.save table{display:table;width:100%}.start td,.start th,.save td,.save th{white-space:normal;vertical-align:top}
+.start td:first-child,.save td:first-child{white-space:nowrap;font-weight:600}
+.save{background:var(--blk-teal-wash)}.save b.lead{color:var(--blk-teal)}
+.next{display:inline-block;margin-top:10px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:6px 16px;text-decoration:none;font-weight:600;font-size:14px}
+.next:hover{background:var(--accent-soft)}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:4px 0 10px}
+.goal .n{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--secondary);border:1px solid var(--border-strong);border-radius:6px;padding:2px 6px;white-space:nowrap;margin-top:4px}
+.ctl{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--secondary)}
+.ctl label{display:flex;gap:8px;align-items:center}
+.ctl input[type=range]{width:150px;accent-color:var(--c)}
+.ctl button{background:transparent;color:var(--c);border:1px solid currentColor;border-radius:999px;padding:4px 12px;font:inherit;cursor:pointer}
+.ctl button.on{background:var(--wash)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0;display:block;overflow-x:auto}
+th,td{border:1px solid var(--border-strong);padding:7px 10px;text-align:left;white-space:nowrap}
+th{color:var(--c);font-weight:600}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px}
+.toc a{display:block;background:var(--card-2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;text-decoration:none;color:var(--text);font-size:14px}
+.toc a span{font-family:ui-monospace,Menlo,monospace;color:var(--secondary);margin-right:6px}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.9em;background:var(--card-2);padding:1px 5px;border-radius:4px}
+.lcd{font-family:ui-monospace,Menlo,monospace;background:#000;color:#ff9a3c;border:1px solid #333;border-radius:4px;padding:0 6px;letter-spacing:.08em}
+.fig.shot{padding:10px}.fig.shot img{width:100%;height:auto;display:block;border-radius:6px}
+.hsmap{position:relative;display:block;border-radius:6px;overflow:visible}
+.hsmap img{width:100%;height:auto;display:block;border-radius:6px}
+.hs{position:absolute;transform:translate(-50%,-50%);border:2px solid transparent;border-radius:8px;cursor:pointer;transition:border-color .12s,background .12s}
+.hs:hover,.hs.on{border-color:var(--accent);background:rgba(110,116,201,.22);box-shadow:0 0 0 3px rgba(110,116,201,.25)}
+.hs-pop{position:absolute;z-index:20;width:300px;max-width:92%;background:var(--card-2);border:1px solid var(--border-strong);border-left:3px solid var(--accent);border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.6);display:none}
+.hs-pop.show{display:block}.hs-pop.pin{pointer-events:auto}
+.hs-pop b{display:block;color:var(--accent);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.hs-pop .sec{color:var(--secondary);font-size:11.5px;margin-top:5px}.hs-pop .sec a{color:var(--secondary);text-decoration:underline dotted;text-underline-offset:2px}.hs-pop .sec a:hover{color:var(--accent)}
+.hs-hint{color:var(--secondary);font-size:12.5px;margin:6px 10px 0}
+#menu table,#l11 table,#l12 table,#l0 table,#l1 table{display:table}#menu td,#menu th,#l11 td,#l11 th,#l12 td,#l12 th,#l0 td,#l0 th,#l1 td,#l1 th{white-space:normal;vertical-align:top}#l12 td:first-child{white-space:nowrap}#menu td:first-child,#menu td:nth-child(2){white-space:nowrap}
+.check label{display:flex;gap:10px;align-items:flex-start;font-size:15px;margin:6px 0;cursor:pointer}
+.check input{margin-top:5px;accent-color:var(--blk-navy)}
+.prog{position:sticky;top:0;z-index:30;background:rgba(8,9,10,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);margin:0 -24px 18px;padding:8px 24px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.prog a{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--secondary);text-decoration:none;border:1px solid var(--border-strong);border-radius:6px;padding:2px 7px}
+.prog a.cur{color:var(--text);border-color:var(--accent);background:var(--accent-soft)}
+.prog a.done{color:var(--blk-green);border-color:var(--blk-green)}
+@media print{.hs,.hs-pop,.hs-hint,.prog{display:none!important}}
+@media(max-width:600px){.wrap{padding:20px 16px 60px}.ctl input[type=range]{width:110px}.prog{margin:0 -16px 16px;padding:8px 16px}}
+</style>
+<div class="wrap">
+<nav class="prog" id="prog">
+<a href="#l0">00</a><a href="#l1">01</a><a href="#l2">02</a><a href="#l3">03</a><a href="#l4">04</a><a href="#l5">05</a><a href="#l6">06</a><a href="#l7">07</a><a href="#l8">08</a><a href="#l9">09</a><a href="#l10">10</a><a href="#l11">11</a><a href="#l12">12</a><a href="#menu">M</a>
+</nav>
+<header class="hero">
+  <div class="eyebrow">Roland S-1 · Synth Foundations · 13 lessons + menu map</div>
+  <h1>How the S-1 Makes a Sound</h1>
+  <div class="meta-line"><span>Roland AIRA Compact S-1 + MiniLab 3</span><span class="dot">·</span><span>Plain-language course with pictures</span><span class="dot">·</span><span>2026-10-28 17:40 PDT</span></div>
+</header>
+
+<section class="card">
+  <h2>Welcome. Start here.</h2>
+  <p>This course teaches you how the S-1 makes a sound. You do not need to know anything first. Each lesson is short. Each lesson builds on the one before it.</p>
+  <h3>How every lesson works</h3>
+  <ul>
+    <li><b>Goal</b> says what you will be able to do at the end.</li>
+    <li><b>Remember</b> gives you the two or three ideas from last time.</li>
+    <li><b>Set your S-1 like this</b> lists every knob and setting. Copy it. Do not skip it.</li>
+    <li><b>The big idea</b> is the one new thing in this lesson.</li>
+    <li><b>Try it</b> tells you what to do, one step at a time.</li>
+    <li><b>If it sounds wrong</b> lists the common slip-ups and the fix.</li>
+    <li><b>Check yourself</b> is a tiny quiz. Tick the boxes when you can do each thing.</li>
+    <li><b>Save it</b> tells you where to save. Then a button takes you to the next lesson.</li>
+  </ul>
+  <div class="box tip"><b class="lead">Two rules for the whole course</b><p>1. Turn your headphones down before you start. Some sounds get loud fast.</p><p>2. Change one thing at a time. Listen. Then change the next thing.</p></div>
+  <h3>Words we use for knobs</h3>
+  <p>We say knob positions like a clock. <b>7 o'clock</b> is all the way left. That is the lowest setting. We also call it <b>MIN</b>. <b>5 o'clock</b> is all the way right. That is the highest setting. We call it <b>MAX</b>. <b>12 o'clock</b> is straight up, the middle.</p>
+  <p>Knob names like <b>Knob 1</b> or <b>Fader 2</b> are the MiniLab 3 controls. The MiniLab must be on its "Roland S1 v2" program. The full map is in <a href="#l11">Lesson 11</a>. You can do every lesson on the S-1 alone too.</p>
+  <div class="toc">
+    <a href="#l0"><span>00</span>Housekeeping: slots, saving, clean start</a><a href="#l1"><span>01</span>The map of the panel</a><a href="#l2"><span>02</span>What sound is</a>
+    <a href="#l3"><span>03</span>Oscillator: four sound makers</a><a href="#l4"><span>04</span>Filter: bright or dark</a><a href="#l5"><span>05</span>Resonance: the whistle</a>
+    <a href="#l6"><span>06</span>Envelope: note shape</a><a href="#l7"><span>07</span>Envelope moves the filter</a><a href="#l8"><span>08</span>Filter keyboard follow</a>
+    <a href="#l9"><span>09</span>LFO: the wobble</a><a href="#l10"><span>10</span>Effects, voices, arp</a><a href="#l11"><span>11</span>Recipes and your MiniLab map</a><a href="#l12"><span>12</span>Four-beat riff in pattern 14</a><a href="#menu"><span>M</span>Menu map</a>
+  </div>
+</section>
+
+<!-- L0 -->
+<section class="card" id="l0">
+  <h2>00 · Housekeeping: slots, saving, and the clean start</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can pick an empty slot, wipe it clean, set the knobs to the clean start, save it, and never break a factory sound.</p></div>
+  <p class="big">On the S-1 a sound and its notes live together. Roland calls that pair a <b>pattern</b>. Think of it as a <b>slot</b>.</p>
+  <h3>Where the 64 slots live</h3>
+  <p>There are 4 <b>banks</b>. Each bank has 16 slots. That is 64 slots. We write a slot as bank-number. So <b>2-05</b> means bank 2, slot 5.</p>
+  <table><tr><th>Bank</th><th>What is in it from the factory</th><th>What we use it for in this course</th></tr>
+  <tr><td><b>1</b> (1-01 to 1-16)</td><td>Roland's 16 factory sounds. <b>They can be overwritten.</b> There is no lock.</td><td>Listen only. Never save here.</td></tr>
+  <tr><td><b>2</b> (2-01 to 2-16)</td><td>Empty</td><td><b>Lesson slots.</b> Lesson 03 saves to 2-03, Lesson 04 to 2-04, and so on.</td></tr>
+  <tr><td><b>3</b> (3-01 to 3-16)</td><td>Empty</td><td><b>Your own sounds.</b> Save the ones you like here.</td></tr>
+  <tr><td><b>4</b> (4-01 to 4-16)</td><td>Empty</td><td><b>Scratch.</b> Mess around here. It does not matter if you wreck it. Slot <b>4-15</b> is the one keeper: the clean start.</td></tr></table>
+  <div class="box wrong"><b class="lead">The one way to lose a factory sound</b><p>You are in bank 1, you change the sound, and you press SHIFT + pad 16 (WRITE). That saves over Roland's sound. So: <b>always check the display shows a 2, 3 or 4 first</b> before you save.</p><p>If you do wreck one, the fix is a factory reset. Hold the <b>HOLD</b> pad while you turn the power on. The display shows <span class="lcd">FACt</span> (factory reset). Press the blinking <b>D-MOTION</b> button. Wait for <span class="lcd">donE</span> (done). Turn the S-1 off and on. This wipes <b>all 64 slots</b>, so back up first (see below).</p></div>
+
+  <h3>Step 1 · Pick a slot</h3>
+  <ol>
+    <li>Hold the <b>PATTERN</b> button. The pads for the 4 banks light up.</li>
+    <li>Still holding PATTERN, press pad <b>1, 2, 3 or 4</b> to pick the bank.</li>
+    <li>Let go of PATTERN.</li>
+    <li>Press a pad <b>1 to 16</b> to pick the slot number.</li>
+  </ol>
+  <p>The display shows the slot, like <span class="lcd">2.03</span> (bank 2, slot 3). If a sound is playing, the new slot waits until the old one finishes.</p>
+
+  <h3>Step 2 · Wipe the slot clean (this is "init")</h3>
+  <p>"Init" is short for initialize. It means: erase this slot. The notes go away. The sound goes back to Roland's blank sound. Every hidden SHIFT setting goes back to normal too.</p>
+  <ol>
+    <li>Hold <b>SHIFT</b>. Press pad <b>15 (MENU)</b>.</li>
+    <li>Turn the <b>TEMPO/VALUE</b> knob until the display shows <span class="lcd">init</span> (initialize).</li>
+    <li>Press pad <b>2 (ENTER)</b>.</li>
+    <li>Press pad <b>1 (EXIT)</b> to leave the menu.</li>
+  </ol>
+  <p>Init is not saved by itself. If you turn the S-1 off now, the old slot comes back. That is fine. We save at the end of each lesson.</p>
+
+  <h3>Step 3 · The clean start (knobs match the sound)</h3>
+  <p>The S-1 has a catch. The knobs can point one way while the sound is set another way. That happens every time you change slot. To make the sound match the knobs, hold <b>SHIFT</b> and press <b>HOLD (MANUAL)</b>. We call this the <b>clean start</b>. Set the knobs like the picture first. Then press SHIFT + HOLD.</p>
+  <div class="fig shot"><img src="img/s1-clean-start.png" alt="Roland S-1 clean start knob positions: saw max, filter freq max, sustain max, everything else min"><div class="cap">The clean start. MIN = 7 o'clock, all the way left. MAX = 5 o'clock, all the way right. Set every knob, then press SHIFT + HOLD so the sound matches the knobs.</div></div>
+  <table><tr><th>Section</th><th>Knob</th><th>Set it to</th><th>Why</th></tr>
+  <tr><td>LFO</td><td>RATE</td><td>MIN</td><td>Slow. It is not doing anything yet anyway.</td></tr>
+  <tr><td>LFO</td><td>WAVE FORM</td><td>triangle (∧∨)</td><td>The smooth shape. Ready for Lesson 09.</td></tr>
+  <tr><td>OSCILLATOR</td><td>RANGE</td><td>8′</td><td>The middle octave. Not too low, not too high.</td></tr>
+  <tr><td>OSCILLATOR</td><td>LFO (white)</td><td>MIN</td><td>No pitch wobble.</td></tr>
+  <tr><td>OSCILLATOR</td><td>square, SUB, NOISE</td><td>MIN</td><td>Three of the four sound makers off.</td></tr>
+  <tr><td>OSCILLATOR</td><td>saw (⟋)</td><td>MAX</td><td>One sound maker on. The sawtooth is bright and easy to hear.</td></tr>
+  <tr><td>FILTER</td><td>FREQ</td><td>MAX</td><td>Filter wide open. You hear everything.</td></tr>
+  <tr><td>FILTER</td><td>RESO, ENV, LFO</td><td>MIN</td><td>No whistle, no movement.</td></tr>
+  <tr><td>EFX</td><td>DELAY, REVERB</td><td>MIN</td><td>No echo, no room. Dry.</td></tr>
+  <tr><td>ENV</td><td>ATTACK, DECAY, RELEASE</td><td>MIN</td><td>Note starts and stops right away.</td></tr>
+  <tr><td>ENV</td><td>SUSTAIN</td><td>MAX</td><td>Note stays at full volume while you hold the pad.</td></tr></table>
+  <p>SHIFT + HOLD only copies the <b>knobs</b>. The hidden SHIFT settings stay as init left them. Init sets them to these, and this is what we want:</p>
+  <table><tr><th>Hidden setting</th><th>How to see it</th><th>Should show</th></tr>
+  <tr><td>AMP</td><td>SHIFT + AMP pad</td><td><span class="lcd">Env</span> (envelope)</td></tr>
+  <tr><td>POLY</td><td>SHIFT + POLY pad</td><td><span class="lcd">Nono</span> (one note at a time)</td></tr>
+  <tr><td>PWM SRC</td><td>SHIFT + PWM SRC pad</td><td><span class="lcd">NAn</span> (manual)</td></tr>
+  <tr><td>FILTER KYBD</td><td>SHIFT + pad 7</td><td><span class="lcd">0</span></td></tr>
+  <tr><td>ARPEGGIO</td><td>SHIFT + pad 8</td><td><span class="lcd">OFF</span> (off)</td></tr></table>
+  <p>If one is different, turn <b>TEMPO/VALUE</b> until it matches. Press pad <b>1 (EXIT)</b>.</p>
+
+  <h3>Step 4 · Play it</h3>
+  <p>Press any keyboard pad. The 13 big pads at the bottom are a one-octave keyboard. You should hear one plain, buzzy note. That is the clean start sound. Every lesson begins from here.</p>
+
+  <h3>Step 5 · Save it</h3>
+  <ol>
+    <li>Look at the display. Make sure the slot starts with <b>2, 3 or 4</b>.</li>
+    <li>Hold <b>SHIFT</b>. Press pad <b>16 (WRITE)</b>. The display shows <span class="lcd">Ptn</span> (pattern).</li>
+    <li>Press pad <b>2 (ENTER)</b>.</li>
+    <li>Wait for <span class="lcd">donE</span> (done). Your slot is saved.</li>
+  </ol>
+  <div class="box tip"><b class="lead">How to know you have unsaved changes</b><p>A small dot appears at the right of the display. When you turn the S-1 off, unsaved changes are gone. The slot goes back to the last save.</p></div>
+
+  <h3>Undo: put a slot back the way it was</h3>
+  <p>Hold <b>SHIFT</b>. Press pad <b>15 (MENU)</b>. Turn TEMPO/VALUE to <span class="lcd">rL.Sd</span> (Reload Sound). Press pad <b>2 (ENTER)</b>. The sound goes back to the last save. The notes stay. <span class="lcd">rLod</span> (reload sound and notes) puts back the sound <i>and</i> the notes.</p>
+
+  <h3>Copy a slot to another slot</h3>
+  <p>Open the slot you want to copy. Hold <b>SHIFT</b>, press pad <b>15 (MENU)</b>. Turn to <span class="lcd">COPy</span> (copy). Press <b>ENTER</b>. Turn TEMPO/VALUE to pick where it goes, like <span class="lcd">3.01</span> (bank 3, slot 1). Press <b>ENTER</b>. Use this to move a lesson sound you like into bank 3.</p>
+
+  <h3>Back up everything to a computer</h3>
+  <p>Plug the S-1 into the Mac with the USB cable. Hold the <b>PLAY</b> button while you turn the power on. Wait 1 to 2 minutes. A drive called <b>S-1</b> appears on the Mac. Copy the whole <b>BACKUP</b> folder somewhere safe. Eject the drive. Turn the S-1 off. Do this before a factory reset, and once a month.</p>
+
+  <h3>Optional: record what you play</h3>
+  <p>The S-1 can record the notes you play. It keeps them in the slot with the sound. This is called a riff. You do not need this for the lessons. It is fun, and it helps you hear a sound many times without playing it again.</p>
+
+  <h4>Step 1 · Pick an empty slot</h4>
+  <ol>
+    <li>Press <b>PLAY</b> if the S-1 is playing. It stops.</li>
+    <li>Hold <b>PATTERN</b>. Press pad <b>4</b>. Let go of PATTERN. This picks bank 4, the scratch bank.</li>
+    <li>Press pad <b>1</b>. The display shows <span class="lcd">4.01</span> (bank 4, slot 1).</li>
+    <li>Set the sound you want to record. The clean start is fine.</li>
+  </ol>
+
+  <h4>Step 2 · Pick a speed and a length</h4>
+  <ol>
+    <li>Make sure <b>PATTERN</b> and <b>STEP</b> are not lit. If one is lit, press it.</li>
+    <li>Turn <b>TEMPO/VALUE</b>. The number is beats per minute. 100 is a good start.</li>
+    <li>Hold <b>SHIFT</b>. Press pad <b>4 (LAST)</b>. Let go of SHIFT.</li>
+    <li>Turn <b>TEMPO/VALUE</b> to <span class="lcd">16</span>. That is one bar. 32 is two bars. 64 is four bars.</li>
+    <li>Press pad <b>1 (EXIT)</b>.</li>
+  </ol>
+
+  <h4>Step 3 · Turn on the count-in</h4>
+  <p>A count-in is four clicks before the recording starts. It gives you time to get ready.</p>
+  <ol>
+    <li>Hold <b>SHIFT</b>. Press pad <b>15 (MENU)</b>. Let go of SHIFT.</li>
+    <li>Turn <b>TEMPO/VALUE</b> until the display shows <span class="lcd">Cnt.I</span> (count-in). Press pad <b>2 (ENTER)</b>.</li>
+    <li>Turn <b>TEMPO/VALUE</b> to <span class="lcd">4</span>.</li>
+    <li>Press pad <b>1 (EXIT)</b> until you are out of the menu.</li>
+  </ol>
+
+  <h4>Step 4 · Turn on the click</h4>
+  <p>The click is a steady beat. It helps you play in time.</p>
+  <ol>
+    <li>Hold <b>SHIFT</b>. Press pad <b>15 (MENU)</b>. Let go of SHIFT.</li>
+    <li>Turn <b>TEMPO/VALUE</b> to <span class="lcd">Ntro</span> (metronome). Press pad <b>2 (ENTER)</b>.</li>
+    <li>Turn <b>TEMPO/VALUE</b> to <span class="lcd">rEC</span> (rec: click only while recording). The click plays only while you record.</li>
+    <li>Press pad <b>1 (EXIT)</b> until you are out of the menu.</li>
+  </ol>
+  <div class="box tip"><b class="lead">Click too quiet?</b><p>Open the menu again. Turn to <span class="lcd">Ntr.L</span> (metronome level). Press ENTER. Turn the number up. Press EXIT.</p></div>
+
+  <h4>Step 5 · Record</h4>
+  <ol>
+    <li>Press <b>REC</b>. It lights up. The S-1 is ready.</li>
+    <li>Press <b>PLAY</b>. You hear four clicks.</li>
+    <li>Play your riff on the Xkey or the pads. Start on the beat after the fourth click.</li>
+    <li>The display shows <span class="lcd">rEc</span> (recording). The loop goes round and round. Each time, it keeps what you play.</li>
+    <li>When you are done, press <b>REC</b>. The light goes off. Recording stops. The loop keeps playing.</li>
+  </ol>
+
+  <h4>Step 6 · Listen and save</h4>
+  <ol>
+    <li>Listen to the loop. Press <b>PLAY</b> to stop it. Press <b>PLAY</b> again to hear it again.</li>
+    <li>Hold <b>SHIFT</b>. Press pad <b>16 (WRITE)</b>. The display shows <span class="lcd">Ptn</span> (pattern).</li>
+    <li>Press pad <b>2 (ENTER)</b>. Wait for <span class="lcd">donE</span> (done). Your riff is saved.</li>
+  </ol>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><p>Wrong notes? Hold <b>SHIFT</b>. Press pad <b>15 (MENU)</b>. Turn to <span class="lcd">rL.Sq</span> (reload sequence). Press ENTER. The notes are gone. The sound stays. Go back to Step 5. Too fast or too slow? Change <b>TEMPO/VALUE</b> and record again.</p></div>
+
+  <div class="box gate check" data-l="l0"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can open slot 4-15 with the PATTERN button and the pads.</label>
+    <label><input type="checkbox"> I can wipe a slot with MENU → init (initialize) → ENTER.</label>
+    <label><input type="checkbox"> I can set the clean start knobs and press SHIFT + HOLD.</label>
+    <label><input type="checkbox"> I can save with SHIFT + 16 → ENTER and see donE.</label>
+    <label><input type="checkbox"> I know bank 1 is the factory bank and I do not save there.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Save the clean start to slot <b>4-15</b>. Now you can always come back to it.</p><a class="next" href="#l1">Next: Lesson 01, the map →</a></div>
+</section>
+
+<!-- L1 -->
+<section class="card" id="l1">
+  <h2>01 · The map: a sound's journey across the panel</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can point to the five sections on the panel and say what each one does, in one short sentence.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>A slot holds a sound and its notes. Bank 1 is Roland's. Banks 2, 3 and 4 are yours. Save with SHIFT + 16 → ENTER.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>4-15</b>, your saved clean start. Press <b>SHIFT + HOLD</b>. If you did not save it, do Lesson 00 steps 1 to 3 again in slot 4-15.</p></div>
+  <p class="big">A sound is made in steps. Each step is a section on the panel. The sound goes from left to right across the top row.</p>
+  <div class="fig shot"><div class="hsmap" id="hsmap"><img src="img/s1-panel-top.png" alt="Roland S-1 top panel"></div><div class="hs-hint">Tap any knob, button or pad to see what it does. Tap again, or tap anywhere else, to close the note.</div><div class="cap">The S-1 top panel. Top row: jacks and volume. Left: the display and tempo knob. Middle: the five sound sections. Bottom: SHIFT, the small function pads, and the 13 keyboard pads.</div></div>
+  <h3>The five sections printed on the panel</h3>
+  <table><tr><th>Section</th><th>In plain words</th><th>Job</th></tr>
+  <tr><td><b>OSCILLATOR</b></td><td>the sound maker</td><td>Makes the raw buzz. Picks the octave.</td></tr>
+  <tr><td><b>FILTER</b></td><td>the bright-or-dark knob</td><td>Takes the fizz out of the buzz. Or leaves it in.</td></tr>
+  <tr><td><b>ENV</b> (envelope)</td><td>the note shaper</td><td>Decides how a note starts, holds and ends. It does this once for every note.</td></tr>
+  <tr><td><b>LFO</b></td><td>the wobble maker</td><td>Rocks a setting back and forth, over and over, by itself.</td></tr>
+  <tr><td><b>EFX</b> (effects)</td><td>the decoration</td><td>Adds echo and room sound at the very end.</td></tr></table>
+  <h3>The hidden sixth part: AMP</h3>
+  <p><b>AMP</b> is short for amplifier. It is the volume gate. It opens when you press a pad and closes when you let go. The S-1 has no AMP section with knobs. It is one hidden setting. Hold <b>SHIFT</b> and press the <b>AMP</b> pad to see it. <span class="lcd">Env</span> means the envelope controls the volume. <span class="lcd">GAtE</span> means plain on and off. We keep it on Env.</p>
+  <div class="fig"><svg viewBox="0 0 900 300" font-family="-apple-system,sans-serif">
+    <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#8a8f98"/></marker></defs>
+    <g font-size="15" font-weight="700" text-anchor="middle">
+      <rect x="20" y="40" width="170" height="90" rx="12" fill="#33240D" stroke="#F4A63C" stroke-width="2"/><text x="105" y="78" fill="#F4A63C">OSCILLATOR</text><text x="105" y="102" fill="#f7f8f8" font-weight="400" font-size="13">makes the buzz</text>
+      <rect x="250" y="40" width="170" height="90" rx="12" fill="#1E1B3D" stroke="#9585FF" stroke-width="2"/><text x="335" y="78" fill="#9585FF">FILTER</text><text x="335" y="102" fill="#f7f8f8" font-weight="400" font-size="13">bright or dark</text>
+      <rect x="480" y="40" width="170" height="90" rx="12" fill="#0C2E2B" stroke="#2FC7B4" stroke-width="2" stroke-dasharray="6 4"/><text x="565" y="78" fill="#2FC7B4">AMP (hidden)</text><text x="565" y="102" fill="#f7f8f8" font-weight="400" font-size="13">loud or quiet</text>
+      <rect x="710" y="40" width="170" height="90" rx="12" fill="#3A1414" stroke="#F26D6D" stroke-width="2"/><text x="795" y="78" fill="#F26D6D">EFX</text><text x="795" y="102" fill="#f7f8f8" font-weight="400" font-size="13">echo and room</text>
+      <rect x="250" y="200" width="170" height="80" rx="12" fill="#1B2A12" stroke="#8FCE63" stroke-width="2"/><text x="335" y="234" fill="#8FCE63">ENV (envelope)</text><text x="335" y="256" fill="#f7f8f8" font-weight="400" font-size="13">moves things once per note</text>
+      <rect x="20" y="200" width="170" height="80" rx="12" fill="#151F38" stroke="#7C9BE0" stroke-width="2"/><text x="105" y="234" fill="#7C9BE0">LFO</text><text x="105" y="256" fill="#f7f8f8" font-weight="400" font-size="13">moves things over and over</text>
+    </g>
+    <g stroke="#8a8f98" stroke-width="2.5" marker-end="url(#ar)"><line x1="190" y1="85" x2="246" y2="85"/><line x1="420" y1="85" x2="476" y2="85"/><line x1="650" y1="85" x2="706" y2="85"/></g>
+    <g stroke-width="2" stroke-dasharray="4 4" fill="none" marker-end="url(#ar)"><path d="M335,200 V134" stroke="#8FCE63"/><path d="M420,240 H565 V134" stroke="#8FCE63"/><path d="M105,200 V134" stroke="#7C9BE0"/><path d="M190,225 Q240,190 300,134" stroke="#7C9BE0"/></g>
+  </svg><div class="cap">Solid arrows carry the sound: OSCILLATOR → FILTER → AMP → EFX. The two boxes at the bottom, ENV and LFO, make no sound. They reach up and move the other boxes for you.</div></div>
+  <div class="box tip"><b class="lead">The SHIFT rule</b><p>Many S-1 settings have no knob. To reach them, hold <b>SHIFT</b> and press a pad. Or hold <b>SHIFT</b> and turn a knob. The small words above each pad tell you its SHIFT job. The display shows the value. Turn <b>TEMPO/VALUE</b> to change it. Press pad <b>1 (EXIT)</b> to leave.</p></div>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Hold a keyboard pad. Turn <b>FREQ</b> in the FILTER section down and up. The sound goes dark, then bright. That is the filter.</li><li>Put FREQ back to MAX. Turn <b>RELEASE</b> in the ENV section to 12 o'clock. Press and let go of a pad. The note hangs on. That is the envelope.</li><li>Put RELEASE back to MIN. Turn <b>REVERB</b> in the EFX section to 12 o'clock. Play. You are in a big room. That is an effect.</li><li>Put REVERB back to MIN.</li></ol></div>
+  <div class="box gate check" data-l="l1"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can point to the five printed sections: OSCILLATOR, FILTER, ENV, LFO, EFX.</label>
+    <label><input type="checkbox"> I can say the order the sound travels: OSCILLATOR → FILTER → AMP → EFX.</label>
+    <label><input type="checkbox"> I can name the two helpers that make no sound but move other things: ENV and LFO.</label>
+    <label><input type="checkbox"> I can find the hidden AMP setting with SHIFT + the AMP pad.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Nothing changed. You put every knob back. No save needed. The next lesson still starts from the clean start.</p><a class="next" href="#l2">Next: Lesson 02, what sound is →</a></div>
+</section>
+
+<!-- L2 -->
+<section class="card" id="l2">
+  <h2>02 · What sound actually is</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can name the three things about a sound wave that change what you hear.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>Five sections. The sound goes OSCILLATOR → FILTER → AMP → EFX. ENV and LFO are helpers.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>4-15</b>, the clean start. Press <b>SHIFT + HOLD</b>.</p></div>
+  <p class="big">Sound is air wiggling back and forth. Fast wiggles sound high. Big wiggles sound loud.</p>
+  <div class="fig"><svg id="w1" viewBox="0 0 900 200"></svg>
+  <div class="ctl" style="--c:var(--blk-violet);--wash:var(--blk-violet-wash)"><label>Pitch (speed) <input type="range" id="w1f" min="1" max="12" value="3"></label><label>Volume (size) <input type="range" id="w1a" min="10" max="90" value="60"></label></div>
+  <div class="cap">Drag the sliders. More waves squeezed in means a higher note. Taller waves mean a louder note.</div></div>
+  <p>A speaker pushes air back and forth. Your ear feels those pushes. There is a third thing too: the <b>shape</b> of the wiggle. Shape is why a flute and a trumpet sound different on the same note. The word for shape-of-sound is <b>timbre</b>. Say it "TAM-ber". You can also just say "the colour of the sound".</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Press a keyboard pad. Listen.</li><li>Hold <b>SHIFT</b> and press <b>OCT+</b>. Press the same pad. Same shape, faster wiggle, higher note.</li><li>Hold <b>SHIFT</b> and press <b>OCT−</b> to go back.</li><li>Turn the <b>VOLUME</b> knob at the top right down and up. Same shape, same speed, bigger wiggle.</li></ol></div>
+  <div class="box gate check" data-l="l2"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can say the three things: speed (pitch), size (volume), shape (timbre).</label>
+    <label><input type="checkbox"> I can move the keyboard up and down an octave with SHIFT + OCT+ and OCT−.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Nothing to save. Set the octave back to 0: hold SHIFT and press OCT− and OCT+ at the same time.</p><a class="next" href="#l3">Next: Lesson 03, the oscillator →</a></div>
+</section>
+
+<!-- L3 -->
+<section class="card" id="l3">
+  <h2>03 · Oscillator: four sound makers you mix like paint</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can hear the difference between the saw and the square, and you can add a deep SUB under them.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>The OSCILLATOR makes the raw buzz. A sound has speed, size and shape. Shape is called timbre.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-03</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set every knob like the table. Press <b>SHIFT + HOLD</b>.</p>
+  <table><tr><th>Knob</th><th>Set to</th></tr>
+  <tr><td>saw</td><td>MAX</td></tr><tr><td>square, SUB, NOISE</td><td>MIN</td></tr><tr><td>RANGE</td><td>8′</td></tr><tr><td>OSC LFO</td><td>MIN</td></tr>
+  <tr><td>FREQ</td><td>MAX</td></tr><tr><td>RESO, FILTER ENV, FILTER LFO</td><td>MIN</td></tr>
+  <tr><td>ATTACK, DECAY, RELEASE</td><td>MIN</td></tr><tr><td>SUSTAIN</td><td>MAX</td></tr>
+  <tr><td>LFO RATE</td><td>MIN</td></tr><tr><td>LFO WAVE FORM</td><td>triangle</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr>
+  <tr><td>SHIFT settings</td><td>AMP = Env · POLY = Nono · PWM SRC = NAn</td></tr></table></div>
+  <p class="big">The S-1 has four sound makers. Each green knob is the volume of one of them. You mix them like paint.</p>
+  <table><tr><th>Green knob</th><th>Sound maker</th><th>Sounds like</th><th>Good for</th></tr>
+  <tr><td>⊓⊔ (square)</td><td>Square wave</td><td>hollow, like a clarinet</td><td>bleepy leads, dark bass</td></tr>
+  <tr><td>⟋ (saw)</td><td>Sawtooth wave</td><td>buzzy, bright, full</td><td>bass, stabs, big leads</td></tr>
+  <tr><td>SUB</td><td>Sub oscillator</td><td>a deep copy, one or two octaves down</td><td>heavy bass floor</td></tr>
+  <tr><td>NOISE</td><td>Noise</td><td>hiss, like wind or rain</td><td>hi-hats, air, risers</td></tr></table>
+  <div class="fig"><svg id="w2" viewBox="0 0 900 220"></svg>
+  <div class="ctl" style="--c:var(--blk-amber);--wash:var(--blk-amber-wash)"><button data-w="saw" class="on">Sawtooth</button><button data-w="sq">Square</button><button data-w="pulse">Thin pulse</button><button data-w="pwm">PWM (moving)</button></div>
+  <div class="cap" id="w2c"></div></div>
+  <p>The square wave has a secret. Its top and bottom can be the same width, or different widths. A thin top sounds nasal and reedy. Hold <b>SHIFT</b> and press <b>PWM DEPTH</b> to set the width, 0 to 255. Hold <b>SHIFT</b> and press <b>PWM SRC</b> to pick what moves the width. <span class="lcd">NAn</span> means you set it and it stays. <span class="lcd">LFO</span> (LFO wave) makes it shimmer. <span class="lcd">Env</span> (envelope) moves it once per note. PWM is short for "pulse width modulation". That just means "changing the width".</p>
+  <p>Two more knobs live in this section. <b>RANGE</b> picks the octave. 64′ is very low. 2′ is very high. 8′ is the middle. The white <b>LFO</b> knob lets the wobble bend the pitch. That is Lesson 09. Leave it at MIN for now.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Hold a pad. You hear the saw alone. Buzzy and bright.</li><li>Turn <b>saw</b> to MIN. Turn <b>square</b> to MAX. Hollow and woody. Same note, different colour.</li><li>Turn <b>square</b> to MIN. Turn <b>saw</b> back to MAX.</li><li>Now add <b>SUB</b> (Fader 2) up to 12 o'clock. Feel the floor shake. Hold <b>SHIFT</b> and press <b>SUB OCT</b> to pick <span class="lcd">-1oc</span> (one octave down) or <span class="lcd">-2oc</span> (two octaves down). Pick -1oc.</li><li>Add a little <b>NOISE</b> (Fader 3), to 9 o'clock. Hear the hiss. Turn it back to MIN.</li><li>Turn <b>RANGE</b> to 16′. Deeper. Turn it to 4′. Higher. Put it back to 8′.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>No sound at all:</b> all four green knobs are at MIN, or FREQ is at MIN. Turn saw up and FREQ to MAX.</li><li><b>Knobs do nothing:</b> you forgot SHIFT + HOLD after changing slot.</li><li><b>Too quiet and muddy:</b> RANGE is at 64′ or 32′. Set it to 8′.</li></ul></div>
+  <div class="box gate check" data-l="l3"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> With my eyes closed, I can tell the saw from the square 4 times out of 5.</label>
+    <label><input type="checkbox"> I can add the SUB and set it one octave down.</label>
+    <label><input type="checkbox"> I can change the octave with RANGE.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave the knobs like this: <b>saw MAX, SUB 12 o'clock (SUB OCT = -1oc), square and NOISE MIN, RANGE 8′</b>. Everything else as the table at the top. Save to slot <b>2-03</b>: SHIFT + 16 → ENTER → <span class="lcd">donE</span> (done). This is your "saw plus sub" sound. Lesson 04 starts from it.</p><a class="next" href="#l4">Next: Lesson 04, the filter →</a></div>
+</section>
+
+<!-- L4 -->
+<section class="card" id="l4">
+  <h2>04 · Filter: making it bright or dark</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can make a sound dark or bright with one knob, and you can guess the sound before you turn it.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>Four sound makers: square, saw, SUB, NOISE. Each green knob is one volume. RANGE picks the octave.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-04</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set every knob like the table. Press <b>SHIFT + HOLD</b>. Then set SUB OCT: SHIFT + SUB OCT pad → <span class="lcd">-1oc</span> (one octave down).</p>
+  <table><tr><th>Knob</th><th>Set to</th></tr>
+  <tr><td>saw</td><td>MAX</td></tr><tr><td>SUB</td><td>12 o'clock</td></tr><tr><td>square, NOISE</td><td>MIN</td></tr><tr><td>RANGE</td><td>8′</td></tr><tr><td>OSC LFO</td><td>MIN</td></tr>
+  <tr><td>FREQ</td><td>MAX</td></tr><tr><td>RESO, FILTER ENV, FILTER LFO</td><td>MIN</td></tr>
+  <tr><td>ATTACK, DECAY, RELEASE</td><td>MIN</td></tr><tr><td>SUSTAIN</td><td>MAX</td></tr>
+  <tr><td>LFO RATE</td><td>MIN</td></tr><tr><td>LFO WAVE FORM</td><td>triangle</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr>
+  <tr><td>SHIFT settings</td><td>AMP = Env · POLY = Nono · PWM SRC = NAn · SUB OCT = -1oc</td></tr></table></div>
+  <p class="big">The filter is a gate. It lets the low parts of the sound through. It blocks the high, fizzy parts.</p>
+  <div class="fig"><svg id="w3" viewBox="0 0 900 260"></svg>
+  <div class="ctl" style="--c:var(--blk-violet);--wash:var(--blk-violet-wash)"><label>FREQ (Knob 1) <input type="range" id="w3c" min="0" max="100" value="45"></label><label>RESO (Knob 2) <input type="range" id="w3r" min="0" max="100" value="0"></label></div>
+  <div class="cap">Each bar is one part of a sawtooth sound. Low parts are on the left. High fizzy parts are on the right. The purple line is the filter. Anything under the line gets through. Leave RESO at 0 for now. It is the next lesson.</div></div>
+  <p>A sawtooth is not one sound. It is a stack of quiet tones piled up. The stack is called the <b>harmonics</b>. The S-1 filter is a <b>low-pass</b> filter. That means it lets the <i>low</i> harmonics <i>pass</i> through. The knob that moves the gate is called <b>FREQ</b>. Turn it down and the high harmonics go away. The sound gets dark, like music through a wall. Turn it all the way down and there is no sound at all.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Hold a low pad.</li><li>Slowly turn <b>FREQ</b> (Knob 1) from MAX down to MIN. Bright, warm, dark, gone.</li><li>Slowly turn it back up. That move is called a <b>filter sweep</b>. It is the most famous sound in techno.</li><li>Stop at 12 o'clock. Play a few notes. Warm, not fizzy.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>No sound:</b> FREQ is at MIN. Turn it up.</li><li><b>Nothing changes when I turn FREQ:</b> forgot SHIFT + HOLD. Press it.</li></ul></div>
+  <div class="box gate check" data-l="l4"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> FREQ at 3 o'clock: I know it will be bright before I turn it.</label>
+    <label><input type="checkbox"> FREQ at 8 o'clock: I know it will be very dark before I turn it.</label>
+    <label><input type="checkbox"> I can say what "low-pass" means in plain words.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave <b>FREQ at 12 o'clock</b>. Everything else as the table. Save to slot <b>2-04</b>: SHIFT + 16 → ENTER → <span class="lcd">donE</span> (done).</p><a class="next" href="#l5">Next: Lesson 05, resonance →</a></div>
+</section>
+
+<!-- L5 -->
+<section class="card" id="l5">
+  <h2>05 · Resonance: the whistle at the edge</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can make the filter "talk" with the RESO knob, and you know why it gets loud.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>The filter is a gate. FREQ moves the gate. Low FREQ is dark. High FREQ is bright. A sound is a stack of harmonics.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-05</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set every knob like the table. Press <b>SHIFT + HOLD</b>. Set SUB OCT to <span class="lcd">-1oc</span> (one octave down). <b>Turn your headphones down first.</b></p>
+  <table><tr><th>Knob</th><th>Set to</th></tr>
+  <tr><td>saw</td><td>MAX</td></tr><tr><td>SUB</td><td>12 o'clock</td></tr><tr><td>square, NOISE</td><td>MIN</td></tr><tr><td>RANGE</td><td>8′</td></tr><tr><td>OSC LFO</td><td>MIN</td></tr>
+  <tr><td>FREQ</td><td>12 o'clock</td></tr><tr><td>RESO, FILTER ENV, FILTER LFO</td><td>MIN</td></tr>
+  <tr><td>ATTACK, DECAY, RELEASE</td><td>MIN</td></tr><tr><td>SUSTAIN</td><td>MAX</td></tr>
+  <tr><td>LFO RATE</td><td>MIN</td></tr><tr><td>LFO WAVE FORM</td><td>triangle</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr>
+  <tr><td>SHIFT settings</td><td>AMP = Env · POLY = Nono · PWM SRC = NAn · SUB OCT = -1oc</td></tr></table></div>
+  <p class="big">Resonance makes the edge of the filter louder. You hear a "wow" or a whistle right where the gate is.</p>
+  <p>Go back to the picture in Lesson 04. Drag <b>RESO</b> up. See the bump at the edge of the purple line? That bump turns up the harmonics right at the gate. Push RESO all the way up and the filter sings by itself. That is called <b>self-oscillation</b>. It means the filter has become its own sound maker.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Hold a pad. Turn <b>RESO</b> (Knob 2) up to 3 o'clock. The sound gets thinner and sharper.</li><li>Now slowly sweep <b>FREQ</b> (Knob 1) down and up. Hear it talk: "yeeoww". That is the squelchy acid sound.</li><li>Turn RESO to MAX. Turn FREQ to about 10 o'clock. Let go of the pad. It still whistles. That is self-oscillation.</li><li>Turn RESO back to 2 o'clock.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>It is too loud and shrill:</b> RESO is high and FREQ is high. Turn FREQ down to 10 o'clock.</li><li><b>I hear no change:</b> FREQ is at MAX. The gate is above all the harmonics, so the bump has nothing to grab. Turn FREQ to 12 o'clock.</li></ul></div>
+  <div class="box gate check" data-l="l5"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can say why a filter sweep sounds bigger with RESO up. (The bump makes the moving edge easy to hear.)</label>
+    <label><input type="checkbox"> I can make the filter whistle on its own, and then stop it.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave <b>FREQ at 10 o'clock, RESO at 2 o'clock</b>. Everything else as the table. Save to slot <b>2-05</b>: SHIFT + 16 → ENTER → <span class="lcd">donE</span> (done).</p><a class="next" href="#l6">Next: Lesson 06, the envelope →</a></div>
+</section>
+
+<!-- L6 -->
+<section class="card" id="l6">
+  <h2>06 · Envelope: the shape of every note</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can make a pluck, an organ, a slow pad and a click, using only the four ENV knobs.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>FREQ moves the filter gate. RESO makes the edge of the gate loud. ENV is a helper. It makes no sound by itself.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-06</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set every knob like the table. Press <b>SHIFT + HOLD</b>. Set SUB OCT to <span class="lcd">-1oc</span> (one octave down). Check <b>SHIFT + AMP</b> shows <span class="lcd">Env</span> (envelope).</p>
+  <table><tr><th>Knob</th><th>Set to</th></tr>
+  <tr><td>saw</td><td>MAX</td></tr><tr><td>SUB</td><td>12 o'clock</td></tr><tr><td>square, NOISE</td><td>MIN</td></tr><tr><td>RANGE</td><td>8′</td></tr><tr><td>OSC LFO</td><td>MIN</td></tr>
+  <tr><td>FREQ</td><td>10 o'clock</td></tr><tr><td>RESO</td><td>2 o'clock</td></tr><tr><td>FILTER ENV, FILTER LFO</td><td>MIN</td></tr>
+  <tr><td>ATTACK, DECAY, RELEASE</td><td>MIN</td></tr><tr><td>SUSTAIN</td><td>MAX</td></tr>
+  <tr><td>LFO RATE</td><td>MIN</td></tr><tr><td>LFO WAVE FORM</td><td>triangle</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr>
+  <tr><td>SHIFT settings</td><td>AMP = Env · POLY = Nono · PWM SRC = NAn · SUB OCT = -1oc</td></tr></table></div>
+  <p class="big">The envelope is a robot hand. Every time you press a pad, it turns the volume knob for you. It moves in four steps: A, D, S, R.</p>
+  <div class="fig"><svg id="w5" viewBox="0 0 900 260"></svg>
+  <div class="ctl" style="--c:var(--blk-green);--wash:var(--blk-green-wash)"><label>A <input type="range" id="w5a" min="0" max="100" value="10"></label><label>D <input type="range" id="w5d" min="0" max="100" value="40"></label><label>S <input type="range" id="w5s" min="0" max="100" value="60"></label><label>R <input type="range" id="w5r" min="0" max="100" value="30"></label></div>
+  <div class="cap">The pad goes down at the left green line. It comes up at the right green line. Drag the four sliders and watch the shape change.</div></div>
+  <table><tr><th>Step</th><th>Question it answers</th><th>S-1 knob</th><th>MiniLab</th></tr>
+  <tr><td><b>A</b>ttack</td><td>How fast does the note get going?</td><td>ATTACK</td><td>Knob 5</td></tr>
+  <tr><td><b>D</b>ecay</td><td>How fast does it drop after the start?</td><td>DECAY</td><td>Knob 6</td></tr>
+  <tr><td><b>S</b>ustain</td><td>How loud does it stay while I hold the pad? (This is a level, not a time.)</td><td>SUSTAIN</td><td>Knob 7</td></tr>
+  <tr><td><b>R</b>elease</td><td>How long does it ring after I let go?</td><td>RELEASE</td><td>Knob 8</td></tr></table>
+  <div class="fig"><svg viewBox="0 0 900 170" font-family="-apple-system,sans-serif" font-size="14" text-anchor="middle">
+    <g fill="none" stroke-width="3">
+      <path d="M30,140 L45,40 L110,140 L190,140" stroke="#8FCE63"/><path d="M240,140 L250,50 L250,70 L390,70 L400,140" stroke="#2FC7B4"/><path d="M480,140 L600,40 L680,60 L720,60 L800,140" stroke="#9585FF"/><path d="M830,140 L835,40 L845,140 L880,140" stroke="#F4A63C"/>
+    </g>
+    <g fill="#f7f8f8"><text x="110" y="162">Pluck / bass</text><text x="320" y="162">Organ / stab</text><text x="640" y="162">Pad (slow swell)</text><text x="855" y="162">Click / hat</text></g>
+  </svg><div class="cap">Four shapes to learn. Same sound maker, four different instruments.</div></div>
+  <table><tr><th>Shape</th><th>ATTACK</th><th>DECAY</th><th>SUSTAIN</th><th>RELEASE</th></tr>
+  <tr><td>Pluck / bass</td><td>MIN</td><td>10 o'clock</td><td>MIN</td><td>9 o'clock</td></tr>
+  <tr><td>Organ / stab</td><td>MIN</td><td>MIN</td><td>MAX</td><td>MIN</td></tr>
+  <tr><td>Pad (slow swell)</td><td>1 o'clock</td><td>2 o'clock</td><td>3 o'clock</td><td>3 o'clock</td></tr>
+  <tr><td>Click / hat</td><td>MIN</td><td>8 o'clock</td><td>MIN</td><td>MIN</td></tr></table>
+  <p>One S-1 catch: the envelope only shapes the volume if AMP is set to listen to it. Hold <b>SHIFT</b> and press <b>AMP</b>. <span class="lcd">Env</span> means "follow the envelope". <span class="lcd">GAtE</span> means "just on while the pad is down". Keep it on Env.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Set the <b>Organ</b> shape from the table. Press a pad. It is on, then off. Plain.</li><li>Set the <b>Pluck</b> shape. Press a pad. Pop, then gone. Hold the pad. Still gone, because SUSTAIN is MIN.</li><li>Set the <b>Pad</b> shape. Press a pad. It fades in. Let go. It fades out.</li><li>Set the <b>Click</b> shape. Press a pad. Tick.</li><li>Go back to <b>Pluck</b>. Now turn DECAY slowly up. The pluck gets longer.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>Pluck does not stop while I hold the pad:</b> SUSTAIN is not at MIN.</li><li><b>Pad does not fade in:</b> SHIFT + AMP is set to GAtE. Change it to Env.</li><li><b>Notes cut off hard even with RELEASE up:</b> same fix, AMP must be Env.</li></ul></div>
+  <div class="box gate check" data-l="l6"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> Someone says "fade in slowly and ring after I let go". I know to raise ATTACK and RELEASE.</label>
+    <label><input type="checkbox"> I can make all four shapes without looking at the table.</label>
+    <label><input type="checkbox"> I can say why SUSTAIN is a level, not a time.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave the <b>Pluck</b> shape: <b>ATTACK MIN, DECAY 10 o'clock, SUSTAIN MIN, RELEASE 9 o'clock</b>. Everything else as the table. Save to slot <b>2-06</b>: SHIFT + 16 → ENTER → <span class="lcd">donE</span> (done).</p><a class="next" href="#l7">Next: Lesson 07, envelope moves the filter →</a></div>
+</section>
+
+<!-- L7 -->
+<section class="card" id="l7">
+  <h2>07 · Envelope moves the filter: the "pluck" and the "wow"</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can make the classic techno bass: every note opens bright and closes dark.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>The envelope is a robot hand. A, D, S, R. It shapes the volume when AMP = Env. Pluck means ATTACK MIN, SUSTAIN MIN.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-07</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set every knob like the table. Press <b>SHIFT + HOLD</b>. Set SUB OCT to <span class="lcd">-1oc</span> (one octave down).</p>
+  <table><tr><th>Knob</th><th>Set to</th></tr>
+  <tr><td>saw</td><td>MAX</td></tr><tr><td>SUB</td><td>12 o'clock</td></tr><tr><td>square, NOISE</td><td>MIN</td></tr><tr><td>RANGE</td><td>8′</td></tr><tr><td>OSC LFO</td><td>MIN</td></tr>
+  <tr><td>FREQ</td><td>10 o'clock</td></tr><tr><td>RESO</td><td>2 o'clock</td></tr><tr><td>FILTER ENV, FILTER LFO</td><td>MIN</td></tr>
+  <tr><td>ATTACK</td><td>MIN</td></tr><tr><td>DECAY</td><td>10 o'clock</td></tr><tr><td>SUSTAIN</td><td>MIN</td></tr><tr><td>RELEASE</td><td>9 o'clock</td></tr>
+  <tr><td>LFO RATE</td><td>MIN</td></tr><tr><td>LFO WAVE FORM</td><td>triangle</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr>
+  <tr><td>SHIFT settings</td><td>AMP = Env · POLY = Nono · PWM SRC = NAn · SUB OCT = -1oc</td></tr></table></div>
+  <p class="big">The robot hand can turn two knobs at once. It already turns the volume. Now we let it turn FREQ too.</p>
+  <div class="fig"><svg viewBox="0 0 900 230" font-family="-apple-system,sans-serif" font-size="14">
+    <g stroke="#28282c"><line x1="40" y1="200" x2="860" y2="200"/></g>
+    <path d="M60,200 L60,150 L400,150" stroke="#9585FF" stroke-width="3" fill="none" stroke-dasharray="6 4"/>
+    <path d="M60,150 L130,40 L300,150" stroke="#8FCE63" stroke-width="3" fill="#1B2A12"/>
+    <text x="70" y="140" fill="#9585FF">FREQ knob: where the filter rests</text><text x="140" y="34" fill="#8FCE63">FILTER ENV knob: how far each note pushes it up</text>
+    <text x="40" y="222" fill="#8a8f98" font-size="12">pad down</text>
+    <path d="M520,200 L520,100 L860,100" stroke="#9585FF" stroke-width="3" fill="none" stroke-dasharray="6 4"/>
+    <path d="M520,100 L560,60 L720,100" stroke="#8FCE63" stroke-width="3" fill="#1B2A12"/>
+    <text x="530" y="90" fill="#9585FF">FREQ higher, FILTER ENV smaller</text><text x="530" y="222" fill="#8a8f98" font-size="12">pad down</text>
+  </svg><div class="cap">Purple dashed line: where FREQ sets the gate. Green hill: the envelope pushing the gate up for a moment, then letting it fall.</div></div>
+  <p>This is the most important trick in the course. The orange <b>ENV</b> knob in the FILTER section (Knob 3) connects the envelope to the filter. Turn it up. Now every note starts bright and goes dark, "bow-w". The DECAY knob sets how fast it goes dark.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Turn <b>FREQ</b> down to 9 o'clock. Play. Dull and dark.</li><li>Turn <b>FILTER ENV</b> (Knob 3) up to 3 o'clock. Play short notes. Each one bites, "bow-w". That plucky bass is the heartbeat of techno.</li><li>Slowly turn <b>DECAY</b> (Knob 6) up and down. The bite gets longer and shorter.</li><li>Turn <b>RESO</b> up to 3 o'clock. Now it squelches too.</li><li>Put RESO back to 2 o'clock. Put DECAY back to 10 o'clock.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>No bite:</b> FILTER ENV is at MIN, or FREQ is already at MAX so there is nowhere to go. Set FREQ to 9 o'clock.</li><li><b>Bite is there but the note hangs on:</b> SUSTAIN is up. Set it to MIN.</li></ul></div>
+  <div class="box gate check" data-l="l7"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> My bass sounds dull. I know two knobs that add bite. (FILTER ENV, or RESO.)</label>
+    <label><input type="checkbox"> I know which knob makes the bite longer. (DECAY.)</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave <b>FREQ 9 o'clock, RESO 2 o'clock, FILTER ENV 3 o'clock, DECAY 10 o'clock</b>. Everything else as the table. Save to slot <b>2-07</b>. This is your <b>pluck bass</b>. You will use it again in Lessons 10 and 11.</p><a class="next" href="#l8">Next: Lesson 08, filter keyboard follow →</a></div>
+</section>
+
+<!-- L8 -->
+<section class="card" id="l8">
+  <h2>08 · Filter keyboard follow: fair for high and low notes</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can make high notes and low notes sound equally bright, with one hidden setting.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>FILTER ENV lets the envelope push the filter open on each note. FREQ is where the filter rests. DECAY is how fast the bite fades.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-08</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set every knob like the table. Press <b>SHIFT + HOLD</b>. Set SUB OCT to <span class="lcd">-1oc</span> (one octave down).</p>
+  <table><tr><th>Knob</th><th>Set to</th></tr>
+  <tr><td>saw</td><td>MAX</td></tr><tr><td>SUB</td><td>12 o'clock</td></tr><tr><td>square, NOISE</td><td>MIN</td></tr><tr><td>RANGE</td><td>8′</td></tr><tr><td>OSC LFO</td><td>MIN</td></tr>
+  <tr><td>FREQ</td><td>9 o'clock</td></tr><tr><td>RESO</td><td>2 o'clock</td></tr><tr><td>FILTER ENV</td><td>3 o'clock</td></tr><tr><td>FILTER LFO</td><td>MIN</td></tr>
+  <tr><td>ATTACK</td><td>MIN</td></tr><tr><td>DECAY</td><td>10 o'clock</td></tr><tr><td>SUSTAIN</td><td>MIN</td></tr><tr><td>RELEASE</td><td>9 o'clock</td></tr>
+  <tr><td>LFO RATE</td><td>MIN</td></tr><tr><td>LFO WAVE FORM</td><td>triangle</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr>
+  <tr><td>SHIFT settings</td><td>AMP = Env · POLY = Nono · PWM SRC = NAn · SUB OCT = -1oc · FILTER KYBD = 0</td></tr></table></div>
+  <p class="big">High notes have high harmonics. A fixed filter cuts them more. Keyboard follow lifts the filter as you play higher, so every note is equally bright.</p>
+  <div class="fig"><svg viewBox="0 0 900 220" font-family="-apple-system,sans-serif" font-size="14">
+    <g fill="#f7f8f8"><text x="60" y="30">Follow 0: filter stays put</text><text x="490" y="30">Follow 255: filter climbs with you</text></g>
+    <line x1="40" y1="110" x2="400" y2="110" stroke="#9585FF" stroke-width="3"/><line x1="470" y1="150" x2="830" y2="60" stroke="#9585FF" stroke-width="3"/>
+    <g fill="#F4A63C"><circle cx="100" cy="150" r="7"/><circle cx="230" cy="110" r="7"/><circle cx="360" cy="70" r="7"/><circle cx="530" cy="150" r="7"/><circle cx="660" cy="110" r="7"/><circle cx="790" cy="70" r="7"/></g>
+    <g fill="#8a8f98" font-size="12"><text x="85" y="210">low C</text><text x="340" y="210">high C</text><text x="515" y="210">low C</text><text x="770" y="210">high C</text></g>
+  </svg><div class="cap">Orange dots are notes. Purple is the filter. Left: the high note sits above the filter and gets cut, so it sounds dull. Right: the filter climbs with the notes.</div></div>
+  <p>This one has no knob. Hold <b>SHIFT</b> and press pad <b>7 (FILTER KYBD)</b>. Turn <b>TEMPO/VALUE</b> from 0 to 255. Or hold <b>SHIFT</b> and turn the FILTER <b>ENV</b> knob. Both do the same thing. At 255 the filter follows the pitch exactly.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Play the lowest pad. Then hold SHIFT and press OCT+ twice. Play the same pad. The high note sounds thin and weak.</li><li>Hold SHIFT and press pad <b>7</b>. Turn TEMPO/VALUE to <b>200</b>. Press pad 1 (EXIT).</li><li>Play the high note again. Now it has the same bite as the low one.</li><li>Hold SHIFT and press OCT− twice to come back down.</li></ol></div>
+  <div class="box gate check" data-l="l8"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can say when follow at 0 is better. (A bass that should stay dark even when the melody jumps up.)</label>
+    <label><input type="checkbox"> I can set FILTER KYBD two ways: SHIFT + pad 7, or SHIFT + turn FILTER ENV.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave <b>FILTER KYBD = 200</b> and every knob as the table. Save to slot <b>2-08</b>.</p><a class="next" href="#l9">Next: Lesson 09, the LFO →</a></div>
+</section>
+
+<!-- L9 -->
+<section class="card" id="l9">
+  <h2>09 · LFO: the automatic wobble</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can make a sound wobble in pitch or in brightness, and you can tell which one you are hearing.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>The envelope moves things once per note. FILTER KYBD lifts the filter for high notes. The LFO is the other helper.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-09</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set every knob like the table. Press <b>SHIFT + HOLD</b>. Set SUB OCT to <span class="lcd">-1oc</span> (one octave down). This time the envelope is a slow pad, so the wobble has time to show.</p>
+  <table><tr><th>Knob</th><th>Set to</th></tr>
+  <tr><td>saw</td><td>MAX</td></tr><tr><td>SUB</td><td>12 o'clock</td></tr><tr><td>square, NOISE</td><td>MIN</td></tr><tr><td>RANGE</td><td>8′</td></tr><tr><td>OSC LFO</td><td>MIN</td></tr>
+  <tr><td>FREQ</td><td>11 o'clock</td></tr><tr><td>RESO</td><td>10 o'clock</td></tr><tr><td>FILTER ENV</td><td>MIN</td></tr><tr><td>FILTER LFO</td><td>MIN</td></tr>
+  <tr><td>ATTACK</td><td>12 o'clock</td></tr><tr><td>DECAY</td><td>12 o'clock</td></tr><tr><td>SUSTAIN</td><td>MAX</td></tr><tr><td>RELEASE</td><td>2 o'clock</td></tr>
+  <tr><td>LFO RATE</td><td>9 o'clock</td></tr><tr><td>LFO WAVE FORM</td><td>triangle</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr>
+  <tr><td>SHIFT settings</td><td>AMP = Env · POLY = Nono · PWM SRC = NAn · SUB OCT = -1oc · FILTER KYBD = 0</td></tr></table></div>
+  <p class="big">The LFO is a slow wave that rocks a knob back and forth, forever. You pick what it rocks, how fast, and how much.</p>
+  <div class="fig"><svg id="w8" viewBox="0 0 900 220"></svg>
+  <div class="ctl" style="--c:var(--blk-navy);--wash:var(--blk-navy-wash)"><label>RATE (Fader 1) <input type="range" id="w8f" min="1" max="10" value="3"></label><label>Amount <input type="range" id="w8a" min="0" max="100" value="50"></label><button data-t="VCO" class="on">Pitch (OSC LFO)</button><button data-t="VCF">Filter (FILTER LFO)</button></div>
+  <div class="cap" id="w8c"></div></div>
+  <p>LFO is short for "low frequency oscillator". That means "a very slow wave". Too slow to hear as a note. Just right for rocking a knob. The envelope moves once per note. The LFO never stops. It rocks like a swing.</p>
+  <p>The LFO section has two knobs. <b>RATE</b> is the speed (Fader 1). <b>WAVE FORM</b> is the shape of the rocking: ramp up, ramp down, triangle, square, random (RND), or noise. The "how much" knobs live on the targets. The white <b>LFO</b> knob in OSCILLATOR rocks the pitch. The white <b>LFO</b> knob in FILTER rocks the brightness (Knob 4).</p>
+  <table><tr><th>Target knob</th><th>What you hear</th><th>Name for it</th></tr>
+  <tr><td>OSCILLATOR · LFO</td><td>the note bends up and down</td><td>vibrato</td></tr>
+  <tr><td>FILTER · LFO (Knob 4)</td><td>"wah-wah" or "wub-wub"</td><td>filter wobble</td></tr>
+  <tr><td>SHIFT + PWM SRC = LFO</td><td>the square wave shimmers</td><td>PWM</td></tr></table>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Hold a pad for 10 seconds. A plain slow pad. No wobble yet.</li><li>Turn <b>FILTER LFO</b> (Knob 4) up to 10 o'clock. Hold a pad. It breathes, wah-wah. That is the filter wobble.</li><li>Turn <b>RATE</b> (Fader 1) up to 2 o'clock. Faster wobble. Back to 9 o'clock.</li><li>Turn FILTER LFO back to MIN. Turn <b>OSC LFO</b> (the white knob in OSCILLATOR) up to 9 o'clock. Hold a pad. The pitch sways. That is vibrato.</li><li>Turn <b>WAVE FORM</b> to RND. Random bubbles. Turn it back to triangle.</li><li>Turn OSC LFO back to MIN. Turn FILTER LFO to 9 o'clock.</li></ol></div>
+  <div class="box tip"><b class="lead">Two studio tips</b><p>Set the menu item <span class="lcd">LFO.S</span> (LFO Sync) to On. Then RATE picks note lengths instead of a speed, and the wobble locks to the tempo.</p><p>In techno a <i>tiny</i> wobble is almost always better than a big one.</p></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>No wobble:</b> both LFO target knobs are at MIN. Turn one up.</li><li><b>Wobble is too fast to hear as a wobble:</b> RATE is high. Turn Fader 1 down.</li><li><b>Pitch wobble sounds seasick:</b> OSC LFO is too high. 9 o'clock is plenty.</li></ul></div>
+  <div class="box gate check" data-l="l9"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I hear a wobbling sound and I can say if the pitch or the brightness is moving.</label>
+    <label><input type="checkbox"> I can say how the LFO is different from the envelope. (Over and over, versus once per note.)</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave <b>FILTER LFO 9 o'clock, OSC LFO MIN, RATE 9 o'clock, WAVE FORM triangle</b>, and the pad envelope. Save to slot <b>2-09</b>. This is your <b>breathing pad</b>.</p><a class="next" href="#l10">Next: Lesson 10, effects, voices and arp →</a></div>
+</section>
+
+<!-- L10 -->
+<section class="card" id="l10">
+  <h2>10 · The finishing tools: effects, voices, arpeggiator</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can add echo and room, play chords, and turn a chord into a running pattern.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>The LFO rocks a knob over and over. Its amount knobs live on the targets: OSC LFO for pitch, FILTER LFO for brightness.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-10</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set every knob like the table. Press <b>SHIFT + HOLD</b>. Set SUB OCT to <span class="lcd">-1oc</span> (one octave down). This is the <b>pluck bass</b> from Lesson 07 again.</p>
+  <table><tr><th>Knob</th><th>Set to</th></tr>
+  <tr><td>saw</td><td>MAX</td></tr><tr><td>SUB</td><td>12 o'clock</td></tr><tr><td>square, NOISE</td><td>MIN</td></tr><tr><td>RANGE</td><td>8′</td></tr><tr><td>OSC LFO</td><td>MIN</td></tr>
+  <tr><td>FREQ</td><td>9 o'clock</td></tr><tr><td>RESO</td><td>2 o'clock</td></tr><tr><td>FILTER ENV</td><td>3 o'clock</td></tr><tr><td>FILTER LFO</td><td>MIN</td></tr>
+  <tr><td>ATTACK</td><td>MIN</td></tr><tr><td>DECAY</td><td>10 o'clock</td></tr><tr><td>SUSTAIN</td><td>MIN</td></tr><tr><td>RELEASE</td><td>9 o'clock</td></tr>
+  <tr><td>LFO RATE</td><td>MIN</td></tr><tr><td>LFO WAVE FORM</td><td>triangle</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr>
+  <tr><td>SHIFT settings</td><td>AMP = Env · POLY = Nono · PWM SRC = NAn · SUB OCT = -1oc · FILTER KYBD = 0 · ARPEGGIO = OFF</td></tr></table></div>
+  <p class="big">These come last. They decorate a sound you already built. Build the sound first. Decorate after.</p>
+  <div class="fig"><svg viewBox="0 0 900 190" font-family="-apple-system,sans-serif" font-size="14" text-anchor="middle">
+    <g><rect x="20" y="20" width="270" height="150" rx="12" fill="#3A1414" stroke="#F26D6D"/><text x="155" y="50" fill="#F26D6D" font-weight="700">EFX</text><text x="155" y="80" fill="#f7f8f8">DELAY · REVERB · chorus</text><text x="155" y="104" fill="#8a8f98" font-size="12">echo · room · thick</text></g>
+    <g><rect x="315" y="20" width="270" height="150" rx="12" fill="#1E1B3D" stroke="#9585FF"/><text x="450" y="50" fill="#9585FF" font-weight="700">POLY</text><text x="450" y="80" fill="#f7f8f8">Mono · Unison · Poly · Chord</text>
+      <g fill="#9585FF"><circle cx="400" cy="115" r="14" opacity=".5"/><circle cx="430" cy="110" r="14" opacity=".7"/><circle cx="460" cy="115" r="14" opacity=".85"/><circle cx="490" cy="110" r="14"/></g></g>
+    <g><rect x="610" y="20" width="270" height="150" rx="12" fill="#0C2E2B" stroke="#2FC7B4"/><text x="745" y="50" fill="#2FC7B4" font-weight="700">ARPEGGIO</text><text x="745" y="80" fill="#f7f8f8">pads 8 · 9 · 10</text>
+      <g fill="#2FC7B4"><rect x="650" y="115" width="30" height="14" rx="3"/><rect x="695" y="100" width="30" height="14" rx="3"/><rect x="740" y="85" width="30" height="14" rx="3"/><rect x="785" y="100" width="30" height="14" rx="3"/></g></g>
+  </svg></div>
+  <h3>Effects (EFX)</h3>
+  <ul><li><b>DELAY</b> (Fader 4) is an echo. The knob is how loud the echo is. Hold SHIFT and turn it to set the time between echoes. SHIFT + pad 13 opens the full delay menu.</li>
+  <li><b>REVERB</b> is the sound of a room. The knob is how much room. Hold SHIFT and turn it to set how long the room rings. SHIFT + pad 14 picks the kind of room.</li>
+  <li><b>Chorus</b> has no knob. It is the <span class="lcd">Cho</span> (chorus) item in the menu. It copies the sound and smears the copy a little, so it feels wide.</li></ul>
+  <h3>Voices (POLY)</h3>
+  <p>Hold <b>SHIFT</b> and press the <b>POLY</b> pad. Turn TEMPO/VALUE. <span class="lcd">Nono</span> is mono: one note at a time. <span class="lcd">Uni</span> is unison: all four voices stacked on one note, very fat. <span class="lcd">PoLy</span> (poly, many notes) plays up to four notes at once. <span class="lcd">Chd</span> (chord) plays a whole chord from one pad.</p>
+  <h3>Arpeggiator (ARPEGGIO)</h3>
+  <p>An arpeggio is a chord played one note at a time, up or down, in rhythm. The arpeggiator does it for you. Hold a chord and it runs. SHIFT + pad <b>8</b> turns it on. SHIFT + pad <b>9</b> picks the direction. SHIFT + pad <b>10</b> picks the speed. It needs POLY set to PoLy.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Play some pluck notes. Dry.</li><li>Turn <b>DELAY</b> (Fader 4) to 11 o'clock. Each note echoes. Turn <b>REVERB</b> to 10 o'clock. Now the echoes are in a room.</li><li>SHIFT + <b>POLY</b> → <span class="lcd">PoLy</span> (poly, many notes). Press pad 1 (EXIT). Hold three pads. A chord.</li><li>SHIFT + pad <b>8</b> → <span class="lcd">On</span> (on). Hold the same three pads. They run as a pattern. Press <b>PLAY</b> if nothing moves, so the clock runs.</li><li>SHIFT + pad <b>10</b>, turn to <span class="lcd">1_16</span> (sixteenth notes). Faster.</li><li>While it runs, slowly turn <b>FREQ</b>. That is a techno build.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>Arp does not run:</b> POLY is still Nono, or the sequencer is stopped. Set PoLy, press PLAY.</li><li><b>Chord sounds like one note:</b> POLY is Nono. Set PoLy.</li><li><b>Everything is a wash of echo:</b> DELAY and REVERB are too high. Decoration should be small.</li></ul></div>
+  <div class="box gate check" data-l="l10"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can turn DELAY and REVERB to MIN and my sound still sounds good. If not, I fix the earlier sections first.</label>
+    <label><input type="checkbox"> I can switch between Nono, Uni, PoLy and Chd and say what each does.</label>
+    <label><input type="checkbox"> I can turn the arpeggiator on and change its speed.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave <b>DELAY 11 o'clock, REVERB 10 o'clock, POLY = PoLy, ARPEGGIO = On, RATE 1_16</b>. Save to slot <b>2-10</b>. This is your <b>arp pluck</b>.</p><a class="next" href="#l11">Next: Lesson 11, recipes and your MiniLab map →</a></div>
+</section>
+
+<!-- L11 -->
+<section class="card" id="l11">
+  <h2>11 · Recipes, your MiniLab map, and graduation</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can build five classic sounds from a recipe card, and you can take a factory sound apart by ear.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>Build first, decorate after. POLY picks how many notes. The arpeggiator needs PoLy and a running clock.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Open slot <b>2-11</b>. Do <b>MENU → init (initialize) → ENTER</b>. Set the clean start from Lesson 00. Press <b>SHIFT + HOLD</b>. Each recipe below starts from the clean start. Only the listed knobs change.</p></div>
+  <p class="big">Recipes teach your ears. Then you break the rules on purpose.</p>
+  <p>Knob positions are clock times. 7 is MIN. 5 is MAX. They are starting points, so trust your ears over the numbers. Everything not listed stays at the clean start.</p>
+  <table>
+  <tr><th>Sound</th><th>Mix</th><th>FREQ</th><th>RESO</th><th>F.ENV</th><th>A / D / S / R</th><th>LFO</th><th>Extra</th></tr>
+  <tr><td>Rolling bass</td><td>saw MAX + SUB 12</td><td>9</td><td>11</td><td>3</td><td>7 / 10 / 7 / 9</td><td>off</td><td>RANGE 16′</td></tr>
+  <tr><td>Acid squelch</td><td>saw MAX</td><td>9</td><td>3</td><td>4</td><td>7 / 11 / 8 / 8</td><td>off</td><td>ride FREQ live</td></tr>
+  <tr><td>Chord stab</td><td>saw MAX + square 12</td><td>12</td><td>10</td><td>2</td><td>7 / 10 / 7 / 11</td><td>off</td><td>POLY = Chd, menu Cho = 1</td></tr>
+  <tr><td>Dark pad</td><td>square MAX, PWM SRC = LFO</td><td>10</td><td>9</td><td>9</td><td>1 / 2 / 3 / 3</td><td>FILTER LFO 9, RATE 9</td><td>REVERB 1 o'clock</td></tr>
+  <tr><td>Arp lead</td><td>saw MAX</td><td>1</td><td>1</td><td>12</td><td>7 / 11 / 10 / 9</td><td>OSC LFO 8</td><td>POLY = PoLy, ARPEGGIO On, 1_16</td></tr>
+  </table>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Build the <b>Rolling bass</b>. Save it to <b>3-01</b>. (Bank 3 is your bank.)</li><li>Init 2-11 again. Build the <b>Acid squelch</b>. Save it to <b>3-02</b>.</li><li>Do the same for the other three. Save to 3-03, 3-04, 3-05.</li><li>Now open <b>1-01</b>, a factory sound. Hold PATTERN or STEP and turn each knob. The display shows the stored value and nothing moves. Write down the mix, the filter, the envelope shape, and whether the LFO is on.</li></ol></div>
+  <h3>Your MiniLab 3 map ("Roland S1 v2")</h3>
+  <table><tr><th>MiniLab</th><th>S-1 knob</th><th>Lesson</th><th>MiniLab</th><th>S-1 knob</th><th>Lesson</th></tr>
+  <tr><td>Knob 1</td><td>FILTER · FREQ</td><td>04</td><td>Knob 5</td><td>ENV · ATTACK</td><td>06</td></tr>
+  <tr><td>Knob 2</td><td>FILTER · RESO</td><td>05</td><td>Knob 6</td><td>ENV · DECAY</td><td>06</td></tr>
+  <tr><td>Knob 3</td><td>FILTER · ENV</td><td>07</td><td>Knob 7</td><td>ENV · SUSTAIN</td><td>06</td></tr>
+  <tr><td>Knob 4</td><td>FILTER · LFO</td><td>09</td><td>Knob 8</td><td>ENV · RELEASE</td><td>06</td></tr>
+  <tr><td>Fader 1</td><td>LFO · RATE</td><td>09</td><td>Fader 3</td><td>OSC · NOISE</td><td>03</td></tr>
+  <tr><td>Fader 2</td><td>OSC · SUB</td><td>03</td><td>Fader 4</td><td>EFX · DELAY</td><td>10</td></tr></table>
+  <p>The MiniLab must send on MIDI channel 3. MIDI (Musical Instrument Digital Interface) is the language the keyboard uses to talk to the S-1. Channel 3 is the S-1's channel from the factory. The menu item is <span class="lcd">CH</span> (MIDI channel).</p>
+  <h3>Word → knob cheat sheet</h3>
+  <table><tr><th>If you want it…</th><th>Go to</th></tr>
+  <tr><td>darker / brighter</td><td>FREQ (Knob 1)</td></tr><tr><td>squelchy, talking</td><td>RESO (Knob 2) + FILTER ENV (Knob 3)</td></tr>
+  <tr><td>punchy, short</td><td>ATTACK MIN, DECAY low, SUSTAIN MIN</td></tr><tr><td>soft, swelling</td><td>ATTACK up, RELEASE up</td></tr>
+  <tr><td>fatter, heavier</td><td>SUB (Fader 2), RANGE 16′, POLY = Uni</td></tr><tr><td>hollow</td><td>square knob up, saw down</td></tr>
+  <tr><td>moving, alive</td><td>FILTER LFO (Knob 4), PWM SRC = LFO</td></tr><tr><td>wide, shiny</td><td>Cho (menu), REVERB</td></tr></table>
+  <div class="box gate check" data-l="l11"><b class="lead">Graduation check</b>
+    <label><input type="checkbox"> I built all five recipes and saved them in bank 3.</label>
+    <label><input type="checkbox"> I can open any bank 1 sound and name its mix, its filter setting, its envelope shape, and whether the LFO is on.</label>
+    <label><input type="checkbox"> I did that for 5 factory sounds.</label>
+  </div>
+  <div class="box save"><b class="lead">You are done</b><p>You understand the S-1. Lesson 12 shows how to write a riff into a slot by hand. The Menu Map after it is your reference for every hidden setting. Keep bank 4 for messing around. Back up to the Mac once a month.</p><a class="next" href="#l12">Next: Lesson 12, the four-beat riff →</a></div>
+</section>
+
+<!-- L12 -->
+<section class="card" id="l12">
+  <h2>12 · Four-beat riff in pattern 14: borrow a sound, write four notes, save</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can copy a sound you like into a spare slot, clear only its notes, step in four notes from the MiniLab, fix a wrong note, loop it, and save it.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>A slot holds a sound and its notes. COPy moves a slot. CLEAR NOTE wipes the notes only. init wipes both. Save with SHIFT + 16 → ENTER.</p></div>
+  <div class="box start"><b class="lead">Set your S-1 like this</b><p>Pick the bank you keep your sounds in (bank 3 in this course). Open the slot with the sound you want, here slot <b>16</b>. Press <b>PLAY</b> if it is playing, so it stops. MiniLab on its "Roland S1 v2" program.</p></div>
+  <p class="big">A riff is four notes that loop. You do not need to play in time. You put each note on a step by hand.</p>
+  <table><tr><th>Step</th><th>Buttons</th><th>What happens</th></tr>
+  <tr><td>1 · Copy slot 16 to 14</td><td>Open slot 16 · SHIFT + pad 15 (MENU) · turn to <span class="lcd">COPy</span> (copy) · pad 2 (ENTER) · turn to 14 · pad 2 (ENTER)</td><td>Slot 14 now has the same sound as 16.</td></tr>
+  <tr><td>2 · Open 14 and save a safety copy</td><td>Hold PATTERN, press the bank pad, let go, press pad 14 · SHIFT + pad 16 (WRITE) · <span class="lcd">Ptn</span> (pattern) · pad 2 (ENTER)</td><td>Wait for <span class="lcd">donE</span> (done). If anything goes wrong later, rL.Sd brings this back.</td></tr>
+  <tr><td>3 · Clear the notes only</td><td>SHIFT + pad 11 (CLEAR NOTE) · pad 2 (ENTER)</td><td>The notes are gone. The sound stays. Never use <span class="lcd">init</span> (initialize) here. It wipes the sound too.</td></tr>
+  <tr><td>4 · Set one bar</td><td>SHIFT + pad 4 (LAST) · turn to 16 · pad 1 (EXIT)</td><td>16 steps is one bar of four beats. The beats are steps 1, 5, 9 and 13.</td></tr>
+  <tr><td>5 · Enter the four notes</td><td>REC dark · STEP lit · hold pad 1, play a key on the MiniLab · repeat on pads 5, 9, 13</td><td>Each pad lights when it holds a note. Press a lit pad again to delete its note.</td></tr>
+  <tr><td>6 · Fix a wrong note</td><td>Hold the step pad · the display shows <span class="lcd">n.C5</span> (note C5); press D-MOTION if it shows something else · keep holding, turn TEMPO/VALUE to the note you want</td><td>Do this once per wrong step.</td></tr>
+  <tr><td>7 · Loop, play over it, save</td><td>PLAY · play the MiniLab over the loop · SHIFT + pad 16 (WRITE) · <span class="lcd">Ptn</span> · pad 2 (ENTER)</td><td>Check <span class="lcd">donE</span> before you turn the S-1 off.</td></tr></table>
+  <div class="box tip"><b class="lead">If the octave is wrong</b><p>The D one octave below C5 is <b>D4</b>. If the note sounds an octave off from what you want, pick <b>D3</b> instead. The same rule works for any note: the number is the octave.</p></div>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Do steps 1 to 4. Slot 14 is empty and has your sound.</li><li>Do step 5 with the keys <b>D, D, A, A#</b> on pads 1, 5, 9, 13.</li><li>Press <b>PLAY</b>. Listen to the loop. Hold the MiniLab's keys over it.</li><li>Hold pad 9. Turn TEMPO/VALUE one click up. The third note moves. Turn it back.</li><li>Save (step 7).</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>The sound changed when I cleared:</b> you used init. Open MENU, turn to <span class="lcd">rL.Sd</span> (reload sound), press ENTER.</li><li><b>Pressing a pad plays a note instead of setting one:</b> STEP is not lit. Press STEP.</li><li><b>The loop is eight steps or runs long:</b> LAST is not 16. Do step 4 again.</li><li><b>The riff vanished after power-off:</b> it was not saved. Unsaved slots go back to the last save.</li></ul></div>
+  <div class="box gate check" data-l="l12"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can copy a slot with MENU → COPy without wrecking the original.</label>
+    <label><input type="checkbox"> I can say the difference between CLEAR NOTE and init.</label>
+    <label><input type="checkbox"> I can change one step's note with the pad held and TEMPO/VALUE.</label>
+    <label><input type="checkbox"> I have a four-note riff saved in slot 14.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Slot <b>14</b> in your sounds bank holds the riff and its sound. To run it under a T-8 drum beat, see the <a href="t8-foundations.html#l11">T-8 course, Lesson 11</a>.</p><a class="next" href="#menu">Next: the Menu Map →</a></div>
+</section>
+
+<!-- MENU MAP -->
+<section class="card" id="menu">
+  <h2>M · The Menu Map: every hidden setting</h2>
+  <p class="big">The S-1 has a 4-letter display, so it uses short codes. This map turns every code back into words.</p>
+
+  <h3>The map of the maps: where does a setting live?</h3>
+  <div class="fig" style="background:#0b0d14"><svg viewBox="0 0 960 640" font-family="-apple-system,'SF Pro Display',sans-serif">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB347"/><stop offset="1" stop-color="#FF6F3C"/></linearGradient>
+      <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4FD1C5"/><stop offset="1" stop-color="#2B8AE6"/></linearGradient>
+      <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B388FF"/><stop offset="1" stop-color="#7C4DFF"/></linearGradient>
+      <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF7EB3"/><stop offset="1" stop-color="#FF2E63"/></linearGradient>
+      <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9F26D"/><stop offset="1" stop-color="#3DD598"/></linearGradient>
+      <marker id="fa" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#c9cdd6"/></marker>
+      <filter id="sh" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".45"/></filter>
+    </defs>
+    <g filter="url(#sh)"><rect x="330" y="18" width="300" height="56" rx="28" fill="url(#g5)"/><text x="480" y="52" text-anchor="middle" font-size="18" font-weight="800" fill="#07110a">I want to change a setting</text></g>
+    <g font-size="14" font-weight="700" fill="#f7f8f8" text-anchor="middle">
+      <rect x="20" y="130" width="210" height="64" rx="14" fill="#161a26" stroke="#4FD1C5" stroke-width="2"/><text x="125" y="156">Does it have</text><text x="125" y="176">its own knob?</text>
+      <rect x="255" y="130" width="210" height="64" rx="14" fill="#161a26" stroke="#FFB347" stroke-width="2"/><text x="360" y="156">Is it printed in small</text><text x="360" y="176">letters above a pad?</text>
+      <rect x="490" y="130" width="210" height="64" rx="14" fill="#161a26" stroke="#B388FF" stroke-width="2"/><text x="595" y="156">Is it a knob's</text><text x="595" y="176">second job?</text>
+      <rect x="725" y="130" width="215" height="64" rx="14" fill="#161a26" stroke="#FF7EB3" stroke-width="2"/><text x="832" y="156">None of those?</text><text x="832" y="176">(MIDI, tempo click, tuning…)</text>
+    </g>
+    <g stroke="#c9cdd6" stroke-width="2" fill="none" marker-end="url(#fa)"><path d="M480,74 V100 H125 V126"/><path d="M480,100 H360 V126"/><path d="M480,100 H595 V126"/><path d="M480,100 H832 V126"/></g>
+    <g filter="url(#sh)">
+      <rect x="20" y="240" width="210" height="150" rx="16" fill="url(#g2)"/>
+      <rect x="255" y="240" width="210" height="150" rx="16" fill="url(#g1)"/>
+      <rect x="490" y="240" width="210" height="150" rx="16" fill="url(#g3)"/>
+      <rect x="725" y="240" width="215" height="150" rx="16" fill="url(#g4)"/>
+    </g>
+    <g stroke="#c9cdd6" stroke-width="2" fill="none" marker-end="url(#fa)"><path d="M125,194 V236"/><path d="M360,194 V236"/><path d="M595,194 V236"/><path d="M832,194 V236"/></g>
+    <g font-size="13.5" fill="#0b0d14" text-anchor="middle">
+      <text x="125" y="268" font-size="15" font-weight="800">LAYER 0 · Just turn it</text>
+      <text x="125" y="296">FREQ, RESO, ATTACK…</text><text x="125" y="318">The display shows the</text><text x="125" y="338">first letter + value.</text><text x="125" y="366" font-weight="700">Nothing to exit.</text>
+      <text x="360" y="268" font-size="15" font-weight="800">LAYER 1 · SHIFT + pad</text>
+      <text x="360" y="296">Hold SHIFT, tap the pad.</text><text x="360" y="318">Turn TEMPO/VALUE.</text><text x="360" y="338">(Some pads: tap again</text><text x="360" y="358">to step through values.)</text><text x="360" y="380" font-weight="700">Pad 1 EXIT to leave.</text>
+      <text x="595" y="268" font-size="15" font-weight="800">LAYER 2 · SHIFT + knob</text>
+      <text x="595" y="296">Hold SHIFT, turn the knob.</text><text x="595" y="318">Fine tune, delay time,</text><text x="595" y="338">reverb time, LFO sync…</text><text x="595" y="366" font-weight="700">Let go of SHIFT. Done.</text>
+      <text x="832" y="268" font-size="15" font-weight="800">LAYER 3 · The MENU</text>
+      <text x="832" y="296">SHIFT + pad 15 (MENU)</text><text x="832" y="318">Turn to the item → pad 2 ENTER</text><text x="832" y="338">Turn to the value</text><text x="832" y="366" font-weight="700">Pad 1 EXIT to leave.</text>
+    </g>
+    <g stroke="#c9cdd6" stroke-width="2" fill="none" marker-end="url(#fa)"><path d="M125,390 V430 H480 V466"/><path d="M360,390 V430"/><path d="M595,390 V430"/><path d="M832,390 V430 H480"/></g>
+    <g filter="url(#sh)"><rect x="250" y="470" width="460" height="54" rx="27" fill="url(#g5)"/><text x="480" y="496" text-anchor="middle" font-size="16" font-weight="800" fill="#07110a">Like it? SAVE: SHIFT + pad 16 → ENTER</text><text x="480" y="514" text-anchor="middle" font-size="12" fill="#07110a">display says donE · unsaved changes are lost at power-off</text></g>
+    <g font-size="13" fill="#f7f8f8">
+      <rect x="20" y="560" width="440" height="62" rx="14" fill="#161a26" stroke="#4FD1C5" stroke-width="1.5"/><text x="36" y="584" font-weight="800" fill="#4FD1C5">PEEK without changing</text><text x="36" y="603" font-size="12.5">Hold PATTERN or STEP and turn a knob:</text><text x="36" y="618" font-size="12.5">the value shows, nothing moves.</text>
+      <rect x="490" y="560" width="450" height="62" rx="14" fill="#161a26" stroke="#FF7EB3" stroke-width="1.5"/><text x="506" y="584" font-weight="800" fill="#FF7EB3">UNDO a mess</text><text x="506" y="603" font-size="12.5">MENU → rL.Sd (Reload Sound) → ENTER</text><text x="506" y="618" font-size="12.5">puts the sound back to the last save.</text>
+    </g>
+  </svg><div class="cap">Start at the top. Answer one question. Follow the arrow. Now you know which layer the setting lives in. Every layer ends at the same two buttons: TEMPO/VALUE to change, pad 1 to EXIT.</div></div>
+  <h3>How the three layers work</h3>
+  <table><tr><th>Layer</th><th>How to open it</th><th>How to change a value</th><th>How to leave</th></tr>
+  <tr><td>1 · SHIFT + a pad</td><td>Hold SHIFT, tap the pad</td><td>Turn TEMPO/VALUE. Some pads step through values when you tap again.</td><td>Pad 1 (EXIT)</td></tr>
+  <tr><td>2 · SHIFT + a knob</td><td>Hold SHIFT, turn the knob</td><td>Keep turning while you hold SHIFT</td><td>Let go of SHIFT</td></tr>
+  <tr><td>3 · The MENU</td><td>Hold SHIFT, tap pad 15 (MENU)</td><td>Turn TEMPO/VALUE to pick an item. Pad 2 (ENTER). Turn to change.</td><td>Pad 1 (EXIT)</td></tr></table>
+  <div class="box tip"><b class="lead">Peek without changing</b><p>Hold <b>PATTERN</b> or <b>STEP</b> and turn any knob. The display shows the stored value. Nothing moves.</p></div>
+
+  <h3>Layer 1 · SHIFT + the small pads (top row)</h3>
+  <table><tr><th>Pad</th><th>Display</th><th>Values</th><th>Plain meaning</th><th>Lesson</th></tr>
+  <tr><td>OCT−  /  OCT+</td><td>−4 … 4</td><td>octaves</td><td>Move the keyboard pads down or up. SHIFT + both pads = back to 0.</td><td>02</td></tr>
+  <tr><td>PWM DEPTH</td><td>0–255</td><td>number</td><td>Width of the square wave (manual), or how far the LFO or envelope moves it.</td><td>03</td></tr>
+  <tr><td>PWM SRC</td><td>NAn · LFO · Env</td><td>manual, LFO, envelope</td><td>What moves the square wave's width.</td><td>03</td></tr>
+  <tr><td>SUB OCT</td><td>-1oc · -2oc · -2o.A</td><td>1 down, 2 down, 2 down narrow</td><td>How low the SUB sits. "A" means a thinner wave.</td><td>03</td></tr>
+  <tr><td>ENV TRG</td><td>GAtE · triG · LFO</td><td>gate, gate + retrigger, LFO</td><td>What restarts the envelope. GAtE: a new pad after you let go. triG: every new pad, even if you did not let go. LFO: the LFO restarts it over and over.</td><td>06</td></tr>
+  <tr><td>AMP</td><td>Env · GAtE</td><td>envelope, gate</td><td>Env: volume follows A-D-S-R. GAtE: on while the pad is down, off when it is up.</td><td>06</td></tr>
+  <tr><td>POLY</td><td>Nono · Uni · PoLy · Chd</td><td>mono, unison, poly, chord</td><td>How many notes play. Press ENTER on Chd to set voices 2–4 on or off (v2Sw…) and their shift in half-steps (v2kS…, −12 to 12).</td><td>10</td></tr>
+  <tr><td>PORTA ON</td><td>OFF · On · AUto</td><td>off, always, legato only</td><td>Glide between notes. AUto glides only when you press the next pad before you let go.</td><td>—</td></tr>
+  <tr><td>PORTA TIME</td><td>0–255</td><td>number</td><td>How long the glide takes.</td><td>—</td></tr>
+  <tr><td>HOLD (MANUAL)</td><td>—</td><td>—</td><td>Make the sound match where every knob is right now. The clean start.</td><td>00</td></tr></table>
+
+  <h3>Layer 1 · SHIFT + the numbered pads (bottom row)</h3>
+  <table><tr><th>Pad</th><th>Display</th><th>Values</th><th>Plain meaning</th></tr>
+  <tr><td>1 EXIT</td><td>—</td><td>—</td><td>Leave any menu.</td></tr>
+  <tr><td>2 ENTER</td><td>—</td><td>—</td><td>Say yes. Confirms a value or opens an item.</td></tr>
+  <tr><td>3 SHUFFLE</td><td>−90 … 90</td><td>number</td><td>Swing. Pushes every second step late (+) or early (−).</td></tr>
+  <tr><td>4 LAST</td><td>1–64</td><td>steps</td><td>How long the pattern is.</td></tr>
+  <tr><td>5 OSC DRAW</td><td>Sw · ForN</td><td>OFF · StEP · SLPE, then 16 bars</td><td>Draw your own wave in 16 steps. It replaces the square wave. Sw turns it on. ForN: hold a pad 1–16 and turn TEMPO/VALUE to set that bar's height.</td></tr>
+  <tr><td>6 OSC CHOP</td><td>Sqr.P · SAw.P · SUb.P · noi.P</td><td>16-step chop pattern each</td><td>Cut holes in a wave to make it buzz with new overtones. One pattern for each of the four sound makers.</td></tr>
+  <tr><td>7 FILTER KYBD</td><td>0–255</td><td>number</td><td>Filter keyboard follow (Lesson 08). 255 = follows the pitch exactly.</td></tr>
+  <tr><td>8 ARPEGGIO ON</td><td>OFF · On</td><td>—</td><td>Arpeggiator on or off.</td></tr>
+  <tr><td>9 ARPEGGIO TYPE</td><td>UP · down · UP.dw · UP.2 · dw.2 · U.d.2 · rand · rnd.2</td><td>direction, ".2" = 2 octaves</td><td>Which way the arpeggio runs.</td></tr>
+  <tr><td>10 ARPEGGIO RATE</td><td>1_4 · 1_8 · 1_16 · 1_32 · 8t · 16t · 32t</td><td>note lengths, "t" = triplet</td><td>How fast the arpeggio steps.</td></tr>
+  <tr><td>11 CLEAR NOTE</td><td>CLr.n</td><td>ENTER to confirm</td><td>Erase all notes in the pattern (or just one step if a step is selected).</td></tr>
+  <tr><td>12 CLEAR MOTION</td><td>CLr.M</td><td>ENTER to confirm</td><td>Erase all recorded knob moves (motions).</td></tr>
+  <tr><td>13 DELAY</td><td>d.Syn · tiME · Fdbk · Lo.Ct · Hi.Ct</td><td>see below</td><td>Delay sync (lock to tempo), time (1–740 ms, or a note length), feedback 0–255 (how many echoes), low cut, high cut.</td></tr>
+  <tr><td>14 REVERB</td><td>tyPE · tiME · LEv · Pr.dL · Lo.Ct · Hi.Ct · dEnS</td><td>see below</td><td>Type (AMb ambience, RooM, hAL1, hAL2, PLAt plate, SPrn spring, Mod), time, level, pre-delay 0–100 ms, low cut, high cut, density 0–10.</td></tr>
+  <tr><td>15 MENU</td><td>—</td><td>—</td><td>Opens Layer 3, below.</td></tr>
+  <tr><td>16 WRITE</td><td>Ptn · ALL</td><td>this pattern, all patterns</td><td>Save. Press ENTER, wait for donE. Check the bank number first.</td></tr></table>
+
+  <h3>Layer 2 · SHIFT + a knob (second job of each knob)</h3>
+  <table><tr><th>Knob</th><th>Normal job (CC)</th><th>SHIFT job (CC)</th><th>Plain meaning of the SHIFT job</th></tr>
+  <tr><td>LFO · RATE</td><td>LFO speed (3)</td><td>LFO Mode (79)</td><td>norM = normal speeds. FASt = much faster wobble, for growls.</td></tr>
+  <tr><td>LFO · WAVE FORM</td><td>LFO shape (12)</td><td>LFO Sync (106)</td><td>On = RATE picks note lengths and locks to tempo.</td></tr>
+  <tr><td>OSC · RANGE</td><td>octave (14)</td><td>Fine Tune (76)</td><td>Nudge the pitch up or down within one octave.</td></tr>
+  <tr><td>OSC · LFO</td><td>pitch wobble amount (13)</td><td>OSC Chop Overtone (103)</td><td>How strong the chop effect is.</td></tr>
+  <tr><td>OSC · square</td><td>square level (19)</td><td>Pulse Width (15) or Draw Multiply (102)</td><td>Square width by hand. If OSC DRAW is on, this scales your drawn wave instead.</td></tr>
+  <tr><td>OSC · saw</td><td>saw level (20)</td><td>OSC Draw Switch (107)</td><td>Turns OSC DRAW off / steps / slopes.</td></tr>
+  <tr><td>OSC · SUB</td><td>sub level (21)</td><td>OSC Chop Comb (104)</td><td>Comb setting for the chop effect.</td></tr>
+  <tr><td>OSC · NOISE</td><td>noise level (23), or the Riser when Riser Mode is on</td><td>Noise Mode (78)</td><td>Pink (soft) or white (bright) noise. With the Riser on: move the knob silently.</td></tr>
+  <tr><td>FILTER · ENV</td><td>envelope → filter (24)</td><td>Filter Keyboard Follow (26)</td><td>Same as SHIFT + pad 7.</td></tr>
+  <tr><td>EFX · DELAY</td><td>delay level (92)</td><td>Delay Time (90)</td><td>Gap between echoes.</td></tr>
+  <tr><td>EFX · REVERB</td><td>reverb level (91)</td><td>Reverb Time (89)</td><td>How long the room rings.</td></tr>
+  <tr><td>TEMPO/VALUE</td><td>tempo</td><td>fine tempo</td><td>Steps of 0.1 BPM (beats per minute).</td></tr>
+  <tr><td>STEP button</td><td>step mode</td><td>Key Transpose (77)</td><td>Shift the whole pattern, −60 to 60 half-steps. SHIFT + a keyboard pad does −12 to 12.</td></tr>
+  <tr><td>PATTERN button</td><td>pattern select</td><td>Step Loop</td><td>While playing: hold pads to loop only those steps.</td></tr></table>
+  <p>FREQ, RESO, FILTER LFO, ATTACK, DECAY, SUSTAIN and RELEASE have no SHIFT job. CC numbers are the MIDI control numbers your MiniLab sends.</p>
+
+  <h3>Layer 3 · SHIFT + pad 15: the MENU, top to bottom</h3>
+  <p>Items marked ★ are saved with the pattern. The rest are global settings for the whole S-1.</p>
+  <table><tr><th>Display</th><th>Full name</th><th>Values</th><th>Plain meaning</th></tr>
+  <tr><td>vOL ★</td><td>Volume</td><td>0–127</td><td>How loud this pattern is.</td></tr>
+  <tr><td>Mod.d ★</td><td>LFO Modulation Depth</td><td>0–255</td><td>How much the mod wheel (or D-MOTION) adds vibrato or growl.</td></tr>
+  <tr><td>bnd.o ★</td><td>Oscillator Bend Sens</td><td>0–240</td><td>How far pitch bend moves the pitch. 120 = 1 octave, 240 = 2.</td></tr>
+  <tr><td>bnd.F ★</td><td>Filter Bend Sens</td><td>0–255</td><td>How far pitch bend moves the filter.</td></tr>
+  <tr><td>nS.Md ★</td><td>Noise Mode</td><td>Pink · whit</td><td>Soft pink noise or bright white noise.</td></tr>
+  <tr><td>rS.Md ★</td><td>Riser Mode</td><td>OFF · SynC · qUiv · qvPn</td><td>Turns the NOISE knob into a build-up "riser" sound. SynC pulses with the tempo. qUiv pulses faster as you turn. qvPn also pans left and right.</td></tr>
+  <tr><td>rS.rS ★</td><td>Riser Resonance</td><td>0–100</td><td>How shrill the riser is.</td></tr>
+  <tr><td>rS.Sh</td><td>Riser Shape</td><td>0–100</td><td>0 = sawtooth riser, 100 = square riser.</td></tr>
+  <tr><td>rS.Lv ★</td><td>Riser Level</td><td>0–100</td><td>How loud the riser is.</td></tr>
+  <tr><td>LFO.M ★</td><td>LFO Mode</td><td>norM · FASt</td><td>Normal or very fast LFO. Ignored when LFO Sync is On.</td></tr>
+  <tr><td>LFO.S ★</td><td>LFO Sync</td><td>OFF · On</td><td>Lock the LFO to the tempo.</td></tr>
+  <tr><td>LFO.K ★</td><td>LFO Key Trigger</td><td>OFF · On</td><td>Restart the LFO from the top on every new note.</td></tr>
+  <tr><td>Cho ★</td><td>Chorus</td><td>OFF · 1–4</td><td>1 normal, 2 faster, 3 spinning-speaker, 4 slow and gentle.</td></tr>
+  <tr><td>trAn ★</td><td>Transpose</td><td>−60 … 60</td><td>Shift everything by half-steps.</td></tr>
+  <tr><td>P.SCL ★</td><td>Pattern Scale</td><td>1_8 · 1_16 · 1_32 · 8t · 16t · 32t</td><td>How long one step is.</td></tr>
+  <tr><td>M.Prb</td><td>Master Probability</td><td>−100 … 100</td><td>Makes every step more or less likely to play.</td></tr>
+  <tr><td>n.Pri</td><td>Note Priority</td><td>LASt · Low</td><td>In mono modes: does the last note or the lowest note win?</td></tr>
+  <tr><td>GL.d.r</td><td>Global Delay/Reverb</td><td>OFF · On</td><td>On = one delay and reverb for all patterns, so they do not cut out when you switch.</td></tr>
+  <tr><td>d.L.Md</td><td>Delay Level Mode</td><td>PrE · PoSt</td><td>PrE: turning DELAY down lets the echoes fade. PoSt: it cuts them.</td></tr>
+  <tr><td>S.cLk</td><td>Sync Clock</td><td>1 … 24</td><td>Clock pulses per beat on the SYNC jacks.</td></tr>
+  <tr><td>CH</td><td>MIDI Channel</td><td>1–16</td><td>The channel the S-1 listens on. Factory = 3. Your MiniLab map uses 3.</td></tr>
+  <tr><td>SYnC</td><td>MIDI Clock Sync</td><td>AUtO · Int · MIdI · USb</td><td>Whose clock to follow. AUtO = any clock that arrives.</td></tr>
+  <tr><td>thru</td><td>MIDI Thru</td><td>OFF · On</td><td>Pass MIDI IN straight out of MIDI OUT.</td></tr>
+  <tr><td>txPc / rxPc</td><td>Tx / Rx Program Change</td><td>OFF · On</td><td>Send / obey pattern-change messages.</td></tr>
+  <tr><td>Pc.Ch</td><td>Program Change Channel</td><td>1–16</td><td>Channel for those messages. Factory = 16.</td></tr>
+  <tr><td>vELo</td><td>Key Velocity</td><td>1–127</td><td>How hard the pads "hit". They are not touch-sensitive, so this sets a fixed value.</td></tr>
+  <tr><td>tUnE</td><td>Tune</td><td>433.0–448.0</td><td>Master tuning. Leave at 440.0.</td></tr>
+  <tr><td>USb.d</td><td>USB Direct Out</td><td>OFF · 1–127</td><td>A separate volume for the USB audio signal.</td></tr>
+  <tr><td>A.LnK</td><td>AIRA Link</td><td>OFF · On</td><td>Only for a Roland MX-1 mixer. Leave OFF.</td></tr>
+  <tr><td>Cnt.I</td><td>Count In</td><td>OFF · 2–4</td><td>Beats of count-in before recording.</td></tr>
+  <tr><td>Mtro</td><td>Metronome</td><td>OFF · rEC · rC.PL</td><td>Click off, only when recording, or when recording and playing.</td></tr>
+  <tr><td>Mtr.L</td><td>Metronome Level</td><td>0–100</td><td>Click volume.</td></tr>
+  <tr><td>d.Lat</td><td>D-Motion Latch</td><td>OFF · On</td><td>OFF: tilt control only while the button is held. On: the button toggles it.</td></tr>
+  <tr><td>COPy</td><td>Pattern Copy</td><td>pick a slot</td><td>Copy this pattern to another slot. ENTER to do it.</td></tr>
+  <tr><td>init</td><td>Pattern Initialize</td><td>ENTER</td><td>Wipe this slot back to a blank sound and no notes. Lesson 00.</td></tr>
+  <tr><td>rLod · rL.Sd · rL.Sq</td><td>Reload All / Sound / Sequence</td><td>ENTER</td><td>Undo back to the last save. All of it, just the sound, or just the notes.</td></tr></table>
+
+  <h3>Display words you will see</h3>
+  <table><tr><th>Display</th><th>Means</th><th>Display</th><th>Means</th></tr>
+  <tr><td>donE</td><td>finished, saved</td><td>Ptn / ALL</td><td>this pattern / all patterns</td></tr>
+  <tr><td>CLr.n / CLr.M</td><td>clear notes / clear motions (press ENTER)</td><td>r.0 … d.0</td><td>riser (r) going up, downer (d) going down</td></tr>
+  <tr><td>NAn</td><td>manual</td><td>GAtE / triG</td><td>gate / gate plus retrigger</td></tr>
+  <tr><td>Nono / Uni / PoLy / Chd</td><td>mono / unison / poly / chord</td><td>a dot on the right</td><td>this pattern has unsaved changes</td></tr>
+  <tr><td>1_16 · 8t · 16d</td><td>sixteenth note · eighth triplet · dotted sixteenth</td><td>F / r / A / d / S</td><td>first letter of the knob you just turned (FREQ, RESO…)</td></tr>
+  <tr><td>FACt</td><td>factory reset is about to run</td><td>init</td><td>wipe this slot</td></tr></table>
+  <div class="box tip"><b class="lead">Lost?</b><p>Press pad 1 (EXIT) until the display shows the tempo again. If the sound is wrecked, use the menu's <span class="lcd">rL.Sd</span> (Reload Sound) to go back to the last save.</p></div>
+</section>
+
+<footer class="foot">S-1 Foundations · Roland AIRA Compact S-1, manual v1.02 · MiniLab 3 knob numbers from the "Roland S1 v2" program (channel 3) · Panel image from Roland's owner's manual · Recipe values are starting points, not factory settings.</footer>
+</div>
+<script>
+const NS="http://www.w3.org/2000/svg";
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild)}
+function axis(s,y){el("line",{x1:20,y1:y,x2:880,y2:y,stroke:"#28282c"},s)}
+// L2 wave
+function d1(){const s=document.getElementById("w1");clear(s);axis(s,100);const f=+w1f.value,a=+w1a.value;let d="";for(let x=0;x<=860;x+=2){d+=(x?"L":"M")+(20+x)+","+(100-a*Math.sin(x/860*f*2*Math.PI))}el("path",{d,fill:"none",stroke:"#9585FF","stroke-width":3},s)}
+w1f.oninput=w1a.oninput=d1;d1();
+// L3 shapes
+const cap2={saw:"Sawtooth: a ramp up, then a cliff. Buzzy and bright, full of harmonics. The S-1's saw knob.",sq:"Square: up half the time, down half the time. Hollow and woody. The S-1's square knob with PWM DEPTH in the middle.",pulse:"Thin pulse: up only a little of the time. Nasal and reedy. PWM SRC = NAn, PWM DEPTH low.",pwm:"PWM: the width keeps moving by itself. Thick and shimmering. PWM SRC = LFO."};
+let wv="saw",ph=0;
+function d2(){const s=document.getElementById("w2");clear(s);axis(s,110);const per=215;let d="";for(let x=0;x<=860;x++){const t=(x%per)/per;let y;
+ if(wv=="saw")y=1-2*t;else if(wv=="sq")y=t<.5?1:-1;else if(wv=="pulse")y=t<.15?1:-1;else{const w=.5+.38*Math.sin(ph+Math.floor(x/per));y=t<w?1:-1}
+ d+=(x?"L":"M")+(20+x)+","+(110-80*y)}el("path",{d,fill:"none",stroke:"#F4A63C","stroke-width":3},s);document.getElementById("w2c").textContent=cap2[wv]}
+document.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-w]").forEach(x=>x.classList.remove("on"));b.classList.add("on");wv=b.dataset.w;d2()});
+setInterval(()=>{if(wv=="pwm"){ph+=.08;d2()}},60);d2();
+// L4 filter
+function d3(){const s=document.getElementById("w3");clear(s);const c=+w3c.value/100,r=+w3r.value/100,N=32,bw=860/N;const fc=c*N;
+ for(let n=1;n<=N;n++){const raw=1/n;const x=(n-.5);let g=1/(1+Math.pow(x/(fc+.3),6));g+=r*2.5*Math.exp(-Math.pow((x-fc)/1.2,2));const h=Math.min(200,220*raw*g+2);
+  el("rect",{x:20+(n-1)*bw+2,y:230-h,width:bw-4,height:h,rx:2,fill:g>.3?"#F4A63C":"#33240D"},s)}
+ let d="";for(let i=0;i<=860;i+=4){const x=i/bw;let g=1/(1+Math.pow(x/(fc+.3),6))+r*2.5*Math.exp(-Math.pow((x-fc)/1.2,2));d+=(i?"L":"M")+(20+i)+","+(230-Math.min(1.5,g)*130)}
+ el("path",{d,fill:"none",stroke:"#9585FF","stroke-width":3},s);axis(s,230);
+ const t=el("text",{x:30,y:24,fill:"#8a8f98","font-size":14,"font-family":"-apple-system,sans-serif"},s);t.textContent=c<.25?"Sounds: dark, muffled":c<.6?"Sounds: warm":"Sounds: bright, buzzy"}
+w3c.oninput=w3r.oninput=d3;d3();
+// L6 envelope
+function d5(){const s=document.getElementById("w5");clear(s);const A=+w5a.value*1.6,D=+w5d.value*1.6,S=+w5s.value/100,R=+w5r.value*2.2;const x0=40,on=x0,off=560,top=30,bot=220;
+ const xa=on+A,xd=xa+D,xr=off+R;const ys=bot-(bot-top)*S;
+ el("line",{x1:on,y1:20,x2:on,y2:bot,stroke:"#8FCE63","stroke-dasharray":"4 4"},s);el("line",{x1:off,y1:20,x2:off,y2:bot,stroke:"#8FCE63","stroke-dasharray":"4 4"},s);axis(s,bot);
+ const xdC=Math.min(xd,off);el("path",{d:`M${on},${bot} L${xa},${top} L${xdC},${ys} L${off},${ys} L${xr},${bot}`,fill:"#1B2A12",stroke:"#8FCE63","stroke-width":3},s);
+ [["A",(on+xa)/2],["D",(xa+xdC)/2],["S",(xdC+off)/2],["R",(off+xr)/2]].forEach(([l,x])=>{const t=el("text",{x,y:bot+30,fill:"#f7f8f8","text-anchor":"middle","font-size":16,"font-weight":700,"font-family":"-apple-system,sans-serif"},s);t.textContent=l});
+ const k=el("text",{x:off+6,y:16,fill:"#8a8f98","font-size":12,"font-family":"-apple-system,sans-serif"},s);k.textContent="pad up";const k2=el("text",{x:on+6,y:16,fill:"#8a8f98","font-size":12,"font-family":"-apple-system,sans-serif"},s);k2.textContent="pad down"}
+document.getElementById("w5").setAttribute("viewBox","0 0 900 270");[w5a,w5d,w5s,w5r].forEach(i=>i.oninput=d5);d5();
+// L9 LFO
+let tg="VCO",p8=0;const cap8={VCO:"Pitch: the wave gets squeezed and stretched, so the note bends (vibrato). That is the OSCILLATOR LFO knob.",VCF:"Filter: the brightness rises and falls, wah-wah (the purple line). That is the FILTER LFO knob, Knob 4."};
+function d8(){const s=document.getElementById("w8");clear(s);axis(s,110);const f=+w8f.value,a=+w8a.value/100;let d="",ph2=0;
+ for(let x=0;x<=860;x++){const l=Math.sin(p8+x/860*f*2*Math.PI);let fr=14,amp=70;if(tg=="VCO")fr=14*(1+.5*a*l);ph2+=fr*2*Math.PI/860;d+=(x?"L":"M")+(20+x)+","+(110-amp*Math.sin(ph2))}
+ el("path",{d,fill:"none",stroke:tg=="VCF"?"#5a6a8a":"#7C9BE0","stroke-width":2.5},s);
+ if(tg=="VCF"){let e="";for(let x=0;x<=860;x+=4){e+=(x?"L":"M")+(20+x)+","+(110-60*a*Math.sin(p8+x/860*f*2*Math.PI))}el("path",{d:e,fill:"none",stroke:"#9585FF","stroke-width":4},s)}
+ document.getElementById("w8c").textContent=cap8[tg]}
+document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-t]").forEach(x=>x.classList.remove("on"));b.classList.add("on");tg=b.dataset.t;d8()});
+w8f.oninput=w8a.oninput=d8;setInterval(()=>{p8+=.05*(+w8f.value);d8()},60);d8();
+// Checklists: remember ticks in this browser only.
+(function(){
+document.querySelectorAll(".check").forEach(box=>{const key="s1f."+box.dataset.l;const cbs=box.querySelectorAll("input");
+ try{const saved=JSON.parse(localStorage.getItem(key)||"[]");cbs.forEach((c,i)=>c.checked=!!saved[i])}catch(e){}
+ function sync(){try{localStorage.setItem(key,JSON.stringify([...cbs].map(c=>c.checked)))}catch(e){}
+  const all=[...cbs].every(c=>c.checked);const a=document.querySelector('#prog a[href="#'+box.dataset.l+'"]');if(a)a.classList.toggle("done",all)}
+ cbs.forEach(c=>c.onchange=sync);sync()});
+// Progress bar: highlight the lesson on screen.
+const links=[...document.querySelectorAll("#prog a")];const secs=links.map(a=>document.querySelector(a.getAttribute("href"))).filter(Boolean);
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("cur",a.getAttribute("href")=="#"+e.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});secs.forEach(s=>io.observe(s))}
+})();
+// L1 hotspot map. Boxes are [name,cx,cy,w,h,section,plain text,links] in pixels of the 1631x922 panel image (s1-panel-top.png); converted to % so they scale.
+const HS=[
+["CHARGE light",707,132,40,37,"Jacks","Orange = charging. Green = full. Red = battery low. It will shut off within 30 minutes.",""],
+["SYNC IN / OUT",997,132,207,64,"Jacks","Clock pulses in and out for old-school gear. Mono mini cables only.",""],
+["MIX IN / OUT",1244,132,207,64,"Jacks","MIX IN adds another device's sound. MIX OUT is where your headphones go. Stereo mini cables.",""],
+["VOLUME",1459,132,79,73,"Jacks","How loud the headphone / MIX OUT jack is.","<a href=\"#l2\">Lesson 02</a>"],
+["Display",231,306,257,101,"Display","Four letters or numbers. Shows the tempo, or the value you are editing. A dot on the right means unsaved changes.","<a href=\"#menu\">Menu map</a>"],
+["TEMPO/VALUE",231,420,99,91,"Display","Turn to set the tempo. Inside a menu, turn to change the value. Hold SHIFT for fine steps.","<a href=\"#menu\">Menu map</a>"],
+["PLAY",152,528,89,46,"Display","Starts and stops the pattern.","<a href=\"#l0\">Lesson 00</a>"],
+["REC",307,528,89,46,"Display","Record standby. Press PLAY and your pad presses and knob moves are recorded into the steps.","<a href=\"#l0\">Lesson 00</a>"],
+["LFO RATE",468,276,84,78,"LFO","How fast the wobble rocks. Fader 1. SHIFT + turn: LFO Mode (normal or fast).","<a href=\"#l9\">Lesson 09</a>"],
+["LFO WAVE FORM",468,397,84,78,"LFO","Shape of the wobble: ramp up, ramp down, triangle, square, RND (random), NOISE. SHIFT + turn: LFO Sync to tempo.","<a href=\"#l9\">Lesson 09</a>"],
+["RANGE",636,276,84,78,"OSCILLATOR","Octave of the tone: 64′ lowest, 2′ highest, 8′ normal. SHIFT + turn: fine tune.","<a href=\"#l3\">Lesson 03</a>"],
+["OSC LFO",636,406,84,78,"OSCILLATOR","How much the LFO bends the pitch (vibrato). SHIFT + turn: Chop overtone.","<a href=\"#l9\">Lesson 09</a>"],
+["Square level",809,276,84,78,"OSCILLATOR","Volume of the square wave (or your drawn wave). SHIFT + turn: pulse width.","<a href=\"#l3\">Lesson 03</a>"],
+["Saw level",977,276,84,78,"OSCILLATOR","Volume of the sawtooth wave. SHIFT + turn: OSC DRAW on/off.","<a href=\"#l3\">Lesson 03</a>"],
+["SUB level",809,406,84,78,"OSCILLATOR","Volume of the deep sub oscillator. Fader 2. SHIFT + turn: Chop comb.","<a href=\"#l3\">Lesson 03</a>"],
+["NOISE level",977,406,84,78,"OSCILLATOR","Volume of the hiss. Fader 3. Becomes the Riser control when Riser Mode is on. SHIFT + turn: pink or white noise.","<a href=\"#l3\">Lesson 03</a>"],
+["FREQ (cutoff)",1160,276,84,78,"FILTER","Bright or dark. Knob 1. All the way down = silence.","<a href=\"#l4\">Lesson 04</a>"],
+["RESO",1327,276,84,78,"FILTER","The whistle at the filter's edge. Knob 2. Max = it sings on its own.","<a href=\"#l5\">Lesson 05</a>"],
+["FILTER LFO",1160,406,84,78,"FILTER","How much the LFO wobbles the brightness (wah-wah). Knob 4.","<a href=\"#l9\">Lesson 09</a>"],
+["FILTER ENV",1327,406,84,78,"FILTER","How far the envelope pushes the filter open on each note. Knob 3. SHIFT + turn: keyboard follow.","<a href=\"#l7\">Lesson 07</a>"],
+["DELAY",1486,276,84,78,"EFX","Echo volume. Fader 4. SHIFT + turn: echo time.","<a href=\"#l10\">Lesson 10</a>"],
+["REVERB",1486,406,84,78,"EFX","Room volume. SHIFT + turn: room length.","<a href=\"#l10\">Lesson 10</a>"],
+["PATTERN (STEP LOOP)",465,528,94,46,"Sequencer","Hold it and press pads 1–4 for the bank, let go, then 1–16 for the slot. SHIFT + PATTERN while playing: step loop.","<a href=\"#l0\">Lesson 00</a>"],
+["STEP (KEY TRANSPOSE)",639,528,94,46,"Sequencer","Lit = the pads become step pads 1–16 for building a sequence. SHIFT + STEP: transpose.","<a href=\"#menu\">Menu map</a>"],
+["ATTACK",809,528,84,78,"ENV","How fast the note starts. Knob 5.","<a href=\"#l6\">Lesson 06</a>"],
+["DECAY",977,528,84,78,"ENV","How fast it drops after the start. Knob 6.","<a href=\"#l6\">Lesson 06</a>"],
+["SUSTAIN",1160,528,84,78,"ENV","How loud while you hold the pad. Knob 7.","<a href=\"#l6\">Lesson 06</a>"],
+["RELEASE",1327,528,84,78,"ENV","How long it rings after you let go. Knob 8.","<a href=\"#l6\">Lesson 06</a>"],
+["D-MOTION",1486,528,94,46,"Extras","Hold it and tilt the S-1 to bend the sound. Try factory sounds 1-01 to 1-16 to hear it. SHIFT + D-MOTION sets what tilting controls.",""],
+["SHIFT",152,644,94,55,"Pads","Hold it to reach every hidden setting. The small words above the pads are the SHIFT jobs.","<a href=\"#menu\">Menu map</a>"],
+["OCT− / OCT+",305,644,158,55,"Pads","SHIFT + these: move the pads an octave down or up. SHIFT + both: reset.","<a href=\"#l2\">Lesson 02</a>"],
+["PWM DEPTH",532,644,59,55,"Pads","SHIFT + this: square wave width (0–255), or how far the LFO or envelope moves it.","<a href=\"#l3\">Lesson 03</a>"],
+["PWM SRC",624,644,59,55,"Pads","SHIFT + this: who moves the square width. NAn manual, LFO, or Env.","<a href=\"#l3\">Lesson 03</a>"],
+["SUB OCT",713,644,59,55,"Pads","SHIFT + this: sub oscillator 1 or 2 octaves down.","<a href=\"#l3\">Lesson 03</a>"],
+["ENV TRG",896,644,59,55,"Pads","SHIFT + this: what restarts the envelope. GAtE, triG or LFO.","<a href=\"#l6\">Lesson 06</a>"],
+["AMP",987,644,59,55,"Pads","SHIFT + this: Env (volume follows the envelope) or GAtE (on/off only).","<a href=\"#l1\">Lesson 01</a>"],
+["POLY",1167,644,59,55,"Pads","SHIFT + this: Mono, Unison, Poly or Chord.","<a href=\"#l10\">Lesson 10</a>"],
+["PORTA ON / TIME",1304,644,148,55,"Pads","SHIFT + these: glide between notes, and how long the glide takes.","<a href=\"#menu\">Menu map</a>"],
+["HOLD (MANUAL)",1490,644,94,55,"Pads","Holds notes down for you. SHIFT + HOLD: make the sound match the knobs right now. The clean start.","<a href=\"#l0\">Lesson 00</a>"],
+["Pads 1–4: EXIT · ENTER · SHUFFLE · LAST",261,745,365,82,"Pads","SHIFT + pad: 1 leaves a menu, 2 says yes, 3 sets swing, 4 sets pattern length.","<a href=\"#menu\">Menu map</a>"],
+["Pads 5–7: OSC DRAW · OSC CHOP · FILTER KYBD",579,745,277,82,"Pads","SHIFT + pad: draw your own wave, chop a wave, or set filter keyboard follow.","<a href=\"#l8\">Lesson 08</a>"],
+["Pads 8–10: ARPEGGIO on · type · rate",851,745,277,82,"Pads","SHIFT + pad: arpeggiator on/off, direction, speed.","<a href=\"#l10\">Lesson 10</a>"],
+["Pads 11–12: CLEAR NOTE · CLEAR MOTION",1079,745,183,82,"Pads","SHIFT + pad: erase the notes, or erase recorded knob moves. ENTER to confirm.","<a href=\"#menu\">Menu map</a>"],
+["Pads 13–14: DELAY · REVERB",1260,745,183,82,"Pads","SHIFT + pad: the full delay and reverb settings.","<a href=\"#l10\">Lesson 10</a>"],
+["Pads 15–16: MENU · WRITE",1442,745,183,82,"Pads","SHIFT + 15 opens the menu. SHIFT + 16 saves (then ENTER). Check the bank first.","<a href=\"#l0\">Lesson 00</a>"],
+];
+(function(){
+const map=document.getElementById("hsmap");if(!map)return;const W=1631,H=922;
+const pop=document.createElement("div");pop.className="hs-pop";map.appendChild(pop);let pinned=null;
+function show(h,d){pop.innerHTML="<b>"+d[0]+"</b>"+d[6]+"<div class='sec'>"+d[5]+(d[7]?" · "+d[7]:"")+"</div>";pop.classList.add("show");
+ const r=map.getBoundingClientRect(),cx=d[1]/W*r.width,top=(d[2]+d[4]/2)/H*r.height+6;let left=cx-150;
+ if(left<4)left=4;if(left+300>r.width-4)left=r.width-304;pop.style.left=left+"px";
+ if(top+pop.offsetHeight>r.height)pop.style.top=((d[2]-d[4]/2)/H*r.height-pop.offsetHeight-6)+"px";else pop.style.top=top+"px"}
+let ht=null;function hide(){if(pinned)return;clearTimeout(ht);ht=setTimeout(()=>{if(!pinned)pop.classList.remove("show")},350)}
+pop.onmouseenter=()=>clearTimeout(ht);pop.onmouseleave=hide;pop.onclick=e=>e.stopPropagation();
+HS.forEach(d=>{const h=document.createElement("div");h.className="hs";h.title=d[0];
+ h.style.left=d[1]/W*100+"%";h.style.top=d[2]/H*100+"%";h.style.width=d[3]/W*100+"%";h.style.height=d[4]/H*100+"%";
+ h.onmouseenter=()=>{clearTimeout(ht);if(!pinned)show(h,d)};h.onmouseleave=hide;
+ h.onclick=e=>{e.stopPropagation();if(pinned===h){pinned.classList.remove("on");pinned=null;pop.classList.remove("show","pin");return}
+  if(pinned)pinned.classList.remove("on");pinned=h;h.classList.add("on");show(h,d);pop.classList.add("pin")};
+ map.appendChild(h)});
+document.addEventListener("click",()=>{if(pinned){pinned.classList.remove("on");pinned=null;pop.classList.remove("show","pin")}});
+})();
+</script>
+</body></html>

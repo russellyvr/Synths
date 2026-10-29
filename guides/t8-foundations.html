@@ -1,0 +1,858 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Roland T-8 Beat Foundations</title><style>
+/* Shared page theme.
+   2026-08-23: retokenized to the SwarmKey master-dashboard "Linear idiom"
+   (Scheduled/master-dashboard/dashboard-theme.sh) -- near-black ground,
+   off-white text, hairline borders, one indigo accent, dot-grid backdrop.
+   Dark in both colour schemes by design. Static (no JS) -- these also
+   render as email attachments. Edit here; all agents inherit. */
+:root {
+  --bg: #08090a; --card: #0f1011; --card-2: #191a1b;
+  --text: #f7f8f8; --secondary: #8a8f98; --tertiary: #8a8f98; /* tertiary lightened from #62666d (3.3:1, WCAG AA fail) — council 2026-08-24 D5 */
+  --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.10);
+  --accent: #6e74c9; --accent-soft: rgba(110,116,201,0.14); /* aligned to the deployed indigo accent (dashboard-theme.sh + live pages) — council 2026-08-24 D6 */
+  --green: #8FCE63; --green-soft: #1B2A12;
+  --orange: #F4A63C; --orange-soft: #33240D;
+  --red: #F26D6D; --red-soft: #3A1414;
+  --purple: #9585FF; --purple-soft: #1E1B3D;
+  --shadow-1: none; --shadow-2: none;
+  --blk-amber:#F4A63C; --blk-amber-wash:#33240D;
+  --blk-violet:#9585FF; --blk-violet-wash:#1E1B3D;
+  --blk-teal:#2FC7B4;  --blk-teal-wash:#0C2E2B;
+  --blk-navy:#7C9BE0;  --blk-navy-wash:#151F38;
+  --blk-green:#8FCE63; --blk-green-wash:#1B2A12;
+  --blk-rose:#F26D6D;  --blk-rose-wash:#3A1414;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  background: var(--bg); color: var(--text);
+  background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  line-height: 1.45; font-size: 15px;
+}
+.wrap { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+header.hero { margin-bottom: 24px; }
+.hero .eyebrow { color: var(--accent); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.06; margin-top: 6px; }
+.meta-line { color: var(--secondary); font-size: 15px; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.meta-line .dot { color: var(--tertiary); }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 22px 0; }
+.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; box-shadow: var(--shadow-1); }
+.kpi-label { color: var(--secondary); font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.kpi-value { font-size: 30px; font-weight: 700; margin-top: 6px; letter-spacing: -0.024em; font-feature-settings: 'tnum'; line-height: 1.1; }
+.kpi-sub { font-size: 12px; color: var(--tertiary); margin-top: 4px; font-weight: 600; }
+
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; margin-bottom: 16px; box-shadow: var(--shadow-1); }
+.card > h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.018em; margin-bottom: 4px; }
+.card > .card-sub { color: var(--secondary); font-size: 13px; margin-bottom: 14px; }
+.sec-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--secondary); margin: 6px 0 12px; }
+
+.item { padding: 14px 0; border-top: 1px solid var(--border); }
+.item:first-of-type { border-top: 0; padding-top: 2px; }
+.item-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.item-meta { color: var(--secondary); font-size: 12.5px; margin-top: 3px; display: flex; flex-wrap: wrap; gap: 10px; }
+.item-link { color: var(--accent); text-decoration: none; font-size: 12.5px; word-break: break-all; }
+.item-link:hover { text-decoration: underline; }
+.summary { color: var(--text); font-size: 14px; line-height: 1.55; margin-top: 8px; }
+.sub-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-top: 8px; }
+
+.overview { font-size: 16px; line-height: 1.6; color: var(--text); }
+
+.pill { padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+.pill-green { background: var(--green-soft); color: var(--green); }
+.pill-orange { background: var(--orange-soft); color: var(--orange); }
+.pill-red { background: var(--red-soft); color: var(--red); }
+.pill-blue { background: var(--accent-soft); color: var(--accent); }
+.pill-purple { background: var(--purple-soft); color: var(--purple); }
+.pill-gray { background: var(--card-2); color: var(--tertiary); border: 1px solid var(--border); }
+
+.empty { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 40px 28px; text-align: center; color: var(--secondary); }
+.empty-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+
+footer.foot { color: var(--tertiary); font-size: 12px; margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--border); }
+a { color: var(--accent); }
+
+/* ---- colour-block accent layer (2026-08-23) ----
+   Every card and KPI tile carries a tinted rail; hue cycles by position so a
+   brief with N sections reads as N distinct blocks without the agent fragment
+   having to know about colour. .pill-* classes map onto the same hue set. */
+.card, .kpi, .empty { position: relative; overflow: hidden; padding-left: 30px; }
+.kpi { padding-left: 26px; }
+.card::before, .kpi::before, .empty::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
+  background: var(--wash); border-right: 1px solid var(--border); }
+.card, .kpi, .empty { --c: var(--blk-amber); --wash: var(--blk-amber-wash); }
+.card:nth-of-type(5n+2), .kpi:nth-child(5n+2) { --c: var(--blk-violet); --wash: var(--blk-violet-wash); }
+.card:nth-of-type(5n+3), .kpi:nth-child(5n+3) { --c: var(--blk-teal);   --wash: var(--blk-teal-wash); }
+.card:nth-of-type(5n+4), .kpi:nth-child(5n+4) { --c: var(--blk-green);  --wash: var(--blk-green-wash); }
+.card:nth-of-type(5n+5), .kpi:nth-child(5n+5) { --c: var(--blk-navy);   --wash: var(--blk-navy-wash); }
+.card > h2, .kpi-label, .sec-label { color: var(--c); }
+.kpi-sub { color: var(--c); opacity: .85; }
+.hero .eyebrow { color: var(--blk-amber); }
+.pill { border: 1px solid var(--border); }
+
+/* ---- collapsible topics + outlined kind badges (2026-08-23) ----
+   Adopted from the Microsoft Change Digest layout: each topic card is a
+   <details> (open by default) whose summary shows the title and item count;
+   pills become small uppercase outlined badges coloured by kind. */
+details.card > summary { list-style: none; cursor: pointer; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; margin: -4px 0 0; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary h2 { display: inline-flex; align-items: center; gap: 10px; margin: 0; }
+details.card > summary h2::before { content: "\25B8"; font-size: 11px; color: var(--tertiary);
+  transition: transform .15s ease; }
+details.card[open] > summary h2::before { transform: rotate(90deg); }
+details.card > summary .count { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px;
+  color: var(--tertiary); white-space: nowrap; }
+details.card[open] > summary { margin-bottom: 12px; }
+details.card:not([open]) { padding-bottom: 16px; }
+.pill { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  padding: 2px 8px; border-radius: 999px; background: transparent; border: 1px solid currentColor; }
+.pill-green { color: var(--green); }  .pill-orange { color: var(--orange); }
+.pill-red { color: var(--red); }      .pill-blue { color: var(--accent); }
+.pill-purple { color: var(--purple); } .pill-gray { color: var(--secondary); background: transparent; }
+</style></head><body>
+<style>
+.wrap{max-width:980px}
+p,li{font-size:16px;line-height:1.65}
+.card p{margin:8px 0 12px}
+.card ul,.card ol{margin:6px 0 12px 22px}
+.card ol li{margin-bottom:6px}
+h3{font-size:15px;color:var(--c);margin:18px 0 6px;text-transform:uppercase;letter-spacing:.05em}
+h4{font-size:14px;color:var(--text);margin:14px 0 4px}
+.big{font-size:18px;font-weight:600;color:var(--text);margin:8px 0 12px}
+.fig{background:var(--card-2);border:1px solid var(--border-strong);border-radius:10px;padding:14px;margin:12px 0}
+.fig svg{width:100%;height:auto;display:block}
+.cap{color:var(--secondary);font-size:13px;margin-top:8px}
+.box{border:1px solid var(--border-strong);border-radius:10px;padding:12px 16px;margin:12px 0}
+.box b.lead{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.box p{margin:6px 0}.box ol,.box ul{margin:6px 0 4px 22px}
+.try{background:var(--blk-green-wash)}.try b.lead{color:var(--blk-green)}
+.gate{background:var(--blk-navy-wash)}.gate b.lead{color:var(--blk-navy)}
+.tip{background:var(--blk-violet-wash)}.tip b.lead{color:var(--blk-violet)}
+.wrong{background:var(--blk-rose-wash)}.wrong b.lead{color:var(--blk-rose)}
+.remember{background:var(--card-2)}.remember b.lead{color:var(--secondary)}
+.start{background:var(--blk-amber-wash)}.start b.lead{color:var(--blk-amber)}
+.start table,.save table{display:table;width:100%}.start td,.start th,.save td,.save th{white-space:normal;vertical-align:top}
+.start td:first-child,.save td:first-child{white-space:nowrap;font-weight:600}
+.save{background:var(--blk-teal-wash)}.save b.lead{color:var(--blk-teal)}
+.next{display:inline-block;margin-top:10px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:6px 16px;text-decoration:none;font-weight:600;font-size:14px}
+.next:hover{background:var(--accent-soft)}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:4px 0 10px}
+.goal .n{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--secondary);border:1px solid var(--border-strong);border-radius:6px;padding:2px 6px;white-space:nowrap;margin-top:4px}
+.ctl{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--secondary)}
+.ctl label{display:flex;gap:8px;align-items:center}
+.ctl input[type=range]{width:150px;accent-color:var(--c)}
+.ctl button{background:transparent;color:var(--c);border:1px solid currentColor;border-radius:999px;padding:4px 12px;font:inherit;cursor:pointer}
+.ctl button.on{background:var(--wash)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0;display:block;overflow-x:auto}
+th,td{border:1px solid var(--border-strong);padding:7px 10px;text-align:left;white-space:nowrap}
+th{color:var(--c);font-weight:600}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px}
+.toc a{display:block;background:var(--card-2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;text-decoration:none;color:var(--text);font-size:14px}
+.toc a span{font-family:ui-monospace,Menlo,monospace;color:var(--secondary);margin-right:6px}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.9em;background:var(--card-2);padding:1px 5px;border-radius:4px}
+.lcd{font-family:ui-monospace,Menlo,monospace;background:#000;color:#ff9a3c;border:1px solid #333;border-radius:4px;padding:0 6px;letter-spacing:.08em}
+.fig.shot{padding:10px}.fig.shot img{width:100%;height:auto;display:block;border-radius:6px}
+.hsmap{position:relative;display:block;border-radius:6px;overflow:visible}
+.hsmap img{width:100%;height:auto;display:block;border-radius:6px}
+.hs{position:absolute;transform:translate(-50%,-50%);border:2px solid transparent;border-radius:8px;cursor:pointer;transition:border-color .12s,background .12s}
+.hs:hover,.hs.on{border-color:var(--accent);background:rgba(110,116,201,.22);box-shadow:0 0 0 3px rgba(110,116,201,.25)}
+.hs-pop{position:absolute;z-index:20;width:300px;max-width:92%;background:var(--card-2);border:1px solid var(--border-strong);border-left:3px solid var(--accent);border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.6);display:none}
+.hs-pop.show{display:block}.hs-pop.pin{pointer-events:auto}
+.hs-pop b{display:block;color:var(--accent);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.hs-pop .sec{color:var(--secondary);font-size:11.5px;margin-top:5px}.hs-pop .sec a{color:var(--secondary);text-decoration:underline dotted;text-underline-offset:2px}.hs-pop .sec a:hover{color:var(--accent)}
+.hs-hint{color:var(--secondary);font-size:12.5px;margin:6px 10px 0}
+.card table{display:table}.card td,.card th{white-space:normal;vertical-align:top}.card td:first-child{white-space:nowrap}#menu td:nth-child(2){white-space:nowrap}
+.check label{display:flex;gap:10px;align-items:flex-start;font-size:15px;margin:6px 0;cursor:pointer}
+.check input{margin-top:5px;accent-color:var(--blk-navy)}
+.prog{position:sticky;top:0;z-index:30;background:rgba(8,9,10,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);margin:0 -24px 18px;padding:8px 24px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.prog a{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--secondary);text-decoration:none;border:1px solid var(--border-strong);border-radius:6px;padding:2px 7px}
+.prog a.cur{color:var(--text);border-color:var(--accent);background:var(--accent-soft)}
+.prog a.done{color:var(--blk-green);border-color:var(--blk-green)}
+@media print{.hs,.hs-pop,.hs-hint,.prog{display:none!important}}
+@media(max-width:600px){.wrap{padding:20px 16px 60px}.ctl input[type=range]{width:110px}.prog{margin:0 -16px 16px;padding:8px 16px}}
+</style>
+<div class="wrap">
+<nav class="prog" id="prog">
+<a href="#l0">00</a><a href="#l1">01</a><a href="#l2">02</a><a href="#l3">03</a><a href="#l4">04</a><a href="#l5">05</a><a href="#l6">06</a><a href="#l7">07</a><a href="#l8">08</a><a href="#l9">09</a><a href="#l10">10</a><a href="#l11">11</a><a href="#menu">M</a>
+</nav>
+<header class="hero">
+  <div class="eyebrow">Roland T-8 · Beat Foundations · 12 lessons + menu map</div>
+  <h1>How the T-8 Makes a Beat</h1>
+  <div class="meta-line"><span>Roland AIRA Compact T-8 + S-1</span><span class="dot">·</span><span>Plain-language course with pictures</span><span class="dot">·</span><span>2026-10-28 17:05 PDT</span></div>
+</header>
+
+<section class="card">
+  <h2>Welcome. Start here.</h2>
+  <p>This course teaches you how the T-8 makes a beat and a bass line. You do not need to know anything first. Each lesson is short and builds on the one before it. Every fact comes from Roland's T-8 Owner's Manual (version 1.02) or Roland's own web pages. Where the manual is silent, the page says so.</p>
+  <h3>How every lesson works</h3>
+  <ul>
+    <li><b>Goal</b> says what you will be able to do at the end.</li>
+    <li><b>Remember</b> gives you the two or three ideas from last time.</li>
+    <li><b>Set your T-8 like this</b> lists every knob and setting. Copy it. Do not skip it.</li>
+    <li><b>The big idea</b> is the one new thing in this lesson.</li>
+    <li><b>Try it</b> tells you what to do, one step at a time.</li>
+    <li><b>If it sounds wrong</b> lists the common slip-ups and the fix.</li>
+    <li><b>Check yourself</b> is a tiny quiz. Tick the boxes when you can do each thing.</li>
+    <li><b>Save it</b> tells you where to save. Then a button takes you to the next lesson.</li>
+  </ul>
+  <div class="box tip"><b class="lead">Two rules for the whole course</b><p>1. Turn your headphones down before you start. Drums get loud fast.</p><p>2. Change one thing at a time. Listen. Then change the next thing.</p></div>
+  <h3>Words we use</h3>
+  <p>We say knob positions like a clock. <b>7 o'clock</b> is all the way left, the lowest setting. We also call it <b>MIN</b>. <b>5 o'clock</b> is all the way right, the highest setting. We call it <b>MAX</b>. <b>12 o'clock</b> is straight up, the middle.</p>
+  <p>The 16 white buttons along the bottom are the <b>step buttons</b>. Roland prints two names on each one: a note name like <b>C#</b>, and a job like <b>ENTER</b>. We write them as the manual does: <b>[C# (ENTER)]</b>. Step 1 is the left-most button, [C (EXIT)]. Step 16 is the right-most, [SLIDE (WRITE)].</p>
+  <p>The seven big grey buttons in the middle are the <b>instrument buttons</b>: BASS DRUM, SNARE DRUM, HAND CLAP, TOM, CLOSED HIHAT, OPEN HIHAT and BASS. The six drums are the <b>rhythm</b>. The bass is its own part.</p>
+  <div class="toc">
+    <a href="#l0"><span>00</span>Housekeeping: banks, saving, backup</a><a href="#l1"><span>01</span>The map of the panel</a><a href="#l2"><span>02</span>Pick a pattern, set the tempo</a>
+    <a href="#l3"><span>03</span>Your first beat</a><a href="#l4"><span>04</span>Shape each drum</a><a href="#l5"><span>05</span>Accent, velocity, probability, rolls</a>
+    <a href="#l6"><span>06</span>Longer patterns, fills, shuffle</a><a href="#l7"><span>07</span>The bass line</a><a href="#l8"><span>08</span>Delay, reverb, overdrive, side chain</a>
+    <a href="#l9"><span>09</span>Record live, mute, undo</a><a href="#l10"><span>10</span>Save a riff: T-8 and S-1</a><a href="#l11"><span>11</span>Play the T-8 with the S-1</a><a href="#menu"><span>M</span>Menu map</a>
+  </div>
+</section>
+
+<!-- L0 -->
+<section class="card" id="l0">
+  <h2>00 · Housekeeping: banks, patterns, saving and backup</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can pick a pattern, see whether it is empty, clear it, save it, undo a mess, and back up the whole T-8 to the Mac.</p></div>
+  <p class="big">On the T-8 a drum part and a bass part live together in one <b>pattern</b>. The manual says the two numbers "are recalled as a set". Think of a pattern as a <b>slot</b>.</p>
+  <h3>Where the 64 patterns live</h3>
+  <p>There are 4 <b>banks</b>. Each bank has 16 patterns. That is 64 patterns, the number in the specifications. We write a pattern as bank-number, so <b>2-05</b> means bank 2, pattern 5.</p>
+  <table><tr><th>Bank</th><th>How we use it in this course</th></tr>
+  <tr><td><b>1</b> (1-01 to 1-16)</td><td><b>Leave it alone.</b> Listen to what is there. Never save here.</td></tr>
+  <tr><td><b>2</b> (2-01 to 2-16)</td><td><b>Lesson slots.</b> Lesson 03 saves to 2-03, Lesson 04 to 2-04, and so on.</td></tr>
+  <tr><td><b>3</b> (3-01 to 3-16)</td><td><b>Your own beats.</b> Save the ones you like here.</td></tr>
+  <tr><td><b>4</b> (4-01 to 4-16)</td><td><b>Scratch.</b> Mess around here. It does not matter if you wreck it.</td></tr></table>
+  <div class="box wrong"><b class="lead">What the manual does not say</b><p>The T-8 manual never says which patterns come filled from the factory, or that any bank is protected. There is no lock. So we treat bank 1 as "look, do not touch", and we back up everything before the first lesson. The backup takes five minutes and makes every mistake fixable.</p></div>
+
+  <h3>The clean start (the knobs we begin every lesson from)</h3>
+  <p>The T-8 has no "init". Clearing a pattern removes the notes and leaves every knob and menu setting as it was. So the course uses one <b>clean start</b>: a dry, plain panel you set by hand. Every lesson's "Set your T-8 like this" box starts from here.</p>
+  <div class="fig shot"><img src="img/t8-clean-start.png" alt="Roland T-8 clean start: tempo 120, all levels 12 o'clock, bass cutoff max, delay and reverb min"><div class="cap">The clean start. Tempo 120. LEVEL, TUNE and DECAY knobs at 12 o'clock. Bass CUTOFF fully clockwise, RESO and ENV MOD fully counterclockwise. DELAY and REVERB fully counterclockwise. VOLUME low. These are learning positions, not Roland factory defaults.</div></div>
+  <table><tr><th>Area</th><th>Control</th><th>Set it to</th><th>Why</th></tr>
+  <tr><td>Common</td><td>TEMPO/VALUE</td><td>120.0</td><td>A medium tempo. Tempo is shared by all patterns.</td></tr>
+  <tr><td>Drums</td><td>every LEVEL</td><td>12 o'clock</td><td>All drums equal, room to go up or down.</td></tr>
+  <tr><td>Drums</td><td>every TUNE, HIHAT DECAY</td><td>12 o'clock</td><td>Middle pitch and length.</td></tr>
+  <tr><td>Drums</td><td>kick and snare DECAY buttons</td><td>off (unlit)</td><td>TUNE means pitch, not length.</td></tr>
+  <tr><td>Bass</td><td>LEVEL, PITCH, DECAY</td><td>12 o'clock</td><td>Audible, middle pitch, medium length.</td></tr>
+  <tr><td>Bass</td><td>CUTOFF</td><td>MAX</td><td>Filter wide open. You hear the whole bass.</td></tr>
+  <tr><td>Bass</td><td>RESO, ENV MOD</td><td>MIN</td><td>No squelch, no filter movement yet.</td></tr>
+  <tr><td>Effects</td><td>DELAY, REVERB</td><td>MIN</td><td>Dry. No echo, no room.</td></tr>
+  <tr><td>Jacks</td><td>VOLUME</td><td>low, raise gently</td><td>Drums get loud fast.</td></tr>
+  <tr><td>Menu</td><td><span class="lcd">b.WAv</span></td><td><span class="lcd">SAW</span></td><td>The sawtooth bass. Lesson 07 compares it with square.</td></tr>
+  <tr><td>Menu</td><td><span class="lcd">OdOn</span> for each instrument</td><td><span class="lcd">OFF</span></td><td>No overdrive.</td></tr>
+  <tr><td>Menu</td><td><span class="lcd">SC</span></td><td><span class="lcd">OFF</span></td><td>No side chain.</td></tr>
+  <tr><td>Menu</td><td>mutes</td><td>all off (buttons lit, not blinking)</td><td>Every instrument can sound.</td></tr></table>
+  <p>Menu items: hold <b>SHIFT</b>, press step 15 <b>[OCT+ (MENU)]</b>, turn TEMPO/VALUE to the item, press the instrument button or <b>[C# (ENTER)]</b>, turn to the value, press <b>[C (EXIT)]</b>. Lesson 04 and the Menu Map explain each one.</p>
+
+  <h3>Step 1 · Pick a pattern</h3>
+  <ol>
+    <li>Hold <b>PATTERN</b>. The four left step buttons become bank buttons 1 to 4. Press one. Let go of PATTERN.</li>
+    <li>Press <b>PATTERN</b> once. It lights up. The 16 step buttons are now pattern numbers 1 to 16.</li>
+    <li>Press a step button. That pattern plays next. The manual calls this "up next".</li>
+  </ol>
+  <p>Read the step buttons while PATTERN is lit. The manual's table: <b>lit</b> = playing now, <b>blinking</b> = up next, <b>dim</b> = the pattern has something in it, <b>unlit</b> = the pattern is empty. That is how you tell an empty slot from a full one.</p>
+
+  <h3>Step 2 · Clear a pattern</h3>
+  <p>There is no "init" on the T-8. There is a clear. Hold <b>SHIFT</b> and press step 11, <b>[A# (PTN CLEAR ALL)]</b>. The manual says this "deletes the selected pattern". To clear only one drum, select that drum, hold SHIFT and press step 12, <b>[B (PTN CLEAR INST)]</b>. Nothing is saved until you save, so a clear can still be undone by turning the power off and on.</p>
+
+  <h3>Step 3 · Save it</h3>
+  <ol>
+    <li>Look at the bank. Make sure it is 2, 3 or 4.</li>
+    <li>Hold <b>SHIFT</b>. Press step 16, <b>[SLIDE (WRITE)]</b>.</li>
+    <li>Turn <b>TEMPO/VALUE</b> to <span class="lcd">Ptn</span> (this pattern only). <span class="lcd">ALL</span> saves all 64 patterns at once.</li>
+    <li>Press step 2, <b>[C# (ENTER)]</b>. The pattern is saved.</li>
+  </ol>
+  <div class="box tip"><b class="lead">The rule about power</b><p>The manual: "Once the power is turned off, any unsaved patterns are reset to their last saved state." So save before you walk away. The flip side is useful too: a mess you did not save is gone the moment you power off.</p></div>
+
+  <h3>Undo: put a pattern back the way it was</h3>
+  <p>Hold <b>SHIFT</b> and press step 15, <b>[OCT+ (MENU)]</b>. Turn TEMPO/VALUE to <span class="lcd">rLod</span> (reload). Press <b>[C# (ENTER)]</b>. The pattern goes back to its last save, drums and bass both. The shortcut is faster: hold <b>PATTERN</b> and press step 16 to reload the whole pattern, step 14 to reload only the drums, step 15 to reload only the bass.</p>
+
+  <h3>Copy a pattern to another slot</h3>
+  <p>Open the pattern you want to copy. Hold <b>SHIFT</b>, press <b>[OCT+ (MENU)]</b>, turn to <span class="lcd">COPY</span>, press <b>[C# (ENTER)]</b>. Turn TEMPO/VALUE to the destination number. Press <b>[C# (ENTER)]</b> again. <b>[C (EXIT)]</b> cancels. <span class="lcd">CPTr</span> copies only the drums and <span class="lcd">CPTb</span> copies only the bass.</p>
+
+  <h3>Back up everything to the Mac</h3>
+  <ol>
+    <li>Plug the T-8 into the Mac with the USB cable. Not a charge-only cable.</li>
+    <li>Hold the <b>PLAY</b> button while you turn the power on. The step buttons light up one by one. Wait about a minute.</li>
+    <li>A drive called <b>T-8</b> appears. Open its <b>BACKUP</b> folder. Copy the <b>BASS</b> and <b>RHYTHM</b> folders to the Mac.</li>
+    <li>Eject the T-8 drive. Turn the T-8 off.</li>
+  </ol>
+  <p>To restore, start the same way, copy your BASS and RHYTHM folders into the <b>RESTORE</b> folder on the drive, eject, then press <b>ACCENT</b>. Wait for <span class="lcd">dOnE</span> (done).</p>
+  <div class="box wrong"><b class="lead">Factory reset wipes all 64 patterns</b><p>Hold <b>[SLIDE (WRITE)]</b> while you turn the power on. The display shows <span class="lcd">FACt</span> (factory) and ACCENT blinks. Press ACCENT to run it, or turn the power off to cancel. When <span class="lcd">dOnE</span> shows, power off and on. Back up first.</p></div>
+
+  <div class="box gate check" data-l="l0"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can pick bank 4, pattern 1 with PATTERN and the step buttons.</label>
+    <label><input type="checkbox"> I can tell an empty pattern (unlit) from a full one (dim).</label>
+    <label><input type="checkbox"> I can set the clean start from the picture without the table.</label>
+    <label><input type="checkbox"> I can save with SHIFT + 16 → Ptn → ENTER.</label>
+    <label><input type="checkbox"> I can undo with PATTERN + step 16.</label>
+    <label><input type="checkbox"> I have a BASS and RHYTHM backup folder on the Mac.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Nothing to save yet. Keep your backup somewhere safe, with the date in the folder name.</p><a class="next" href="#l1">Next: Lesson 01, the map →</a></div>
+</section>
+
+<!-- L1 -->
+<section class="card" id="l1">
+  <h2>01 · The map: where every sound comes from</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can point to the nine areas on the panel and say what each one does in one sentence.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>A pattern holds drums and bass together. Save with SHIFT + 16 → Ptn → ENTER. Undo with PATTERN + 16.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>The clean start from Lesson 00. Headphones in <b>MIX OUT</b>. Pick pattern <b>1-01</b> and press <b>PLAY</b> so you have something to hear.</p></div>
+  <p class="big">The T-8 is seven instruments and one shared effects section. Each drum has its own small column of controls. The bass has a bigger one.</p>
+  <div class="fig shot"><div class="hsmap" id="hsmap"><img src="img/t8-panel-top.png" alt="Roland T-8 top panel"></div><div class="hs-hint">Tap any knob, button or jack to see what it does. Tap again, or tap anywhere else, to close the note.</div><div class="cap">The T-8 top panel at the clean start (Lesson 00). Roland's manual splits it into nine areas: 1 jacks · 2 common controls · 3 bass drum · 4 snare · 5 tom and hand clap · 6 hi-hat · 7 bass · 8 delay, reverb and accent · 9 step buttons. Every hover note links to Roland's own text on the <a href="https://static.roland.com/manuals/T-8_manual_v102/eng/" target="_blank">manual page</a>.</div></div>
+  <h3>The nine areas, in plain words</h3>
+  <table><tr><th>Area</th><th>In plain words</th><th>Job</th></tr>
+  <tr><td><b>1 Jacks</b></td><td>the plugs</td><td>Sync in and out, audio in and out, headphones, and the VOLUME knob.</td></tr>
+  <tr><td><b>2 Common</b></td><td>the brain</td><td>Display, TEMPO/VALUE knob, SHIFT, PATTERN, PLAY and REC.</td></tr>
+  <tr><td><b>3 Bass drum</b></td><td>the kick</td><td>LEVEL, TUNE, a DECAY button, and the instrument button.</td></tr>
+  <tr><td><b>4 Snare drum</b></td><td>the crack</td><td>Same four controls as the kick.</td></tr>
+  <tr><td><b>5 Tom / hand clap</b></td><td>two sounds, one column</td><td>One LEVEL and one TUNE shared by TOM and HAND CLAP.</td></tr>
+  <tr><td><b>6 Hi-hat</b></td><td>the tick</td><td>One LEVEL and one DECAY shared by CLOSED and OPEN.</td></tr>
+  <tr><td><b>7 Bass</b></td><td>the synth</td><td>LEVEL, PITCH, DECAY, CUTOFF, RESO, ENV MOD, plus BASS and KYBD buttons.</td></tr>
+  <tr><td><b>8 Delay / reverb / accent</b></td><td>the polish</td><td>Two effect knobs and the ACCENT button.</td></tr>
+  <tr><td><b>9 Step buttons</b></td><td>the grid</td><td>Sixteen buttons that pick patterns, place notes, and run SHIFT functions.</td></tr></table>
+  <div class="box tip"><b class="lead">The SHIFT rule</b><p>Every step button has a second job printed under it in small letters. Hold <b>SHIFT</b> and press the button to use that job. Some jobs happen at once. Others show a value: turn <b>TEMPO/VALUE</b> to change it, then press <b>[C (EXIT)]</b> to leave.</p></div>
+  <div class="box try"><b class="lead">Try it</b><ol><li>While 1-01 plays, turn the <b>BASS DRUM LEVEL</b> knob down and up. Only the kick changes.</li><li>Turn the <b>HIHAT DECAY</b> knob up. The hats get longer.</li><li>Turn the <b>REVERB</b> knob to 12 o'clock. Everything is in a room now. Put it back to MIN.</li><li>Hold <b>SHIFT</b> and press <b>BASS DRUM</b>. The kick is muted and its button blinks. Do it again to unmute.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>I hear nothing:</b> headphones must be in MIX OUT, not MIX IN or SYNC OUT.</li><li><b>A drum went quiet and its button blinks:</b> it is muted. SHIFT + that button unmutes it.</li><li><b>The knob moved but nothing changed:</b> that drum has no notes in this pattern. Pick 1-01 or add notes in Lesson 03.</li></ul></div>
+  <div class="box gate check" data-l="l1"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can name the seven instrument buttons without looking.</label>
+    <label><input type="checkbox"> I can say which two instruments share a LEVEL knob (tom and clap; closed and open hat).</label>
+    <label><input type="checkbox"> I can mute and unmute a drum with SHIFT.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Nothing changed in the pattern. Mutes are not saved anyway; the manual says they reset at power off.</p><a class="next" href="#l2">Next: Lesson 02, patterns and tempo →</a></div>
+</section>
+
+<!-- L2 -->
+<section class="card" id="l2">
+  <h2>02 · Pick a pattern, set the tempo, start and stop</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can switch patterns while the beat plays, set an exact tempo, and understand why a new pattern waits.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>Nine areas. Each drum has its own column. SHIFT gives every step button a second job.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Pattern <b>1-01</b>. All LEVEL knobs at 12 o'clock. DELAY and REVERB at MIN.</p></div>
+  <p class="big">The display always shows the tempo. One knob sets it for every pattern at once.</p>
+  <table><tr><th>What you want</th><th>Do this</th><th>Manual says</th></tr>
+  <tr><td>Start or stop</td><td>Press <b>PLAY</b></td><td>"Plays the pattern. Press the button again to stop playback."</td></tr>
+  <tr><td>Tempo in whole numbers</td><td>Turn <b>TEMPO/VALUE</b></td><td>"The tempo is always shown on the display."</td></tr>
+  <tr><td>Tempo in tenths</td><td>Hold <b>SHIFT</b>, turn <b>TEMPO/VALUE</b></td><td>"fine-tune the value in decimal points"</td></tr>
+  <tr><td>Next pattern</td><td>PATTERN, then a step button</td><td>"The selected pattern plays next (set as 'up next')."</td></tr>
+  <tr><td>Other bank</td><td>Hold PATTERN, press step 1 to 4</td><td>"The four leftmost step buttons function as bank numbers 1–4."</td></tr></table>
+  <p>One T-8 fact to know early: "The tempo settings are common to all patterns, and are saved in this unit." So there is no per-pattern tempo. When you change it, every pattern changes.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Press <b>PLAY</b>. Set the tempo to <b>120</b> with TEMPO/VALUE.</li><li>Hold SHIFT and turn the knob two clicks. The display shows a decimal. Put it back to 120.0.</li><li>Press <b>PATTERN</b>. Press step <b>2</b>. Step 2 blinks: it is up next. Wait for the bar to end. It starts.</li><li>Press PATTERN, then steps 3, 4, 5 in turn, one per bar. You are performing.</li><li>Press <b>PLAY</b> to stop.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>I pressed a pattern and nothing happened:</b> it is up next. It starts when the current pattern ends.</li><li><b>Drums and bass changed at different times:</b> this is Pattern Sync. The menu's <span class="lcd">PSYn</span> item sets it; Lesson 06 explains.</li><li><b>Every pattern is now too fast:</b> tempo is global. Set it once.</li></ul></div>
+  <div class="box gate check" data-l="l2"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can set the tempo to 98.5 exactly.</label>
+    <label><input type="checkbox"> I can line up the next pattern while this one plays.</label>
+    <label><input type="checkbox"> I can say why "up next" waits.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Nothing to save. Leave the tempo at 120.</p><a class="next" href="#l3">Next: Lesson 03, your first beat →</a></div>
+</section>
+
+<!-- L3 -->
+<section class="card" id="l3">
+  <h2>03 · Your first beat: kick, snare, hats on a 16-step grid</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can build a one-bar beat from nothing, step by step, and save it.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>PLAY starts and stops. Tempo is global. PATTERN + a step button picks the slot.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Open pattern <b>2-03</b>. Hold <b>SHIFT</b>, press step 11 <b>[A# (PTN CLEAR ALL)]</b>. Tempo 120. Every LEVEL at 12 o'clock. Every TUNE at 12 o'clock. HIHAT DECAY at 9 o'clock. DELAY and REVERB at MIN. BASS LEVEL at MIN for now.</p></div>
+  <p class="big">A pattern is a grid. Sixteen steps make one bar of four beats. Pick a drum, then press the steps where it should hit.</p>
+  <div class="fig"><svg viewBox="0 0 900 230" font-family="-apple-system,sans-serif">
+    <g font-size="13" fill="#8a8f98"><text x="20" y="34">Beat</text><text x="20" y="84">KICK</text><text x="20" y="134">SNARE</text><text x="20" y="184">CL. HAT</text></g>
+    <g font-size="13" fill="#f7f8f8" text-anchor="middle">
+      <text x="128" y="34">1</text><text x="332" y="34">2</text><text x="536" y="34">3</text><text x="740" y="34">4</text></g>
+    <g>
+      <!-- 16 columns at 51px pitch from x=100 -->
+      <g fill="#191a1b" stroke="rgba(255,255,255,.1)">
+        <rect x="102" y="56" width="46" height="40" rx="6"/><rect x="153" y="56" width="46" height="40" rx="6"/><rect x="204" y="56" width="46" height="40" rx="6"/><rect x="255" y="56" width="46" height="40" rx="6"/>
+        <rect x="306" y="56" width="46" height="40" rx="6"/><rect x="357" y="56" width="46" height="40" rx="6"/><rect x="408" y="56" width="46" height="40" rx="6"/><rect x="459" y="56" width="46" height="40" rx="6"/>
+        <rect x="510" y="56" width="46" height="40" rx="6"/><rect x="561" y="56" width="46" height="40" rx="6"/><rect x="612" y="56" width="46" height="40" rx="6"/><rect x="663" y="56" width="46" height="40" rx="6"/>
+        <rect x="714" y="56" width="46" height="40" rx="6"/><rect x="765" y="56" width="46" height="40" rx="6"/><rect x="816" y="56" width="46" height="40" rx="6"/><rect x="867" y="56" width="30" height="40" rx="6"/>
+        <rect x="102" y="106" width="46" height="40" rx="6"/><rect x="153" y="106" width="46" height="40" rx="6"/><rect x="204" y="106" width="46" height="40" rx="6"/><rect x="255" y="106" width="46" height="40" rx="6"/>
+        <rect x="306" y="106" width="46" height="40" rx="6"/><rect x="357" y="106" width="46" height="40" rx="6"/><rect x="408" y="106" width="46" height="40" rx="6"/><rect x="459" y="106" width="46" height="40" rx="6"/>
+        <rect x="510" y="106" width="46" height="40" rx="6"/><rect x="561" y="106" width="46" height="40" rx="6"/><rect x="612" y="106" width="46" height="40" rx="6"/><rect x="663" y="106" width="46" height="40" rx="6"/>
+        <rect x="714" y="106" width="46" height="40" rx="6"/><rect x="765" y="106" width="46" height="40" rx="6"/><rect x="816" y="106" width="46" height="40" rx="6"/><rect x="867" y="106" width="30" height="40" rx="6"/>
+        <rect x="102" y="156" width="46" height="40" rx="6"/><rect x="153" y="156" width="46" height="40" rx="6"/><rect x="204" y="156" width="46" height="40" rx="6"/><rect x="255" y="156" width="46" height="40" rx="6"/>
+        <rect x="306" y="156" width="46" height="40" rx="6"/><rect x="357" y="156" width="46" height="40" rx="6"/><rect x="408" y="156" width="46" height="40" rx="6"/><rect x="459" y="156" width="46" height="40" rx="6"/>
+        <rect x="510" y="156" width="46" height="40" rx="6"/><rect x="561" y="156" width="46" height="40" rx="6"/><rect x="612" y="156" width="46" height="40" rx="6"/><rect x="663" y="156" width="46" height="40" rx="6"/>
+        <rect x="714" y="156" width="46" height="40" rx="6"/><rect x="765" y="156" width="46" height="40" rx="6"/><rect x="816" y="156" width="46" height="40" rx="6"/><rect x="867" y="156" width="30" height="40" rx="6"/>
+      </g>
+      <g fill="#F4A63C"><rect x="102" y="56" width="46" height="40" rx="6"/><rect x="306" y="56" width="46" height="40" rx="6"/><rect x="510" y="56" width="46" height="40" rx="6"/><rect x="714" y="56" width="46" height="40" rx="6"/></g>
+      <g fill="#9585FF"><rect x="306" y="106" width="46" height="40" rx="6"/><rect x="714" y="106" width="46" height="40" rx="6"/></g>
+      <g fill="#2FC7B4"><rect x="102" y="156" width="46" height="40" rx="6"/><rect x="204" y="156" width="46" height="40" rx="6"/><rect x="306" y="156" width="46" height="40" rx="6"/><rect x="408" y="156" width="46" height="40" rx="6"/><rect x="510" y="156" width="46" height="40" rx="6"/><rect x="612" y="156" width="46" height="40" rx="6"/><rect x="714" y="156" width="46" height="40" rx="6"/><rect x="816" y="156" width="46" height="40" rx="6"/></g>
+    </g>
+    <g font-size="11" fill="#8a8f98" text-anchor="middle"><text x="125" y="218">1</text><text x="176" y="218">2</text><text x="227" y="218">3</text><text x="278" y="218">4</text><text x="329" y="218">5</text><text x="380" y="218">6</text><text x="431" y="218">7</text><text x="482" y="218">8</text><text x="533" y="218">9</text><text x="584" y="218">10</text><text x="635" y="218">11</text><text x="686" y="218">12</text><text x="737" y="218">13</text><text x="788" y="218">14</text><text x="839" y="218">15</text><text x="882" y="218">16</text></g>
+  </svg><div class="cap">The lesson beat. Kick on steps 1, 5, 9, 13 (the four beats). Snare on 5 and 13 (beats 2 and 4). Closed hat on every odd step. Step numbers along the bottom match the step buttons.</div></div>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Press <b>PLAY</b>. The empty pattern runs. A moving light shows where you are.</li><li>Press <b>BASS DRUM</b>. Its button lights: the kick is selected.</li><li>Press step buttons <b>1, 5, 9, 13</b>. They light and you hear the kick on every beat.</li><li>Press <b>SNARE DRUM</b>. Press steps <b>5</b> and <b>13</b>.</li><li>Press <b>CLOSED HIHAT</b>. Press steps <b>1, 3, 5, 7, 9, 11, 13, 15</b>.</li><li>Press a lit step again. The note is gone. Press it once more to put it back.</li><li>Press <b>OPEN HIHAT</b>. Press step <b>16</b>. One open hat right before the bar turns over.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>I pressed steps and the wrong drum played:</b> the selected instrument is the one whose button is lit. Press the right one first.</li><li><b>Pressing a step changed a pattern instead:</b> PATTERN is lit. Press PATTERN to turn it off.</li><li><b>The beat is only 8 steps long or runs on past 16:</b> the pattern length is wrong. Hold SHIFT, press step 4 [D# (LAST)], turn to 16, press [C (EXIT)].</li></ul></div>
+  <div class="box gate check" data-l="l3"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can say which four steps are the beats (1, 5, 9, 13).</label>
+    <label><input type="checkbox"> I can add and remove a note without stopping the beat.</label>
+    <label><input type="checkbox"> I can set the pattern length with SHIFT + [D# (LAST)].</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Save to <b>2-03</b>: SHIFT + 16 → <span class="lcd">Ptn</span> → [C# (ENTER)]. This beat is the base for the next lessons.</p><a class="next" href="#l4">Next: Lesson 04, shape each drum →</a></div>
+</section>
+
+<!-- L4 -->
+<section class="card" id="l4">
+  <h2>04 · Shape each drum: level, tune, decay, and the hidden menu</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can make the kick deep or tight, the snare fat or thin, and move a drum left or right in the headphones.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>Select a drum, press steps. Beats are 1, 5, 9, 13. SHIFT + [D# (LAST)] sets the length.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Open <b>2-03</b>. Copy it to <b>2-04</b> (Lesson 00), then open 2-04. Press PLAY.</p>
+  <table><tr><th>Control</th><th>Set to</th></tr>
+  <tr><td>All LEVEL knobs</td><td>12 o'clock</td></tr><tr><td>All TUNE knobs</td><td>12 o'clock</td></tr><tr><td>HIHAT DECAY</td><td>9 o'clock</td></tr><tr><td>BASS LEVEL</td><td>MIN</td></tr><tr><td>DELAY, REVERB</td><td>MIN</td></tr></table></div>
+  <p class="big">Each drum column has three jobs: how loud, what pitch, how long. The kick and snare share one knob for pitch and length, and a button swaps between them.</p>
+  <table><tr><th>Drum</th><th>Loud</th><th>Pitch</th><th>Length</th><th>Manual wording</th></tr>
+  <tr><td>Bass drum</td><td>LEVEL</td><td>TUNE</td><td>press DECAY, then TUNE</td><td>"Press the [DECAY] button to change how long the bass drum resonates"</td></tr>
+  <tr><td>Snare drum</td><td>LEVEL</td><td>TUNE</td><td>press DECAY, then TUNE</td><td>same wording for the snare</td></tr>
+  <tr><td>Tom and hand clap</td><td>shared LEVEL</td><td>TUNE for the selected one</td><td>menu only</td><td>"Adjusts the pitch of the selected instrument."</td></tr>
+  <tr><td>Hi-hats</td><td>shared LEVEL</td><td>menu only</td><td>DECAY knob, both hats</td><td>"Adjusts the decay length of the hi-hat sound."</td></tr></table>
+  <h3>The hidden menu for each drum</h3>
+  <p>Hold <b>SHIFT</b> and press step 15, <b>[OCT+ (MENU)]</b>. Turn TEMPO/VALUE to an item. Press the instrument button you want to shape, or <b>[C# (ENTER)]</b>. Turn to set the value. Press <b>[C (EXIT)]</b> twice to leave.</p>
+  <table><tr><th>Display</th><th>Name</th><th>Values</th><th>Plain meaning</th></tr>
+  <tr><td><span class="lcd">GAIn</span></td><td>Gain</td><td>0–200</td><td>Extra volume for one drum, past what LEVEL gives.</td></tr>
+  <tr><td><span class="lcd">tUnE</span></td><td>Tune</td><td>-128–127</td><td>Pitch of one drum. This is how you tune the hats.</td></tr>
+  <tr><td><span class="lcd">dECY</span></td><td>Decay</td><td>-128–127</td><td>Length of one drum. This is how you shorten a clap.</td></tr>
+  <tr><td><span class="lcd">PAn</span></td><td>Pan</td><td>L64–C0–r63</td><td>Left, centre or right in the headphones.</td></tr>
+  <tr><td><span class="lcd">AtK</span></td><td>Attack</td><td>0–255</td><td>Click at the front of the bass drum.</td></tr>
+  <tr><td><span class="lcd">SnPy</span></td><td>Snappy</td><td>0–255</td><td>Snare wires. More is brighter and buzzier.</td></tr>
+  <tr><td><span class="lcd">CoLr</span></td><td>Color</td><td>-128–127</td><td>Noise in the toms.</td></tr>
+  <tr><td><span class="lcd">tON</span></td><td>Tom</td><td>tON1, tON2</td><td>Pick one of two low tom sounds.</td></tr>
+  <tr><td><span class="lcd">CLAP</span></td><td>Hand clap</td><td>CP, hnt, htON</td><td>The clap button plays a clap, a noise tom, or a high tom.</td></tr></table>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Turn <b>BASS DRUM TUNE</b> to 9 o'clock. Deeper. Turn it to 3 o'clock. Tighter. Leave it at 10 o'clock.</li><li>Press the kick's <b>DECAY</b> button. Now turn TUNE up. The kick gets longer. Set it to 1 o'clock. Press DECAY again to go back to pitch.</li><li>Open the menu, pick <span class="lcd">SnPy</span>, press <b>SNARE DRUM</b>, turn to about 200. Hear the wires.</li><li>Pick <span class="lcd">PAn</span>, press <b>CLOSED HIHAT</b>, turn to r30. The hats sit to the right.</li><li>Exit the menu.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>TUNE changes length, not pitch:</b> the DECAY button is on. Press it to turn it off.</li><li><b>The menu changed the wrong drum:</b> press the drum's instrument button while the item is showing.</li><li><b>Both hats changed pitch:</b> correct. The hats share tuning in this unit the way they share LEVEL.</li></ul></div>
+  <div class="box gate check" data-l="l4"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can make the kick longer with the DECAY button and TUNE.</label>
+    <label><input type="checkbox"> I can pan one drum from the menu.</label>
+    <label><input type="checkbox"> I know which drums can only be tuned in the menu.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Leave the kick deep (TUNE 10 o'clock, decay 1 o'clock) and the hats panned right. Save to <b>2-04</b>: SHIFT + 16 → Ptn → ENTER.</p><a class="next" href="#l5">Next: Lesson 05, accents and rolls →</a></div>
+</section>
+
+<!-- L5 -->
+<section class="card" id="l5">
+  <h2>05 · Accent, velocity, probability and rolls</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can make some hits louder than others, make a hit play only sometimes, and turn one step into a roll.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>LEVEL, TUNE, DECAY per column. The menu shapes one drum at a time. Pan and hat tuning live there.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Copy <b>2-04</b> to <b>2-05</b> and open 2-05. Press PLAY. Same knobs as Lesson 04.</p></div>
+  <p class="big">A beat sounds human when the hits are not all equal. The T-8 gives you three ways: a shared accent, a per-step velocity, and a per-step chance.</p>
+  <table><tr><th>Tool</th><th>What it does</th><th>How</th><th>Display</th></tr>
+  <tr><td><b>Accent</b></td><td>Marks steps as loud. "Accents are applied to all rhythm instruments."</td><td>Select a drum, press ACCENT (it lights), press steps.</td><td>ACCENT lit</td></tr>
+  <tr><td><b>Accent strength</b></td><td>How much louder an accent is.</td><td>Hold ACCENT, turn TEMPO/VALUE.</td><td>a number</td></tr>
+  <tr><td><b>Velocity</b></td><td>Loudness of one step for one drum.</td><td>Hold the step, press ACCENT, turn TEMPO/VALUE.</td><td><span class="lcd">v.0</span>–<span class="lcd">v.10</span></td></tr>
+  <tr><td><b>Probability</b></td><td>Chance the step plays each time round.</td><td>Hold the step, turn TEMPO/VALUE.</td><td><span class="lcd">P.0</span>–<span class="lcd">P.100</span></td></tr>
+  <tr><td><b>Master probability</b></td><td>Scales every step's chance at once. "This has no effect if the individual probabilities are not set."</td><td>Hold PATTERN, turn TEMPO/VALUE.</td><td>a number</td></tr>
+  <tr><td><b>Sub step</b></td><td>Splits one step into a roll.</td><td>Hold the drum button, press the step. Repeat to cycle.</td><td><span class="lcd">OFF</span> → <span class="lcd">1_2</span> → <span class="lcd">1_3</span> → <span class="lcd">1_4</span> → <span class="lcd">FLAM</span></td></tr></table>
+  <p>The manual does not define <span class="lcd">FLAM</span> beyond its name. A flam is two hits almost together. It is the last choice in the cycle after 1_4.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Press <b>CLOSED HIHAT</b>. Press <b>ACCENT</b>. Press steps <b>1, 5, 9, 13</b>. The hats on the beat are louder.</li><li>Hold <b>ACCENT</b> and turn TEMPO/VALUE up. The gap grows. Find a setting you like.</li><li>Hold step <b>15</b> (a hat), press <b>ACCENT</b>, turn to <span class="lcd">v.4</span>. That one hat is soft. Let go.</li><li>Press <b>SNARE DRUM</b>. Press step <b>12</b> to add a ghost snare. Hold step 12 and turn to <span class="lcd">P.50</span>. It plays half the time.</li><li>Hold <b>SNARE DRUM</b> and press step <b>13</b>. Display shows the sub step. Press 13 again while holding: <span class="lcd">1_2</span>. A two-hit roll.</li><li>Press ACCENT once more to turn accent entry off.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>Every drum got louder on those steps:</b> that is what accent does. Use velocity for one drum only.</li><li><b>The step shows P.100 when I wanted velocity:</b> press ACCENT while holding the step. The display switches to v.</li><li><b>My roll disappeared:</b> you cycled past FLAM back to OFF. Go round again.</li></ul></div>
+  <div class="box gate check" data-l="l5"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can say the difference between accent (all drums) and velocity (one step, one drum).</label>
+    <label><input type="checkbox"> I can set a step to play half the time.</label>
+    <label><input type="checkbox"> I can turn a snare step into a roll and back.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Keep the accents, the P.50 ghost snare and the roll. Save to <b>2-05</b>.</p><a class="next" href="#l6">Next: Lesson 06, longer patterns and fills →</a></div>
+</section>
+
+<!-- L6 -->
+<section class="card" id="l6">
+  <h2>06 · Longer patterns, shuffle, fills, random, step loop</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can stretch a beat to 32 steps, add swing, fire a fill, and loop one step by hand.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>Accent is shared. Velocity and probability are per step. Hold the drum and press a step for rolls.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Copy <b>2-05</b> to <b>2-06</b> and open 2-06. Also copy 2-05 to <b>2-16</b>; that will be our fill. Open 2-06. Press PLAY.</p></div>
+  <p class="big">Sixteen steps is one page. The T-8 has two pages, so a pattern can be two bars long. Everything else in this lesson is a SHIFT function on the step buttons.</p>
+  <table><tr><th>SHIFT + step</th><th>Name</th><th>What the manual says it does</th></tr>
+  <tr><td>SHIFT + 3</td><td>[D (SHUFFLE)]</td><td>"Configures the pattern shuffle settings." Turn TEMPO/VALUE, then [C (EXIT)].</td></tr>
+  <tr><td>SHIFT + 4</td><td>[D# (LAST)]</td><td>"Sets the length (the last step) of the selected pattern." Rhythm and bass can differ.</td></tr>
+  <tr><td>SHIFT + 5</td><td>[E (STEP 1-16)]</td><td>Edit page 1.</td></tr>
+  <tr><td>SHIFT + 6</td><td>[F (STEP 17-32)]</td><td>Edit page 2. "If the last step is 16 or less, the last step is changed to 32" and steps 1–16 are copied over.</td></tr>
+  <tr><td>SHIFT + 7</td><td>[F# (FILL TRG)]</td><td>"Inserts a fill-in at the end of the pattern. Uses the pattern selected by FILL PTN."</td></tr>
+  <tr><td>SHIFT + 8</td><td>[G (FILL PTN)]</td><td>Pick which pattern is the fill, with the step buttons. "Set this for each bank."</td></tr>
+  <tr><td>SHIFT + 9</td><td>[G# (RANDOM RHYTHM)]</td><td>"Generates a random rhythm pattern."</td></tr>
+  <tr><td>SHIFT + 10</td><td>[A (RANDOM BASS)]</td><td>"Generates a random bass pattern."</td></tr>
+  <tr><td>SHIFT + PATTERN</td><td>Step loop</td><td>PATTERN blinks. Press a step to loop it. Press PATTERN to stop. "Only the rhythms play back in a loop."</td></tr></table>
+  <div class="box tip"><b class="lead">When drums and bass drift apart</b><p>The manual warns: "The rhythm and bass may be out of sync if their last steps are different." The fix is the menu item <span class="lcd">PSYn</span> (Pattern Sync). <span class="lcd">ALWY</span> (always) keeps the bass locked to the drums. <span class="lcd">OnCE</span> lines them up when a pattern starts. <span class="lcd">OFF</span> lets each run free.</p></div>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Hold SHIFT, press step <b>3</b>. Turn TEMPO/VALUE up a little. The hats swing. Press [C (EXIT)].</li><li>Hold SHIFT, press step <b>6</b>. The pattern is now 32 steps, with bar 1 copied into bar 2. Press <b>SNARE DRUM</b> and add a hit on step <b>16</b> of page 2. Hold SHIFT, press step 5 to go back to page 1.</li><li>Hold SHIFT, press step <b>8</b>, then press step <b>16</b>. Pattern 16 is the fill. Press [C (EXIT)].</li><li>Hold SHIFT, press step <b>7</b>. At the end of this pattern the fill plays once.</li><li>Hold SHIFT and press <b>PATTERN</b>. Press step <b>9</b> and hold it. The drums on step 9 repeat. Press PATTERN to stop.</li><li>Open scratch pattern <b>4-01</b>. Hold SHIFT, press step <b>9</b>. A random beat. Press it again. Another.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>Page 2 is empty and the beat has a hole:</b> you set LAST to 32 before copying. Set LAST to 16, then use SHIFT + 6 to copy and extend.</li><li><b>The fill never plays:</b> FILL PTN is per bank. Set it in the bank you are in.</li><li><b>Random wiped my lesson beat:</b> that is why we did it in 4-01. Reload with PATTERN + 16 if it happened elsewhere.</li></ul></div>
+  <div class="box gate check" data-l="l6"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can make a 32-step pattern from a 16-step one.</label>
+    <label><input type="checkbox"> I can set and fire a fill.</label>
+    <label><input type="checkbox"> I can say what PSYn ALWY does.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Save <b>2-06</b> (32 steps, shuffle, extra snare) and <b>2-16</b> (the fill). Set <span class="lcd">PSYn</span> to <span class="lcd">ALWY</span> before you save.</p><a class="next" href="#l7">Next: Lesson 07, the bass line →</a></div>
+</section>
+
+<!-- L7 -->
+<section class="card" id="l7">
+  <h2>07 · The bass line: notes, slides, accents and the filter</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can write a bass line step by step, play it from the step buttons, add a slide, and make it squelch.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>Two pages make 32 steps. SHIFT + a step is a function. PSYn ALWY keeps drums and bass together.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Copy <b>2-06</b> to <b>2-07</b> and open 2-07. Press PLAY. Turn the drum LEVEL knobs to 10 o'clock so you can hear the bass.</p>
+  <table><tr><th>Bass control</th><th>Set to</th><th>Manual</th></tr>
+  <tr><td>LEVEL</td><td>12 o'clock</td><td>"Adjusts the bass volume."</td></tr>
+  <tr><td>PITCH</td><td>12 o'clock</td><td>"Adjusts the pitch."</td></tr>
+  <tr><td>DECAY</td><td>10 o'clock</td><td>"Adjusts the decay length."</td></tr>
+  <tr><td>CUTOFF</td><td>10 o'clock</td><td>"determines the brightness of the sound"</td></tr>
+  <tr><td>RESO</td><td>12 o'clock</td><td>"Adjusts the harmonics around the cutoff frequency."</td></tr>
+  <tr><td>ENV MOD</td><td>1 o'clock</td><td>"intensity of time-based change to the cutoff frequency"</td></tr>
+  <tr><td>Menu <span class="lcd">b.WAv</span></td><td><span class="lcd">SAW</span></td><td>"Selects the bass waveform." Sawtooth or square.</td></tr></table></div>
+  <p class="big">The bass is a one-note synth with its own 32-step line. Each step holds a note, and can also hold an accent, a slide, or a tie to the step before.</p>
+  <h3>Three ways to write notes</h3>
+  <table><tr><th>Way</th><th>When to use it</th><th>How</th></tr>
+  <tr><td><b>Step mode</b></td><td>Quick rhythm, fix one note</td><td>Press BASS. Press a step: it gets a C2. Hold a step and turn TEMPO/VALUE to change its note (<span class="lcd">n.C0</span>–<span class="lcd">n.C7</span>, <span class="lcd">n.oFF</span>, <span class="lcd">n.tie</span>).</td></tr>
+  <tr><td><b>Keyboard mode</b></td><td>Write a melody note by note</td><td>Stop. Press KYBD, then REC. KYBD blinks. The 13 note buttons play notes into the current step. TEMPO/VALUE moves between steps (<span class="lcd">St. 1</span>). OCT−/OCT+ shift the octave. REC or KYBD exits.</td></tr>
+  <tr><td><b>Live</b></td><td>Jam it in</td><td>Press REC, then PLAY, with KYBD blinking. Play the note buttons in time. Lesson 09.</td></tr></table>
+  <h3>Accent, slide and tie</h3>
+  <table><tr><th>Mark</th><th>Sound</th><th>Step mode</th><th>All at once</th></tr>
+  <tr><td><b>Accent</b></td><td>That note is louder and the filter bites more</td><td>Hold the step, press ACCENT until <span class="lcd">A.OFF</span>/<span class="lcd">A.On</span> shows, turn the knob</td><td>Press BASS, press ACCENT: <span class="lcd">b.ACC</span>. Press steps.</td></tr>
+  <tr><td><b>Slide</b></td><td>"smoothly glide into the note in the next step"</td><td>Press ACCENT again: <span class="lcd">S.OFF</span>/<span class="lcd">S.On</span></td><td>Press ACCENT again: <span class="lcd">b.SLd</span>. Press steps.</td></tr>
+  <tr><td><b>Tie</b></td><td>The previous note keeps sounding into this step</td><td>Turn the step's note to <span class="lcd">n.tie</span></td><td>In keyboard mode: hold KYBD, press SLIDE</td></tr></table>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Press <b>BASS</b>. Press steps <b>1, 4, 7, 11, 13</b>. Five C2 notes. Listen.</li><li>Hold step <b>7</b>. Turn TEMPO/VALUE to <span class="lcd">n.G2</span>. Hold step <b>13</b>, turn to <span class="lcd">n.A#2</span>.</li><li>Hold step <b>4</b>, turn to <span class="lcd">n.tie</span>. Note 1 now rings through step 4.</li><li>Press <b>ACCENT</b> twice until <span class="lcd">b.SLd</span> shows. Press step <b>11</b>. Press ACCENT again to leave. Step 11 slides into step 13.</li><li>Turn <b>CUTOFF</b> slowly from 8 o'clock to 2 o'clock. Dark to bright. Turn <b>RESO</b> up to 3 o'clock. The squelch.</li><li>Hold <b>ACCENT</b> and turn TEMPO/VALUE up. Accented notes bite harder.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>Every note is the same pitch:</b> step mode enters C2 each time. Hold the step and turn the knob to change it.</li><li><b>I pressed KYBD and a drum went away:</b> "If a rhythm instrument is selected, the unit switches to bass." Nothing was deleted.</li><li><b>The line is too high or low:</b> hold BASS and KYBD together and turn TEMPO/VALUE. That is the transpose shortcut.</li><li><b>The bass and drums start apart:</b> PSYn must be ALWY (Lesson 06).</li></ul></div>
+  <div class="box gate check" data-l="l7"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can change one step's note without touching the others.</label>
+    <label><input type="checkbox"> I can say the difference between a slide and a tie.</label>
+    <label><input type="checkbox"> I can transpose the whole line with BASS + KYBD + knob.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Keep the five-note line, the tie and the slide. CUTOFF at 11 o'clock, RESO 2 o'clock, ENV MOD 1 o'clock. Save to <b>2-07</b>.</p><a class="next" href="#l8">Next: Lesson 08, effects →</a></div>
+</section>
+
+<!-- L8 -->
+<section class="card" id="l8">
+  <h2>08 · Delay, reverb, overdrive and side chain</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can send one drum to the delay, put the snare in a room, add grit, and make the bass duck under the kick.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>BASS, then steps, gives C2 notes. Hold a step and turn the knob for the note. b.ACC and b.SLd mark many steps at once.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Copy <b>2-07</b> to <b>2-08</b> and open 2-08. Press PLAY. DELAY and REVERB knobs at MIN. All sends at 0 (we will set them).</p></div>
+  <p class="big">The two effect knobs are the overall amount. A separate "send" decides how much of each instrument goes in. So you can delay only the clap and leave the kick dry.</p>
+  <table><tr><th>Effect</th><th>Amount</th><th>Time or depth</th><th>Per-instrument send</th></tr>
+  <tr><td><b>Delay</b></td><td>DELAY knob ("delay volume")</td><td>SHIFT + turn DELAY. With Delay Sync on, the display shows note lengths like <span class="lcd">1_8</span> (eighth), <span class="lcd">8d</span> (dotted eighth), <span class="lcd">16t</span> (sixteenth triplet).</td><td>SHIFT + step 13 [C (DELAY)] → <span class="lcd">d.Snd</span> → press the instrument → turn 0–127 → [C (EXIT)]</td></tr>
+  <tr><td><b>Reverb</b></td><td>REVERB knob</td><td>SHIFT + turn REVERB</td><td>SHIFT + step 14 [OCT- (REVERB)] → <span class="lcd">r.Snd</span> → press the instrument → turn → [C (EXIT)]</td></tr>
+  <tr><td><b>Overdrive</b></td><td>menu <span class="lcd">OdLv</span> per instrument</td><td>menu <span class="lcd">Oddr</span>, "common to all instruments"</td><td>menu <span class="lcd">OdOn</span>, press the instrument, On/OFF. Shortcut: PATTERN + step 10.</td></tr>
+  <tr><td><b>Side chain</b></td><td>menu <span class="lcd">SC</span> 1–100 ("1–50 changes the depth, and a value above 50 changes the sustain time")</td><td><span class="lcd">SC.ti</span> time ratio 0.5–2.0</td><td><span class="lcd">SC.dG</span> per target: duck (dv) or gate (Gt). <span class="lcd">SC.Sr</span> picks the trigger drum. Shortcut: PATTERN + step 12.</td></tr></table>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Turn <b>DELAY</b> to 12 o'clock. Nothing yet, because every send is 0.</li><li>Hold SHIFT, press step <b>13</b>. <span class="lcd">d.Snd</span>. Press <b>HAND CLAP</b>. Turn to 90. Press [C (EXIT)]. Add a clap on step 8 if there is none. It echoes.</li><li>Menu → <span class="lcd">dSyn</span> → On. Hold SHIFT and turn DELAY until <span class="lcd">8d</span>. A dotted-eighth echo, in time.</li><li>Hold SHIFT, press step <b>14</b>. <span class="lcd">r.Snd</span>. Press <b>SNARE DRUM</b>. Turn to 60. Exit. Turn REVERB to 11 o'clock.</li><li>Menu → <span class="lcd">OdOn</span>, press <b>BASS</b>, On. <span class="lcd">Oddr</span> to 40. Grit on the bass only.</li><li>Menu → <span class="lcd">SC.Sr</span> → <span class="lcd">bd</span>. <span class="lcd">SC.dG</span>, press <b>BASS</b>, turn to <span class="lcd">dv.30</span>. <span class="lcd">SC</span> to 40. The bass dips every time the kick hits.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>The effect knob does nothing:</b> the send for that instrument is 0.</li><li><b>Everything is drowning:</b> turn the effect knob down, not the sends. The knob is the master.</li><li><b>The duck stopped when I muted the kick:</b> the manual says muting the trigger "causes the side chain effect to become lost". Turn its LEVEL down instead.</li></ul></div>
+  <div class="box gate check" data-l="l8"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can explain send versus the effect knob.</label>
+    <label><input type="checkbox"> I can set a delay to a dotted eighth.</label>
+    <label><input type="checkbox"> I can make the bass duck under the kick.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>Keep the clap delay, snare reverb, bass overdrive and the duck. Save to <b>2-08</b>.</p><a class="next" href="#l9">Next: Lesson 09, record live →</a></div>
+</section>
+
+<!-- L9 -->
+<section class="card" id="l9">
+  <h2>09 · Record live, mute on the fly, undo</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can tap a beat in while it plays, jam a bass line from the buttons, mute parts for a breakdown, and get back to the saved version.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>Sends feed the effects. The knobs are the masters. Side chain follows the drum in SC.Sr.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Open scratch pattern <b>4-02</b>. Hold SHIFT, press step 11 [A# (PTN CLEAR ALL)]. Tempo 100. Knobs as in Lesson 08.</p></div>
+  <p class="big">REC turns the T-8 into a tape machine for the grid. Whatever you press while it runs lands on the nearest step.</p>
+  <table><tr><th>Record what</th><th>Steps from the manual</th></tr>
+  <tr><td>Drums, by tapping</td><td>1. Press REC (it lights). 2. Press PLAY. 3. Press an instrument button in time. "This inputs a note into the step during playback."</td></tr>
+  <tr><td>Bass timing only</td><td>REC lit, KYBD unlit. Press BASS in time. "The note that's input in this case is fixed at C2."</td></tr>
+  <tr><td>Bass with notes</td><td>REC lit, KYBD blinking. "You can input notes, ties and slides in real time by using the step buttons in keyboard mode." OCT−/OCT+ shift the octave.</td></tr></table>
+  <h3>Mute for a breakdown</h3>
+  <p>Hold <b>SHIFT</b> and press any instrument button. It blinks: muted. Press again: back. Mutes are live only. "The mute settings return to the 'off' setting when you turn off the power." Use them for performance, not for arranging.</p>
+  <div class="box try"><b class="lead">Try it</b><ol><li>Press <b>REC</b>, then <b>PLAY</b>. Tap <b>BASS DRUM</b> on each beat for a bar. Tap <b>CLOSED HIHAT</b> in between. Press REC to stop recording. The notes are on the grid.</li><li>Press <b>PLAY</b> to stop. Press <b>KYBD</b>, then <b>REC</b>. Press <b>PLAY</b>. Play a few note buttons in time. Press REC. A bass line.</li><li>Hold SHIFT and press <b>BASS DRUM</b>. The kick drops out. Count four bars. SHIFT + BASS DRUM brings it back.</li><li>You do not like the bass? Hold <b>PATTERN</b> and press step <b>15</b>. Only the bass goes back to the last save, which here is empty.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>Taps land on the wrong step:</b> the T-8 snaps to the nearest step. Slow the tempo while you record.</li><li><b>I recorded notes but they are all C2:</b> KYBD was unlit. Make it blink first.</li><li><b>A mute stuck after I saved:</b> mutes are not saved. It is still a live mute; SHIFT + the button.</li></ul></div>
+  <div class="box gate check" data-l="l9"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can tap a kick pattern in without stopping.</label>
+    <label><input type="checkbox"> I can say why KYBD must blink to record real notes.</label>
+    <label><input type="checkbox"> I can reload only the bass or only the drums.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>If you like it, save to a bank 3 slot. Otherwise power-cycle and it is gone.</p><a class="next" href="#l10">Next: Lesson 10, save a riff on both machines →</a></div>
+</section>
+
+<!-- L10 -->
+<section class="card" id="l10">
+  <h2>10 · Save a riff: the T-8 way and the S-1 way</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can build a four-beat riff in a safe slot on either machine, fix a wrong note, loop it, and save it, without touching the sound or the factory data.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>REC + PLAY records. PATTERN + 14/15/16 reloads drums, bass, or both. Mutes are not saved.</p></div>
+  <div class="box start"><b class="lead">Set your T-8 like this</b><p>Open <b>2-08</b>, your fullest lesson pattern. We will copy it to a riff slot, keep the sounds and clear the notes.</p></div>
+  <p class="big">Both machines work the same way: copy a pattern you like into a spare slot, clear only the notes, set one bar, enter four notes, fix mistakes, loop, save.</p>
+
+  <h3>The riff on the T-8 (bass part, 4 notes)</h3>
+  <table><tr><th>Step</th><th>Buttons</th><th>What happens</th></tr>
+  <tr><td>1 · Copy 2-08 to 2-14</td><td>SHIFT + [OCT+ (MENU)] → <span class="lcd">COPY</span> → ENTER → turn to 14 → ENTER</td><td>Pattern 14 now has the same drums, bass sound settings and effects.</td></tr>
+  <tr><td>2 · Open 2-14 and save a safety copy</td><td>PATTERN, step 14 · SHIFT + [SLIDE (WRITE)] → <span class="lcd">Ptn</span> → ENTER</td><td>If anything goes wrong, PATTERN + 16 brings this back.</td></tr>
+  <tr><td>3 · Clear the bass notes only</td><td>Press BASS · SHIFT + step 12 [B (PTN CLEAR INST)]</td><td>"Deletes the selected instrument's pattern." The drums stay. The knob settings stay.</td></tr>
+  <tr><td>4 · Set one bar</td><td>SHIFT + step 4 [D# (LAST)] → 16 → [C (EXIT)]</td><td>16 steps = one bar of 4/4. Beats fall on steps 1, 5, 9, 13.</td></tr>
+  <tr><td>5 · Enter the four notes</td><td>BASS lit · press steps 1, 5, 9, 13 · hold each step, turn TEMPO/VALUE to the note</td><td>Each press gives <span class="lcd">n.C2</span>. Change them to, for example, C2 · C2 · G2 · A#2.</td></tr>
+  <tr><td>6 · Fix a wrong note</td><td>Hold the step · turn TEMPO/VALUE</td><td>Display shows <span class="lcd">n.</span> plus the note. <span class="lcd">n.oFF</span> removes it.</td></tr>
+  <tr><td>7 · Loop, play over it, save</td><td>PLAY · SHIFT + [SLIDE (WRITE)] → <span class="lcd">Ptn</span> → ENTER</td><td>Save before power-off, or the manual's rule resets it.</td></tr></table>
+  <div class="box tip"><b class="lead">If the octave is wrong</b><p>The T-8 bass notes run <span class="lcd">n.C0</span> to <span class="lcd">n.C7</span>. Step mode starts at C2. If the line sounds too low or high, hold BASS and KYBD and turn TEMPO/VALUE to move the whole line.</p></div>
+
+  <h3>The same riff on the S-1 (from this morning's guide)</h3>
+  <p>The S-1 has the same idea with different buttons. These are the steps from the <a href="s1-foundations.html#l12">S-1 course, Lesson 12</a>, sourced from the S-1 Owner's Manual v1.02.</p>
+  <table><tr><th>Step</th><th>S-1 buttons</th><th>What happens</th></tr>
+  <tr><td>1 · Copy patch 16 to 14</td><td>Select 16 · SHIFT + pad 15 (MENU) → <span class="lcd">COPy</span> → pad 2 (ENTER) → turn to 14 → ENTER</td><td>Pattern 14 gets the sound of 16.</td></tr>
+  <tr><td>2 · Select 14, save a safety copy</td><td>Stop. Hold PATTERN, press the bank pad, release, press pad 14 · SHIFT + pad 16 (WRITE) → <span class="lcd">Ptn</span> → pad 2</td><td>Wait for <span class="lcd">donE</span>.</td></tr>
+  <tr><td>3 · Clear notes only</td><td>SHIFT + pad 11 (CLEAR NOTE) → pad 2 (ENTER)</td><td>Deletes the notes, not the sound. Never use <span class="lcd">init</span> here; it resets the sound too.</td></tr>
+  <tr><td>4 · Set one bar</td><td>SHIFT + pad 4 (LAST) → 16 → pad 1 (EXIT)</td><td>Beats on steps 1, 5, 9, 13.</td></tr>
+  <tr><td>5 · Enter the four notes</td><td>REC dark, STEP lit · hold pad 1 and play a key on the MiniLab 3 · repeat on pads 5, 9, 13</td><td>Press a lit pad again to delete its note.</td></tr>
+  <tr><td>6 · Fix a wrong note</td><td>Hold the step pad · display shows <span class="lcd">n.C5</span> (press D-MOTION if not) · turn TEMPO/VALUE to D4</td><td>D one octave below C5 is D4. Choose D3 if it sounds an octave off.</td></tr>
+  <tr><td>7 · Loop, play over it, save</td><td>PLAY · SHIFT + pad 16 (WRITE) → <span class="lcd">Ptn</span> → pad 2 (ENTER)</td><td>Check <span class="lcd">donE</span> before power-off.</td></tr></table>
+  <table><tr><th>Idea</th><th>T-8</th><th>S-1</th></tr>
+  <tr><td>Open the menu</td><td>SHIFT + step 15 [OCT+ (MENU)]</td><td>SHIFT + pad 15 (MENU)</td></tr>
+  <tr><td>Yes / leave</td><td>[C# (ENTER)] / [C (EXIT)]</td><td>pad 2 (ENTER) / pad 1 (EXIT)</td></tr>
+  <tr><td>Save</td><td>SHIFT + step 16 [SLIDE (WRITE)]</td><td>SHIFT + pad 16 (WRITE)</td></tr>
+  <tr><td>Pattern length</td><td>SHIFT + step 4 [D# (LAST)]</td><td>SHIFT + pad 4 (LAST)</td></tr>
+  <tr><td>Clear notes, keep sound</td><td>SHIFT + step 12 [B (PTN CLEAR INST)] with BASS selected</td><td>SHIFT + pad 11 (CLEAR NOTE)</td></tr>
+  <tr><td>Undo to last save</td><td>PATTERN + step 16, or menu <span class="lcd">rLod</span></td><td>menu <span class="lcd">rLod</span> / <span class="lcd">rL.Sd</span> / <span class="lcd">rL.Sq</span></td></tr>
+  <tr><td>Change a step's note</td><td>hold the step, turn TEMPO/VALUE</td><td>hold the step pad, turn TEMPO/VALUE</td></tr></table>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>T-8: clearing wiped the drums too:</b> you used PTN CLEAR ALL (step 11). Reload with PATTERN + 16 and use step 12 with BASS selected.</li><li><b>S-1: the sound changed:</b> you used init. Reload the sound with menu rL.Sd.</li><li><b>Either: the riff vanished after power-off:</b> it was not saved. Both manuals say unsaved patterns reset.</li></ul></div>
+  <div class="box gate check" data-l="l10"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can clear the bass line on the T-8 and keep the drums.</label>
+    <label><input type="checkbox"> I can say which S-1 command never to use when I only want to clear notes (init).</label>
+    <label><input type="checkbox"> I have a four-note riff saved in 2-14 on the T-8 and in pattern 14 on the S-1.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>T-8: <b>2-14</b> saved. S-1: pattern <b>14</b> saved. Both machines are now ready to play together.</p><a class="next" href="#l11">Next: Lesson 11, play the T-8 with the S-1 →</a></div>
+</section>
+
+<!-- L11 -->
+<section class="card" id="l11">
+  <h2>11 · Play the T-8 with the S-1: one pair of headphones, one clock</h2>
+  <div class="goal"><span class="n">GOAL</span><p>You can hear the T-8 drums and the S-1 riff in one pair of headphones, locked to one tempo, and you know which cable does which job.</p></div>
+  <div class="box remember"><b class="lead">Remember</b><p>T-8 riff in 2-14. S-1 riff in pattern 14. Both saved.</p></div>
+  <div class="box start"><b class="lead">Set both machines like this</b><p>Both off. VOLUME at MIN on both. The S-1 manual: "always turn down the volume, and turn off all the units before making any connections."</p></div>
+  <p class="big">Two jobs, two cables. One stereo cable carries the <b>sound</b> from the T-8 into the S-1. One more cable carries the <b>clock</b>, so both machines count the same beat. You choose sync pulses or MIDI for the clock.</p>
+  <div class="fig"><svg viewBox="0 0 900 330" font-family="-apple-system,sans-serif">
+    <defs><marker id="ar2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#c9cdd6"/></marker></defs>
+    <rect x="30" y="40" width="300" height="250" rx="14" fill="#33240D" stroke="#F4A63C" stroke-width="2"/>
+    <text x="180" y="72" text-anchor="middle" font-size="18" font-weight="800" fill="#F4A63C">T-8 (master)</text>
+    <text x="180" y="96" text-anchor="middle" font-size="13" fill="#f7f8f8">drums + its own bass</text>
+    <rect x="570" y="40" width="300" height="250" rx="14" fill="#1E1B3D" stroke="#9585FF" stroke-width="2"/>
+    <text x="720" y="72" text-anchor="middle" font-size="18" font-weight="800" fill="#9585FF">S-1 (follows)</text>
+    <text x="720" y="96" text-anchor="middle" font-size="13" fill="#f7f8f8">your riff, pattern 14</text>
+    <g font-size="13" font-weight="700" fill="#f7f8f8">
+      <rect x="250" y="130" width="80" height="34" rx="8" fill="#0f1011" stroke="#2FC7B4"/><text x="290" y="152" text-anchor="middle">MIX OUT</text>
+      <rect x="570" y="130" width="80" height="34" rx="8" fill="#0f1011" stroke="#2FC7B4"/><text x="610" y="152" text-anchor="middle">MIX IN</text>
+      <rect x="250" y="190" width="80" height="34" rx="8" fill="#0f1011" stroke="#7C9BE0"/><text x="290" y="212" text-anchor="middle">SYNC OUT</text>
+      <rect x="570" y="190" width="80" height="34" rx="8" fill="#0f1011" stroke="#7C9BE0"/><text x="610" y="212" text-anchor="middle">SYNC IN</text>
+      <rect x="250" y="246" width="80" height="34" rx="8" fill="#0f1011" stroke="#F26D6D"/><text x="290" y="268" text-anchor="middle">MIDI OUT</text>
+      <rect x="570" y="246" width="80" height="34" rx="8" fill="#0f1011" stroke="#F26D6D"/><text x="610" y="268" text-anchor="middle">MIDI IN</text>
+      <rect x="790" y="130" width="70" height="34" rx="8" fill="#0f1011" stroke="#2FC7B4"/><text x="825" y="152" text-anchor="middle">MIX OUT</text>
+    </g>
+    <g stroke-width="3" fill="none" marker-end="url(#ar2)">
+      <line x1="332" y1="147" x2="564" y2="147" stroke="#2FC7B4"/>
+      <line x1="332" y1="207" x2="564" y2="207" stroke="#7C9BE0" stroke-dasharray="8 5"/>
+      <line x1="332" y1="263" x2="564" y2="263" stroke="#F26D6D" stroke-dasharray="8 5"/>
+      <path d="M862,147 H890 V310" stroke="#2FC7B4"/>
+    </g>
+    <g font-size="12" fill="#8a8f98" text-anchor="middle">
+      <text x="448" y="138">stereo mini cable · sound</text>
+      <text x="448" y="198">mono mini cable · clock pulses (option 1)</text>
+      <text x="448" y="254">TRS MIDI cable · clock + start/stop (option 2)</text>
+      <text x="800" y="318">headphones</text>
+    </g>
+  </svg><div class="cap">The sound always goes T-8 MIX OUT → S-1 MIX IN, and you listen on the S-1. Pick one dashed line for the clock, not both. The S-1 manual says a SYNC IN cable wins over any MIDI setting.</div></div>
+
+  <h3>Part A · The sound: T-8 into the S-1</h3>
+  <table><tr><th>Do this</th><th>Why (Roland's words)</th></tr>
+  <tr><td>Stereo 3.5 mm mini cable (TRS, three rings) from <b>T-8 MIX OUT</b> to <b>S-1 MIX IN</b>.</td><td>Both manuals: "Use cables with stereo mini phone type plugs to connect to/from the MIX IN/OUT jacks. Do not use cables with monaural mini phone type plugs, as these cables do not work."</td></tr>
+  <tr><td>Headphones into <b>S-1 MIX OUT</b>.</td><td>S-1 manual, MIX IN: "The sound from connected devices is mixed with the sound of the S-1 and output from the MIX OUT jack." Roland's AIRA Compact article: "The final Compact in your chain will go out to your speakers or headphones".</td></tr>
+  <tr><td>Set the balance with the two VOLUME knobs. T-8 VOLUME = how loud the drums are. S-1 VOLUME = everything you hear.</td><td>The article: the last unit mixes "the audio of each device in the chain based on the setting of their respective volume levels."</td></tr></table>
+  <div class="box tip"><b class="lead">What Roland does not say</b><p>Neither manual says whether the S-1's delay, reverb or chorus is applied to sound coming in at MIX IN. Test it: turn the S-1 REVERB up while only the T-8 plays. If the drums get wet, the effects apply.</p></div>
+
+  <h3>Part B · The clock, option 1: sync pulses (simplest)</h3>
+  <table><tr><th>Do this</th><th>Why (Roland's words)</th></tr>
+  <tr><td><b>Mono</b> 3.5 mm mini cable (TS, two rings) from <b>T-8 SYNC OUT</b> to <b>S-1 SYNC IN</b>.</td><td>Both manuals: "Use cables with monaural mini phone type plugs to connect to/from the SYNC IN/OUT jacks. Do not use cables with stereo mini phone type plugs, as these cables do not work."</td></tr>
+  <tr><td>Nothing to set on the S-1.</td><td>S-1 manual: "If an external device is connected to the SYNC IN jack, the unit synchronizes with the clocks inputted to the SYNC IN jack, regardless of the MIDI Clock Sync setting."</td></tr>
+  <tr><td>Check both machines show the same number in the menu item <span class="lcd">S.cLk</span> (Sync Clock): 1, 2, 3, 4, 6, 8, 12 or 24.</td><td>Both manuals: "Sets the number of sync clocks per beat." The manuals do not state the factory value, so look rather than assume.</td></tr>
+  <tr><td>Press PLAY on the T-8, then PLAY on the S-1.</td><td>The manuals only say SYNC carries "clocks". Roland's article names start/stop for the MIDI route only (option 2). So treat PLAY as separate on each machine over SYNC.</td></tr></table>
+  <div class="box wrong"><b class="lead">Never do this</b><p>Both manuals: "Do not connect an audio device to the SYNC OUT jack. Doing so may cause a malfunction." A headphone or mixer cable does not go in a SYNC jack.</p></div>
+
+  <h3>Part B · The clock, option 2: MIDI (tempo plus start and stop)</h3>
+  <table><tr><th>Do this</th><th>Why (Roland's words)</th></tr>
+  <tr><td>Roland/BOSS TRS-to-TRS MIDI cable <b>BCC-1-3535</b> (30 cm) or <b>BCC-2-3535</b> (60 cm) from <b>T-8 MIDI OUT</b> to <b>S-1 MIDI IN</b>. Unplug any SYNC IN cable on the S-1 first.</td><td>Both rear-panel pages: "Use TRS/TRS connecting cables (BCC-1-3535 or BCC-2-3535, sold separately)". The SYNC IN rule above means a SYNC cable would override MIDI clock.</td></tr>
+  <tr><td>On the S-1: menu <span class="lcd">SYnC</span> (MIDI Clock Sync) = <span class="lcd">AUtO</span> or <span class="lcd">NiDi</span> (MIDI). Not <span class="lcd">Int</span>.</td><td>S-1 manual: "AUtO (Auto): Inputted clocks are accepted." "Int (Int): The unit operates according to its internal clock." "NiDi (MIDI): Only MIDI input is accepted."</td></tr>
+  <tr><td>On the T-8: <span class="lcd">SYnC</span> = <span class="lcd">Int</span>, so it is the master.</td><td>T-8 manual, same item: "InT (Int): The unit operates according to its internal clock."</td></tr>
+  <tr><td>Press PLAY on the T-8. The S-1 starts too.</td><td>Roland's article: MIDI "will not only sync the tempo between the devices but the START/STOP commands (that is to say, when you hit STOP or START on one, the others will do the same)." Both MIDI charts list Clock, Start and Stop as transmitted and recognized.</td></tr></table>
+  <h4>Keep the T-8's notes off your riff</h4>
+  <p>Over MIDI the T-8 also sends its own bass notes and pattern changes. The default channels keep them apart, and two S-1 settings keep it that way.</p>
+  <table><tr><th>Message</th><th>T-8 sends on</th><th>S-1 listens on</th><th>Result</th></tr>
+  <tr><td>Bass notes</td><td>channel 2 (default, menu <span class="lcd">b.MCh</span>)</td><td>channel 3 (default, menu <span class="lcd">CH</span>)</td><td>Different channels, so the T-8 bass does not play the S-1. Leave them different.</td></tr>
+  <tr><td>Drum notes</td><td>channel 10 (default, menu <span class="lcd">r.MCh</span>)</td><td>channel 3</td><td>Ignored by the S-1.</td></tr>
+  <tr><td>Pattern change</td><td>channel 16 if <span class="lcd">tXPc</span> is On</td><td>channel 16 if <span class="lcd">rxPc</span> is On</td><td>Set S-1 <span class="lcd">rxPc</span> to <span class="lcd">OFF</span>, or a T-8 pattern switch will change your S-1 pattern too.</td></tr></table>
+  <p>Want the opposite, the T-8 bass line playing the S-1's sound? Set the S-1 <span class="lcd">CH</span> to 2 and turn the T-8 BASS LEVEL to MIN. Both charts allow it: the T-8 transmits bass notes 12–96, and the S-1 recognizes notes on its channel.</p>
+  <div class="box tip"><b class="lead">Two things Roland leaves open</b><p>1. Whether these TRS MIDI jacks are "Type A" or "Type B" is not stated on any Roland page we read. Buying the Roland BCC cable sidesteps the question.</p><p>2. The factory values for <span class="lcd">SYnC</span>, <span class="lcd">S.cLk</span> and <span class="lcd">rxPc</span> are not printed in either manual. Read them on the display before you trust them.</p></div>
+
+  <div class="box try"><b class="lead">Try it</b><ol><li>Cables in, both off: MIX OUT → MIX IN (stereo), and one clock cable. Power on both. VOLUME at 9 o'clock on both.</li><li>T-8: open <b>2-14</b>. S-1: open pattern <b>14</b>.</li><li>Tempo 110 on the T-8. Press PLAY on the T-8. Watch the S-1 display: with MIDI it should follow; with SYNC, press PLAY on the S-1 too.</li><li>Play the MiniLab 3 over the top. Turn the T-8 VOLUME until the drums sit under the riff.</li><li>On the T-8, hold SHIFT and press <b>BASS</b> to mute its bass. Now only the S-1 carries the bass part.</li><li>Press PLAY on the T-8 to stop. With MIDI, the S-1 stops as well.</li></ol></div>
+  <div class="box wrong"><b class="lead">If it sounds wrong</b><ul><li><b>No drums in the headphones:</b> headphones are in the T-8, or the MIX cable is mono. Use the S-1 MIX OUT and a stereo cable.</li><li><b>Drums and riff drift apart:</b> no clock cable, or the S-1 SYnC is on Int, or the S.cLk numbers differ.</li><li><b>The S-1 ignores MIDI clock:</b> a SYNC IN cable is still plugged into the S-1. The manual says SYNC IN always wins.</li><li><b>The S-1 pattern changes when I change T-8 patterns:</b> rxPc on the S-1 is On. Set it OFF.</li><li><b>I hear a second bass line:</b> that is the T-8's own bass. Turn its LEVEL down or mute it.</li></ul></div>
+  <div class="box gate check" data-l="l11"><b class="lead">Check yourself</b>
+    <label><input type="checkbox"> I can say which cable is stereo (MIX, MIDI) and which is mono (SYNC).</label>
+    <label><input type="checkbox"> I can say why a SYNC IN cable beats a MIDI cable on the S-1.</label>
+    <label><input type="checkbox"> I can say why the T-8 bass does not play the S-1 by default (channel 2 vs 3).</label>
+    <label><input type="checkbox"> I can stop both machines with one button over MIDI.</label>
+  </div>
+  <div class="box save"><b class="lead">Save it</b><p>The S-1 saves <span class="lcd">SYnC</span>, <span class="lcd">CH</span> and <span class="lcd">rxPc</span> as system settings. The T-8 says its tempo is "saved in this unit". Nothing else to save. You have finished the course.</p><a class="next" href="#menu">The Menu Map →</a></div>
+</section>
+
+<!-- MENU -->
+<section class="card" id="menu">
+  <h2>M · The Menu Map: every hidden setting</h2>
+  <p class="big">The T-8 has a four-character display, so it uses short codes. This map turns every code back into words. Everything lives in one of three layers.</p>
+  <h3>How the three layers work</h3>
+  <table><tr><th>Layer</th><th>How to open it</th><th>How to change a value</th><th>How to leave</th></tr>
+  <tr><td>1 · SHIFT + a step button</td><td>Hold SHIFT, press the step</td><td>Some run at once (page, fill, random, clear). Others: turn TEMPO/VALUE</td><td>[C (EXIT)]</td></tr>
+  <tr><td>2 · Hold a button + turn the knob</td><td>Hold ACCENT, PATTERN, a step or an instrument, turn TEMPO/VALUE</td><td>Keep turning while you hold</td><td>Let go</td></tr>
+  <tr><td>3 · The MENU</td><td>SHIFT + step 15 [OCT+ (MENU)]</td><td>Turn to the item. Press an instrument button or [C# (ENTER)]. Turn to the value.</td><td>[C (EXIT)] once for the list, twice to leave</td></tr></table>
+
+  <h3>Layer 1 · SHIFT + a step button</h3>
+  <table><tr><th>Step</th><th>Printed name</th><th>Plain meaning</th><th>Lesson</th></tr>
+  <tr><td>1</td><td>C (EXIT)</td><td>Leave a menu or function.</td><td>all</td></tr>
+  <tr><td>2</td><td>C# (ENTER)</td><td>Say yes.</td><td>all</td></tr>
+  <tr><td>3</td><td>D (SHUFFLE)</td><td>Swing amount for this pattern.</td><td><a href="#l6">06</a></td></tr>
+  <tr><td>4</td><td>D# (LAST)</td><td>Pattern length. Drums and bass can differ.</td><td><a href="#l3">03</a></td></tr>
+  <tr><td>5 / 6</td><td>E (STEP 1-16) / F (STEP 17-32)</td><td>Edit page 1 or page 2. Page 2 extends the pattern to 32.</td><td><a href="#l6">06</a></td></tr>
+  <tr><td>7 / 8</td><td>F# (FILL TRG) / G (FILL PTN)</td><td>Fire a fill now / choose the fill pattern for this bank.</td><td><a href="#l6">06</a></td></tr>
+  <tr><td>9 / 10</td><td>G# (RANDOM RHYTHM) / A (RANDOM BASS)</td><td>Generate a random drum or bass pattern.</td><td><a href="#l6">06</a></td></tr>
+  <tr><td>11 / 12</td><td>A# (PTN CLEAR ALL) / B (PTN CLEAR INST)</td><td>Delete the whole pattern / only the selected instrument's notes.</td><td><a href="#l0">00</a></td></tr>
+  <tr><td>13 / 14</td><td>C (DELAY) / OCT- (REVERB)</td><td>Per-instrument delay send <span class="lcd">d.Snd</span> / reverb send <span class="lcd">r.Snd</span>.</td><td><a href="#l8">08</a></td></tr>
+  <tr><td>15</td><td>OCT+ (MENU)</td><td>Open the menu.</td><td>all</td></tr>
+  <tr><td>16</td><td>SLIDE (WRITE)</td><td>Save: <span class="lcd">Ptn</span> this pattern or <span class="lcd">ALL</span>, then ENTER.</td><td><a href="#l0">00</a></td></tr>
+  <tr><td>PATTERN</td><td>STEP LOOP</td><td>Loop the steps you hold. PATTERN again to stop.</td><td><a href="#l6">06</a></td></tr>
+  <tr><td>an instrument</td><td>mute</td><td>Mute or unmute that instrument. Not saved.</td><td><a href="#l9">09</a></td></tr>
+  <tr><td>turn DELAY / REVERB</td><td>time</td><td>Delay time (note lengths when Delay Sync is on) / reverb time.</td><td><a href="#l8">08</a></td></tr>
+  <tr><td>turn TEMPO/VALUE</td><td>fine tempo</td><td>Tenths of a beat per minute.</td><td><a href="#l2">02</a></td></tr></table>
+
+  <h3>Layer 2 · Hold a button and turn TEMPO/VALUE (the manual's shortcut table)</h3>
+  <table><tr><th>Hold</th><th>Turn or press</th><th>Does</th></tr>
+  <tr><td>PATTERN</td><td>turn</td><td>Master probability.</td></tr>
+  <tr><td>a step button</td><td>turn</td><td>That step's probability. Press ACCENT first for velocity.</td></tr>
+  <tr><td>a drum button</td><td>press a step</td><td>Sub step (roll) for that step.</td></tr>
+  <tr><td>an instrument button</td><td>turn</td><td>Shift that instrument's whole pattern forward or backward.</td></tr>
+  <tr><td>BASS + KYBD</td><td>turn</td><td>Transpose the bass line.</td></tr>
+  <tr><td>ACCENT</td><td>turn</td><td>Accent strength for drums (drum selected) or bass (BASS selected).</td></tr>
+  <tr><td>PATTERN</td><td>step 1–4</td><td>Bank 1–4.</td></tr>
+  <tr><td>PATTERN</td><td>step 10 / 11 / 12</td><td>Jump to menu items OdOn (Roland's shortcut table writes it Od.On) / b.WAv / SC.</td></tr>
+  <tr><td>PATTERN</td><td>step 14 / 15 / 16</td><td>Reload drums / bass / whole pattern from the last save.</td></tr></table>
+
+  <h3>Layer 3 · The MENU, top to bottom</h3>
+  <table><tr><th>Display</th><th>Name</th><th>Values</th><th>Plain meaning</th></tr>
+  <tr><td>MUtE</td><td>Mute</td><td>button blinks or lit</td><td>Mute the selected instrument. Resets at power off.</td></tr>
+  <tr><td>GAIn</td><td>Gain</td><td>0–200</td><td>Extra volume for the selected instrument.</td></tr>
+  <tr><td>tUnE</td><td>Tune</td><td>-128–127</td><td>Pitch of the selected instrument.</td></tr>
+  <tr><td>dECY</td><td>Decay</td><td>-128–127</td><td>Length of the selected instrument.</td></tr>
+  <tr><td>PAn</td><td>Pan</td><td>L64–C0–r63</td><td>Left to right.</td></tr>
+  <tr><td>AtK</td><td>Attack</td><td>0–255</td><td>Bass drum click.</td></tr>
+  <tr><td>SnPy</td><td>Snappy</td><td>0–255</td><td>Snare wires.</td></tr>
+  <tr><td>CoLr</td><td>Color</td><td>-128–127</td><td>Noise in the toms.</td></tr>
+  <tr><td>tON</td><td>Tom</td><td>tON1, tON2</td><td>Which low tom.</td></tr>
+  <tr><td>CLAP</td><td>Hand clap</td><td>CP, hnt, htON</td><td>Clap, noise tom or high tom on the clap button.</td></tr>
+  <tr><td>otMp</td><td>Open HiHat Tempo Sync</td><td>OFF, On</td><td>"the decay of the open hi-hat lengthens along the tempo".</td></tr>
+  <tr><td>b.WAv</td><td>Bass Wave</td><td>SAW, Sqr</td><td>Sawtooth or square bass.</td></tr>
+  <tr><td>r.ACC / b.ACC</td><td>Rhythm / Bass Accent</td><td>OFF, 1–255</td><td>Accent strength.</td></tr>
+  <tr><td>PSYn</td><td>Pattern Sync</td><td>OFF, OnCE, ALWY</td><td>How drums and bass line up when patterns change. Lesson 06.</td></tr>
+  <tr><td>r.SCL</td><td>Rhythm Step Scale</td><td>16, 32, 8-3, 16-3</td><td>What one drum step is worth: sixteenth, thirty-second, eighth triplet, sixteenth triplet.</td></tr>
+  <tr><td>b.TRi</td><td>Bass Step Triplet</td><td>OFF, On</td><td>Bass steps as eighth-note triplets.</td></tr>
+  <tr><td>OdOn / Oddr / OdLv</td><td>Overdrive on / drive / level</td><td>OFF,On / 0–127 / 0–127</td><td>Grit per instrument; drive is shared. Lesson 08.</td></tr>
+  <tr><td>dSyn</td><td>Delay Sync</td><td>OFF, On</td><td>Delay time in note lengths.</td></tr>
+  <tr><td>dr.SE</td><td>Delay to Reverb Send</td><td>0–127</td><td>Echoes go into the room.</td></tr>
+  <tr><td>SC / SC.dG / SC.ti / SC.Sr</td><td>Side chain depth / duck-gate / time / source</td><td>see Lesson 08</td><td>Make a part duck or gate in time with one drum.</td></tr>
+  <tr><td>S.cLk</td><td>Sync Clock</td><td>1, 2, 3, 4, 6, 8, 12, 24</td><td>Pulses per beat on the SYNC jacks. Match both machines. Lesson 11.</td></tr>
+  <tr><td>r.MCh / b.MCh</td><td>Rhythm / Bass MIDI Channel</td><td>1–16, OFF</td><td>Defaults 10 and 2.</td></tr>
+  <tr><td>tXPc / rXPc / Pc.Ch</td><td>TX / RX Program Change / channel</td><td>OFF,On / OFF,On / 1–16</td><td>Send or follow pattern changes over MIDI. Default channel 16.</td></tr>
+  <tr><td>SYnC</td><td>MIDI Clock Sync</td><td>AUTO, Int, MIDI, USB</td><td>Whose clock to follow. SYNC IN always wins if plugged in.</td></tr>
+  <tr><td>thru</td><td>MIDI Thru</td><td>OFF, On</td><td>Pass MIDI IN messages to MIDI OUT. On by default.</td></tr>
+  <tr><td>USb.d</td><td>USB Direct Out</td><td>OFF, 1–127</td><td>Whether VOLUME affects the USB audio level.</td></tr>
+  <tr><td>A.Lnk</td><td>AIRA Link</td><td>OFF, On</td><td>Only for the MX-1 mixer. Leave OFF. Takes effect after a power cycle.</td></tr>
+  <tr><td>LvCC</td><td>Level knob curve</td><td>nrM, SPL</td><td>Response of the LEVEL knobs.</td></tr>
+  <tr><td>rLod / rLdr / rLdb</td><td>Reload all / rhythm / bass</td><td>ENTER</td><td>Undo to last save.</td></tr>
+  <tr><td>COPY / CPTr / CPTb</td><td>Copy all / rhythm / bass</td><td>pick a slot, ENTER</td><td>Copy to another pattern. [C (EXIT)] cancels.</td></tr></table>
+
+  <h3>Display words you will see</h3>
+  <table><tr><th>Display</th><th>Means</th><th>Display</th><th>Means</th></tr>
+  <tr><td>Ptn / ALL</td><td>save this pattern / save all</td><td>dOnE</td><td>finished (factory reset, restore)</td></tr>
+  <tr><td>FACt</td><td>factory reset armed</td><td>St. 1</td><td>step 1 in keyboard-mode editing</td></tr>
+  <tr><td>P.0–P.100</td><td>probability</td><td>v.0–v.10</td><td>velocity</td></tr>
+  <tr><td>n.C2 · n.oFF · n.tie</td><td>bass note · no note · tie</td><td>A.On / S.On</td><td>accent on / slide on for that step</td></tr>
+  <tr><td>b.ACC / b.SLd</td><td>entering bass accents / slides on the steps</td><td>d.Snd / r.Snd</td><td>delay send / reverb send</td></tr>
+  <tr><td>1_16 · 8t · 16d · 1_4</td><td>sixteenth · eighth triplet · dotted sixteenth · quarter (delay time)</td><td>OFF · 1_2 · 1_3 · 1_4 · FLAM</td><td>sub step: none, 2, 3 or 4 hits, flam</td></tr></table>
+  <div class="box tip"><b class="lead">Lost?</b><p>Press [C (EXIT)] until the display shows the tempo again. If the pattern is wrecked, hold PATTERN and press step 16 to go back to the last save.</p></div>
+</section>
+
+<footer class="foot">T-8 Beat Foundations · Roland AIRA Compact T-8 Owner's Manual v1.02 (static.roland.com/manuals/T-8_manual_v102/eng/) · Roland S-1 Owner's Manual v1.02 · Roland Articles, "Getting to Know AIRA Compact: The Basics" (articles.roland.com) · Roland T-8 product page (roland.com/global/products/t-8/) · Panel and clean-start images: own render, control functions checked against the manual · Knob positions in lessons are starting points, not factory settings. Menu codes are as Roland's online manual prints them.</footer>
+</div>
+<script>
+(function(){
+// Checklists: remember ticks in this browser only.
+document.querySelectorAll(".check").forEach(box=>{const key="t8f."+box.dataset.l;const cbs=box.querySelectorAll("input");
+ try{const saved=JSON.parse(localStorage.getItem(key)||"[]");cbs.forEach((c,i)=>c.checked=!!saved[i])}catch(e){}
+ function sync(){try{localStorage.setItem(key,JSON.stringify([...cbs].map(c=>c.checked)))}catch(e){}
+  const all=[...cbs].every(c=>c.checked);const a=document.querySelector('#prog a[href="#'+box.dataset.l+'"]');if(a)a.classList.toggle("done",all)}
+ cbs.forEach(c=>c.onchange=sync);sync()});
+// Progress bar: highlight the lesson on screen.
+const links=[...document.querySelectorAll("#prog a")];const secs=links.map(a=>document.querySelector(a.getAttribute("href"))).filter(Boolean);
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("cur",a.getAttribute("href")=="#"+e.target.id))}})},{rootMargin:"-40% 0px -55% 0px"});secs.forEach(s=>io.observe(s))}
+})();
+// L1 hotspot map. Boxes are [name,cx,cy,w,h,area,plain text,link] in pixels of the original 1265x585 panel crop; they are scaled at load time onto the 1844x853 t8-panel-top.png.
+const HS=[
+["CHARGE light", 557, 47, 110, 30, "1 Jacks", "Orange = charging. Green = full. Red = battery low; it powers down within 30 minutes. Blinking green and orange = charging error.", "<a href=\"t8-manual.html#p28312299-1-jacks\">manual</a>"],
+["SYNC IN / OUT", 760, 49, 150, 70, "1 Jacks", "Clock pulses in and out. Mono mini cables only. Never plug audio into SYNC OUT. A cable in SYNC IN always wins over MIDI clock.", "<a href=\"t8-manual.html#p28312299-1-jacks\">manual</a> · <a href=\"#l11\">Lesson 11</a>"],
+["MIX IN / OUT", 940, 49, 150, 70, "1 Jacks", "MIX IN: another device's sound comes in and goes out of MIX OUT. MIX OUT: headphones. Stereo mini cables only.", "<a href=\"t8-manual.html#p28312299-1-jacks\">manual</a> · <a href=\"#l11\">Lesson 11</a>"],
+["VOLUME", 1117, 49, 70, 70, "1 Jacks", "How loud the MIX OUT jack is.", "<a href=\"t8-manual.html#p28312299-1-jacks\">manual</a> · <a href=\"#l1\">Lesson 01</a>"],
+["Display", 117, 161, 190, 80, "2 Common", "Four characters. Shows the tempo, or the value you are editing.", "<a href=\"t8-manual.html#p28312299-2-common\">manual</a> · <a href=\"#menu\">Lesson enu</a>"],
+["TEMPO/VALUE", 117, 257, 80, 80, "2 Common", "Turn to set the tempo. Inside a menu, turn to change the value. Hold SHIFT for tenths.", "<a href=\"t8-manual.html#p28312254-setting-the-tempo\">manual</a> · <a href=\"#l2\">Lesson 02</a>"],
+["SHIFT", 68, 338, 75, 40, "2 Common", "Hold it to reach every step button's second job, and to mute an instrument.", "<a href=\"t8-manual.html#p28312299-2-common\">manual</a> · <a href=\"#menu\">Lesson enu</a>"],
+["PATTERN (STEP LOOP)", 173, 338, 80, 40, "2 Common", "Press: step buttons pick patterns 1–16. Hold + step 1–4: bank. SHIFT + PATTERN: step loop.", "<a href=\"t8-manual.html#p28312254-switching-between-patterns\">manual</a> · <a href=\"#l0\">Lesson 00</a>"],
+["PLAY", 68, 405, 75, 40, "2 Common", "Starts and stops the pattern.", "<a href=\"t8-manual.html#p28312299-2-common\">manual</a> · <a href=\"#l2\">Lesson 02</a>"],
+["REC", 173, 405, 80, 40, "2 Common", "Record standby. Press PLAY and the instrument buttons you tap land on the steps.", "<a href=\"t8-manual.html#p28312384-real-time-input-tap-input\">manual</a> · <a href=\"#l9\">Lesson 09</a>"],
+["BASS DRUM LEVEL", 288, 149, 60, 60, "3 Bass drum", "Kick volume.", "<a href=\"t8-manual.html#p28312299-3-bass-drum\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["BASS DRUM TUNE", 288, 239, 60, 60, "3 Bass drum", "Kick pitch. With the DECAY button on, kick length instead.", "<a href=\"t8-manual.html#p28312299-3-bass-drum\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["BASS DRUM DECAY button", 288, 330, 70, 60, "3 Bass drum", "Swaps the TUNE knob between pitch and decay length.", "<a href=\"t8-manual.html#p28312299-3-bass-drum\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["BASS DRUM button", 288, 399, 85, 46, "3 Bass drum", "Selects the kick for step entry. SHIFT + this: mute.", "<a href=\"t8-manual.html#p28312299-3-bass-drum\">manual</a> · <a href=\"#l3\">Lesson 03</a>"],
+["SNARE LEVEL", 402, 149, 60, 60, "4 Snare drum", "Snare volume.", "<a href=\"t8-manual.html#p28312299-4-snare-drum\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["SNARE TUNE", 402, 239, 60, 60, "4 Snare drum", "Snare pitch, or decay with the DECAY button on.", "<a href=\"t8-manual.html#p28312299-4-snare-drum\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["SNARE DECAY button", 402, 330, 70, 60, "4 Snare drum", "Swaps the TUNE knob between pitch and decay length.", "<a href=\"t8-manual.html#p28312299-4-snare-drum\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["SNARE DRUM button", 402, 399, 85, 46, "4 Snare drum", "Selects the snare.", "<a href=\"t8-manual.html#p28312299-4-snare-drum\">manual</a> · <a href=\"#l3\">Lesson 03</a>"],
+["TOM / CLAP LEVEL", 523, 149, 60, 60, "5 Tom / hand clap", "Volume for both the toms and the hand clap.", "<a href=\"t8-manual.html#p28312299-5-tom-hand-clap\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["TOM / CLAP TUNE", 523, 239, 60, 60, "5 Tom / hand clap", "Pitch of whichever of the two is selected.", "<a href=\"t8-manual.html#p28312299-5-tom-hand-clap\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["HAND CLAP button", 523, 327, 80, 46, "5 Tom / hand clap", "Selects the clap. The menu CLAP item can swap it for a noise tom or high tom.", "<a href=\"t8-manual.html#p28312299-5-tom-hand-clap\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["TOM button", 523, 399, 80, 46, "5 Tom / hand clap", "Selects the tom. The menu tON item picks tom 1 or tom 2.", "<a href=\"t8-manual.html#p28312299-5-tom-hand-clap\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["HIHAT LEVEL", 648, 149, 60, 60, "6 Hi-hat", "Volume of both open and closed hats.", "<a href=\"t8-manual.html#p28312299-6-hihat\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["HIHAT DECAY", 648, 239, 60, 60, "6 Hi-hat", "Length of the hi-hat sound.", "<a href=\"t8-manual.html#p28312299-6-hihat\">manual</a> · <a href=\"#l4\">Lesson 04</a>"],
+["CLOSED HIHAT button", 648, 327, 80, 46, "6 Hi-hat", "Selects the closed hat.", "<a href=\"t8-manual.html#p28312299-6-hihat\">manual</a> · <a href=\"#l3\">Lesson 03</a>"],
+["OPEN HIHAT button", 648, 399, 80, 46, "6 Hi-hat", "Selects the open hat.", "<a href=\"t8-manual.html#p28312299-6-hihat\">manual</a> · <a href=\"#l3\">Lesson 03</a>"],
+["BASS LEVEL", 770, 149, 60, 60, "7 Bass", "Bass volume.", "<a href=\"t8-manual.html#p28312299-7-bass\">manual</a> · <a href=\"#l7\">Lesson 07</a>"],
+["CUTOFF", 995, 149, 60, 60, "7 Bass", "Brightness of the bass.", "<a href=\"t8-manual.html#p28312299-7-bass\">manual</a> · <a href=\"#l7\">Lesson 07</a>"],
+["PITCH", 770, 239, 60, 60, "7 Bass", "Bass pitch.", "<a href=\"t8-manual.html#p28312299-7-bass\">manual</a> · <a href=\"#l7\">Lesson 07</a>"],
+["RESO", 995, 239, 60, 60, "7 Bass", "The harmonics around the cutoff: the squelch.", "<a href=\"t8-manual.html#p28312299-7-bass\">manual</a> · <a href=\"#l7\">Lesson 07</a>"],
+["BASS DECAY", 770, 327, 60, 60, "7 Bass", "Length of each bass note.", "<a href=\"t8-manual.html#p28312299-7-bass\">manual</a> · <a href=\"#l7\">Lesson 07</a>"],
+["ENV MOD", 995, 327, 60, 60, "7 Bass", "How much the cutoff moves over time on each note.", "<a href=\"t8-manual.html#p28312299-7-bass\">manual</a> · <a href=\"#l7\">Lesson 07</a>"],
+["BASS button", 772, 403, 80, 46, "7 Bass", "Selects the bass. Hold with KYBD and turn TEMPO/VALUE to transpose.", "<a href=\"t8-manual.html#p28312299-7-bass\">manual</a> · <a href=\"#l7\">Lesson 07</a>"],
+["KYBD", 995, 403, 80, 46, "7 Bass", "Turns the step buttons into a keyboard for the bass. Blinks while editing.", "<a href=\"t8-manual.html#p28312362-using-the-step-buttons-as-a-keyboard-keyboard-mode\">manual</a> · <a href=\"#l7\">Lesson 07</a>"],
+["DELAY", 1121, 149, 60, 60, "8 Delay / reverb / accent", "Delay volume. SHIFT + turn: delay time.", "<a href=\"t8-manual.html#p28312336-configuring-the-delay\">manual</a> · <a href=\"#l8\">Lesson 08</a>"],
+["REVERB", 1121, 239, 60, 60, "8 Delay / reverb / accent", "Reverb volume. SHIFT + turn: reverb time.", "<a href=\"t8-manual.html#p28312336-configuring-the-reverb\">manual</a> · <a href=\"#l8\">Lesson 08</a>"],
+["ACCENT", 1121, 403, 80, 46, "8 Delay / reverb / accent", "Accent entry for the drums (drum selected) or the bass (BASS selected). Hold and turn: accent strength.", "<a href=\"t8-manual.html#p28312384-inputting-an-accent\">manual</a> · <a href=\"#l5\">Lesson 05</a>"],
+["Step 1 · C (EXIT)", 53, 504, 62, 100, "9 Step buttons", "SHIFT + this: leave a menu. PATTERN + this: bank 1.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#menu\">Lesson enu</a>"],
+["Step 2 · C# (ENTER)", 125, 504, 62, 100, "9 Step buttons", "SHIFT + this: confirm. PATTERN + this: bank 2.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#menu\">Lesson enu</a>"],
+["Step 3 · D (SHUFFLE)", 196, 504, 62, 100, "9 Step buttons", "SHIFT + this: swing. PATTERN + this: bank 3.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#l6\">Lesson 06</a>"],
+["Step 4 · D# (LAST)", 268, 504, 62, 100, "9 Step buttons", "SHIFT + this: pattern length. PATTERN + this: bank 4.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#l3\">Lesson 03</a>"],
+["Step 5 · E (STEP 1-16)", 339, 504, 62, 100, "9 Step buttons", "SHIFT + this: edit page 1.", "<a href=\"t8-manual.html#p28312384-switching-between-pages-indicated-on-the-panel\">manual</a> · <a href=\"#l6\">Lesson 06</a>"],
+["Step 6 · F (STEP 17-32)", 411, 504, 62, 100, "9 Step buttons", "SHIFT + this: edit page 2 (extends the pattern to 32 steps).", "<a href=\"t8-manual.html#p28312384-switching-between-pages-indicated-on-the-panel\">manual</a> · <a href=\"#l6\">Lesson 06</a>"],
+["Step 7 · F# (FILL TRG)", 483, 504, 62, 100, "9 Step buttons", "SHIFT + this: play the fill at the end of this pattern.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#l6\">Lesson 06</a>"],
+["Step 8 · G (FILL PTN)", 555, 504, 62, 100, "9 Step buttons", "SHIFT + this: choose the fill pattern for this bank.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#l6\">Lesson 06</a>"],
+["Step 9 · G# (RANDOM RHYTHM)", 633, 504, 62, 100, "9 Step buttons", "SHIFT + this: random drum pattern.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#l6\">Lesson 06</a>"],
+["Step 10 · A (RANDOM BASS)", 712, 504, 62, 100, "9 Step buttons", "SHIFT + this: random bass pattern. PATTERN + this: overdrive menu.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#l6\">Lesson 06</a>"],
+["Step 11 · A# (PTN CLEAR ALL)", 785, 504, 62, 100, "9 Step buttons", "SHIFT + this: delete the whole pattern.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#l0\">Lesson 00</a>"],
+["Step 12 · B (PTN CLEAR INST)", 858, 504, 62, 100, "9 Step buttons", "SHIFT + this: delete only the selected instrument's notes. PATTERN + this: side chain menu.", "<a href=\"t8-manual.html#p28312322-list-of-functions\">manual</a> · <a href=\"#l0\">Lesson 00</a>"],
+["Step 13 · C (DELAY)", 931, 504, 62, 100, "9 Step buttons", "SHIFT + this: per-instrument delay send.", "<a href=\"t8-manual.html#p28312336-setting-how-much-signal-is-sent-to-the-delay\">manual</a> · <a href=\"#l8\">Lesson 08</a>"],
+["Step 14 · OCT- (REVERB)", 1007, 504, 62, 100, "9 Step buttons", "SHIFT + this: per-instrument reverb send. OCT- in keyboard mode. PATTERN + this: reload drums.", "<a href=\"t8-manual.html#p28312336-setting-how-much-signal-is-sent-to-the-reverb\">manual</a> · <a href=\"#l8\">Lesson 08</a>"],
+["Step 15 · OCT+ (MENU)", 1085, 504, 62, 100, "9 Step buttons", "SHIFT + this: open the menu. OCT+ in keyboard mode. PATTERN + this: reload bass.", "<a href=\"t8-manual.html#p28312322-using-the-menu\">manual</a> · <a href=\"#menu\">Lesson enu</a>"],
+["Step 16 · SLIDE (WRITE)", 1163, 504, 62, 100, "9 Step buttons", "SHIFT + this: save. SLIDE in keyboard mode. PATTERN + this: reload the pattern. Hold at power-on: factory reset.", "<a href=\"t8-manual.html#p28312254-saving-a-pattern\">manual</a> · <a href=\"#l0\">Lesson 00</a>"],
+];
+(function(){
+const map=document.getElementById("hsmap");if(!map)return;const W=1844,H=853;
+HS.forEach(d=>{d[1]=d[1]*1.447-2.6;d[2]=d[2]*1.462-1;d[3]*=1.447;d[4]*=1.462});
+const pop=document.createElement("div");pop.className="hs-pop";map.appendChild(pop);let pinned=null;
+function show(h,d){pop.innerHTML="<b>"+d[0]+"</b>"+d[6]+"<div class='sec'>"+d[5]+(d[7]?" · "+d[7]:"")+"</div>";pop.classList.add("show");
+ const r=map.getBoundingClientRect(),cx=d[1]/W*r.width,top=(d[2]+d[4]/2)/H*r.height+6;let left=cx-150;
+ if(left<4)left=4;if(left+300>r.width-4)left=r.width-304;pop.style.left=left+"px";
+ if(top+pop.offsetHeight>r.height)pop.style.top=((d[2]-d[4]/2)/H*r.height-pop.offsetHeight-6)+"px";else pop.style.top=top+"px"}
+let ht=null;function hide(){if(pinned)return;clearTimeout(ht);ht=setTimeout(()=>{if(!pinned)pop.classList.remove("show")},350)}
+pop.onmouseenter=()=>clearTimeout(ht);pop.onmouseleave=hide;pop.onclick=e=>e.stopPropagation();
+HS.forEach(d=>{const h=document.createElement("div");h.className="hs";h.title=d[0];
+ h.style.left=d[1]/W*100+"%";h.style.top=d[2]/H*100+"%";h.style.width=d[3]/W*100+"%";h.style.height=d[4]/H*100+"%";
+ h.onmouseenter=()=>{clearTimeout(ht);if(!pinned)show(h,d)};h.onmouseleave=hide;
+ h.onclick=e=>{e.stopPropagation();if(pinned===h){pinned.classList.remove("on");pinned=null;pop.classList.remove("show","pin");return}
+  if(pinned)pinned.classList.remove("on");pinned=h;h.classList.add("on");show(h,d);pop.classList.add("pin")};
+ map.appendChild(h)});
+document.addEventListener("click",()=>{if(pinned){pinned.classList.remove("on");pinned=null;pop.classList.remove("show","pin")}});
+})();
+</script>
+</body></html>
