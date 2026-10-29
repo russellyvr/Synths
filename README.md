@@ -7,6 +7,12 @@ Most of what is published about this format is inferred from the factory files.
 Everything here was checked the other way round: send a known value into the S-1,
 back it up, read what it stored.
 
+## Rendered pages
+
+- [S-1 Foundations](https://russellyvr.github.io/Synths/guides/s1-foundations.html), a twelve-lesson beginner course
+- [T-8 Beat Foundations](https://russellyvr.github.io/Synths/guides/t8-foundations.html), with chaining to the S-1
+- [S-1 Patch Inspector](https://russellyvr.github.io/Synths/guides/s1-inspector.html), open a `.PRM` backup in the browser
+
 ## What is in the repo
 
 | Path | What |
