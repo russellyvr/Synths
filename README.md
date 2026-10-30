@@ -7,6 +7,8 @@ Most of what is published about this format is inferred from the factory files.
 Everything here was checked the other way round: send a known value into the S-1,
 back it up, read what it stored.
 
+![Roland AIRA Compact S-1 front panel](guides/img/s1-front-panel.png)
+
 ## Rendered pages
 
 - [S-1 Foundations](https://russellyvr.github.io/Synths/guides/s1-foundations.html), a twelve-lesson beginner course
