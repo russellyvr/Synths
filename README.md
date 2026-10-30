@@ -1,4 +1,4 @@
-# Synths — Roland AIRA Compact S-1: pattern files verified on hardware, plus a MiniLab 3 map
+# Synths — Roland AIRA Compact S-1 and T-8: beginner courses, a pattern-file toolkit, and a MiniLab 3 controller map
 
 A small toolkit and a set of hardware-verified findings for the `.PRM` files the
 Roland S-1 writes when you run BACKUP. Firmware 1.02, tested October 2026.
@@ -8,6 +8,8 @@ Everything here was checked the other way round: send a known value into the S-1
 back it up, read what it stored.
 
 ![Roland AIRA Compact S-1 front panel](guides/img/s1-front-panel.png)
+
+![Roland AIRA Compact T-8 front panel](guides/img/t8-front-panel.png)
 
 ## Rendered pages
 
