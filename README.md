@@ -1,4 +1,4 @@
-# Synths — Roland AIRA Compact S-1 and T-8: beginner courses, a pattern-file toolkit, and a MiniLab 3 controller map
+# Roland AIRA Compact S-1 synthesizer and T-8 Beat Machine: beginner courses, a pattern-file toolkit, and a MiniLab 3 controller map
 
 A small toolkit and a set of hardware-verified findings for the `.PRM` files the
 Roland S-1 writes when you run BACKUP. Firmware 1.02, tested October 2026.
