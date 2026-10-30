@@ -35,16 +35,21 @@ material accessible, not a reflection of the depth of the underlying research.
 | `guides/t8-foundations.html` | Beat-foundations course for the Roland T-8, including chaining it to the S-1 |
 | `minilab3/Roland S1 v2.minilab3` | Arturia MiniLab 3 user program that puts the S-1's filter, envelope, LFO rate, sub, noise and delay on the eight knobs and four faders. Load with Arturia MIDI Control Center |
 
-## Where this differs from S-1 Utility
+## How this compares with S-1 Utility
 
-[S-1 Utility](https://github.com/denzlobin/S1Utility) by denzlobin is a free desktop companion app for the S-1: a visual parameter editor over MIDI, plus a read-only Patch Inspector for browsing `.PRM` patch backups. Its author notes that parts of the app rely on heuristics, and it is built to flag uncertainty rather than guess. Testing against a real S-1 showed a few values work differently from what the app assumes:
+[S-1 Utility](https://github.com/denzlobin/S1Utility), by denzlobin, is a free desktop companion app for the S-1. It connects over MIDI and gives you an on-screen editor with knobs, envelope and filter views, live sync with the synth, undo/redo, MIDI export, and a Patch Inspector for browsing your `.PRM` pattern backups. Many of its tables were measured on real hardware, and its delay-time curve, CC numbers and value scales all checked out exactly against my S-1. Its author is open that some of the file format is still unverified.
 
-- **Pitch bend** — the file stores a smaller range than the app expects, so a full bend plays and draws at about a quarter size.
-- **Note length (LENG)** — a percentage of the step, where 100 means tie; it is not a count of timing ticks.
-- **Probability (PROB)** — stored in 10 % steps, and the lowest setting is 0 %, not the manual's 1 %.
-- **Substep patterns** — each of the 14 stored values maps to one pattern on the S-1 display (table below).
+Testing against an S-1 on firmware 1.02 turned up a few places where the app reads a pattern file differently from what the synth actually stores:
 
-Byte-level details, including tempo, motion lanes, draw-wave and chop data, are in [`docs/PRM-FORMAT.md`](docs/PRM-FORMAT.md).
+- **Pitch bend** — bends play and draw at about a quarter of their real size.
+- **Note length** — it is a percentage of the step (100 = tied note), not a count of timing ticks.
+- **Motion recording** — each step holds eight motion samples; the app reads only the first 64 of 512.
+- **Delay and reverb high-cut** — the list is off by one, so 2 kHz shows as 1.6 kHz.
+- **Portamento mode** — the On and Auto labels are swapped.
+
+I've shared these with the author on GitHub ([#3](https://github.com/denzlobin/S1Utility/issues/3), [#4](https://github.com/denzlobin/S1Utility/issues/4)).
+
+This toolkit also decodes two step settings the app doesn't read yet: **probability**, stored in 10 % steps with the lowest setting at 0 % (Roland's manual says 1 %), and **substep patterns**, shown in the table below. Byte-level details are in [`docs/PRM-FORMAT.md`](docs/PRM-FORMAT.md).
 
 ### SUBSTEP values
 
