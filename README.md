@@ -35,21 +35,16 @@ material accessible, not a reflection of the depth of the underlying research.
 | `guides/t8-foundations.html` | Beat-foundations course for the Roland T-8, including chaining it to the S-1 |
 | `minilab3/Roland S1 v2.minilab3` | Arturia MiniLab 3 user program that puts the S-1's filter, envelope, LFO rate, sub, noise and delay on the eight knobs and four faders. Load with Arturia MIDI Control Center |
 
-## Findings that differ from what is published elsewhere
+## Where this differs from S-1 Utility
 
-- **Pitch bend** is stored verbatim as the signed 14-bit value, -8192..8191. The
-  `-32768` sentinel means no event. S1Utility scales playback and the PB lane
-  against ±32768, so a full bend plays and draws at a quarter size (reported as
-  denzlobin/S1Utility #4).
-- **LENG** is a gate percentage 1-100, with 100 = tie. It is not 1/96-note ticks.
-- **PROB** is stored in tens: 0 = off, 5 = 50 %, 10 = 100 %. The hardware's lowest
-  setting stores 0, so the range is 0-100, not the manual's 1-100.
-- **SUBSTEP** 0-13 maps one-to-one to the S-1 display patterns in the table
-  below. Factory value 9 is `ooo_`.
-- **Motion lanes** `M1..M8` store the raw CC value 0-127, eight samples per step;
-  lane *k* is live only when `MOTION_CCk` is not -1.
-- **TEMPO** is BPM × 100. **OSC_DRAW** points are two signed int8 per word,
-  little-endian, -100..100. **OSC_CHOP** masks are 16-bit, bit n-1 = step n.
+[S-1 Utility](https://github.com/denzlobin/S1Utility) by denzlobin is a free desktop companion app for the S-1: a visual parameter editor over MIDI, plus a read-only Patch Inspector for browsing `.PRM` patch backups. Its author notes that parts of the app rely on heuristics, and it is built to flag uncertainty rather than guess. Testing against a real S-1 showed a few values work differently from what the app assumes:
+
+- **Pitch bend** — the file stores a smaller range than the app expects, so a full bend plays and draws at about a quarter size.
+- **Note length (LENG)** — a percentage of the step, where 100 means tie; it is not a count of timing ticks.
+- **Probability (PROB)** — stored in 10 % steps, and the lowest setting is 0 %, not the manual's 1 %.
+- **Substep patterns** — each of the 14 stored values maps to one pattern on the S-1 display (table below).
+
+Byte-level details, including tempo, motion lanes, draw-wave and chop data, are in [`docs/PRM-FORMAT.md`](docs/PRM-FORMAT.md).
 
 ### SUBSTEP values
 
