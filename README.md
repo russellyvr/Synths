@@ -39,7 +39,7 @@ material accessible, not a reflection of the depth of the underlying research.
 
 [S-1 Utility](https://github.com/denzlobin/S1Utility), by denzlobin, is a free desktop companion app for the S-1. It connects over MIDI and gives you an on-screen editor with knobs, envelope and filter views, live sync with the synth, undo/redo, MIDI export, and a Patch Inspector for browsing your `.PRM` pattern backups. Many of its tables were measured on real hardware, and its delay-time curve, CC numbers and value scales all checked out exactly against my S-1. Its author is open that some of the file format is still unverified.
 
-Testing against an S-1 on firmware 1.02 turned up a few places where the app reads a pattern file differently from what the synth actually stores:
+Testing against an S-1 on firmware 1.02 turned up a few places where versions up to 1.1.1 read a pattern file differently from what the synth actually stores:
 
 - **Pitch bend** — bends play and draw at about a quarter of their real size.
 - **Note length** — it is a percentage of the step (100 = tied note), not a count of timing ticks.
@@ -47,9 +47,9 @@ Testing against an S-1 on firmware 1.02 turned up a few places where the app rea
 - **Delay and reverb high-cut** — the list is off by one, so 2 kHz shows as 1.6 kHz.
 - **Portamento mode** — the On and Auto labels are swapped.
 
-I've shared these with the author on GitHub ([#3](https://github.com/denzlobin/S1Utility/issues/3), [#4](https://github.com/denzlobin/S1Utility/issues/4)).
+I reported these to the author on GitHub ([#3](https://github.com/denzlobin/S1Utility/issues/3), [#4](https://github.com/denzlobin/S1Utility/issues/4)). denzlobin confirmed each one, re-checked them on an S-1 running firmware 1.02, and fixed all five in [S-1 Utility v1.2.0](https://github.com/denzlobin/S1Utility/releases/tag/v1.2.0) (31 October 2026). If you're on 1.2.0 or later, the list above is history.
 
-This toolkit also decodes two step settings the app doesn't read yet: **probability**, stored in 10 % steps with the lowest setting at 0 % (Roland's manual says 1 %), and **substep patterns**, shown in the table below. Byte-level details are in [`docs/PRM-FORMAT.md`](docs/PRM-FORMAT.md).
+The same release added a **probability** lane and draws **substep patterns** in the step view, so the app now reads both settings this toolkit decodes. Probability is stored in 10 % steps with the lowest setting at 0 % (Roland's manual says 1 %); the substep table is below. Byte-level details are in [`docs/PRM-FORMAT.md`](docs/PRM-FORMAT.md).
 
 ### SUBSTEP values
 
@@ -120,7 +120,8 @@ patterns and my test recordings are redistributed.
 - [denzlobin/S1Utility](https://github.com/denzlobin/S1Utility) — Windows editor;
   issues [#3](https://github.com/denzlobin/S1Utility/issues/3) and
   [#4](https://github.com/denzlobin/S1Utility/issues/4) carry the pitch-bend, LENG
-  and PROB corrections above.
+  and PROB corrections above, all fixed in
+  [v1.2.0](https://github.com/denzlobin/S1Utility/releases/tag/v1.2.0).
 - [Roland S-1 reference manual v1.02](https://static.roland.com/manuals/s-1_manual_v102/eng/),
   [MIDI implementation chart (section 87294690)](https://static.roland.com/manuals/s-1_manual_v102/eng/87294690.html).
 
